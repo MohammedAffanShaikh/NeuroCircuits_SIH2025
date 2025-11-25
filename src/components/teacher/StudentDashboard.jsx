@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Calendar, BookOpen, Award, TrendingUp, AlertCircle, Clock, Bell, User, MessageSquare, CheckCircle, FileText, Target, LogOut, Home, Search, ChevronDown, Eye, Download, Printer, Filter, Plus, BarChart as BarChartIcon, PieChart as PieChartIcon, LineChart as LineChartIcon } from 'lucide-react';
+import { Calendar, BookOpen, Award, TrendingUp, AlertCircle, Clock, Bell, User, MessageSquare, CheckCircle, FileText, Target, LogOut, Home, Search, ChevronDown, Eye, Download, Printer, Filter, Plus, X, BarChart as BarChartIcon, PieChart as PieChartIcon, LineChart as LineChartIcon } from 'lucide-react';
 import { BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { motion } from 'framer-motion';
+import AttendSmartLogo from '../AttendSmartLogo';
 
 const StudentDashboard = () => {
   const [activeTab, setActiveTab] = useState('home');
@@ -9,6 +10,8 @@ const StudentDashboard = () => {
   const [selectedAssignment, setSelectedAssignment] = useState(null);
   const [showTestDetailDrawer, setShowTestDetailDrawer] = useState(false);
   const [selectedTest, setSelectedTest] = useState(null);
+  const [studentAvatar, setStudentAvatar] = useState('https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah');
+  const [showAvatarModal, setShowAvatarModal] = useState(false);
 
   // Sample data for the dashboard
   const studentData = {
@@ -135,23 +138,31 @@ const StudentDashboard = () => {
         initial={{ x: -100, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
         transition={{ duration: 0.5 }}
-        className="w-64 bg-white shadow-xl flex flex-col"
+        className="w-64 md:w-72 bg-white shadow-xl flex flex-col"
       >
-        <div className="p-6 border-b border-gray-100">
+        <div className="p-5 border-b border-gray-100">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-xl flex items-center justify-center shadow-lg">
-              <User className="w-7 h-7 text-white" />
+            <div className="relative">
+              <img 
+                src={studentAvatar} 
+                alt="Student Avatar" 
+                className="w-12 h-12 rounded-xl object-cover shadow-lg"
+              />
+              <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-green-500 rounded-full border-2 border-white"></div>
             </div>
-            <div>
-              <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-                AttendSmart
-              </span>
-              <p className="text-xs text-gray-500">Student Dashboard</p>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2">
+                <AttendSmartLogo size="sm" />
+                <span className="text-lg font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent truncate block">
+                  AttendSmart
+                </span>
+              </div>
+              <p className="text-xs text-gray-500 truncate">Student Dashboard</p>
             </div>
           </div>
         </div>
 
-        <nav className="flex-1 p-4 space-y-1">
+        <nav className="flex-1 p-4 pt-0 space-y-1">
           {[
             { id: 'home', icon: Home, label: 'Dashboard Home' },
             { id: 'assignments', icon: BookOpen, label: 'Assignments' },
@@ -186,10 +197,17 @@ const StudentDashboard = () => {
           ))}
         </nav>
 
-        <div className="p-4 border-t border-gray-100 space-y-1">
-          <button className="w-full flex items-center gap-4 px-4 py-3.5 rounded-xl text-gray-600 hover:bg-gray-50 transition-all">
-            <LogOut className="w-5 h-5" />
-            <span className="font-medium">Logout</span>
+        <div className="p-4 pb-4 border-t border-gray-100 space-y-1">
+          <button 
+            onClick={() => setShowAvatarModal(true)}
+            className="w-full flex items-center gap-3 md:gap-4 px-4 py-3.5 rounded-xl text-gray-600 hover:bg-gray-50 transition-all"
+          >
+            <User className="w-5 h-5 flex-shrink-0" />
+            <span className="font-medium whitespace-nowrap overflow-hidden text-ellipsis">Change Avatar</span>
+          </button>
+          <button className="w-full flex items-center gap-3 md:gap-4 px-4 py-3.5 rounded-xl text-gray-600 hover:bg-gray-50 transition-all">
+            <LogOut className="w-5 h-5 flex-shrink-0" />
+            <span className="font-medium whitespace-nowrap overflow-hidden text-ellipsis">Logout</span>
           </button>
         </div>
       </motion.div>
@@ -1118,6 +1136,56 @@ const StudentDashboard = () => {
             </div>
           </motion.div>
         </motion.div>
+      )}
+
+      {/* Avatar Change Modal */}
+      {showAvatarModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl w-full max-w-md max-h-96 overflow-y-auto">
+            <div className="p-6 border-b border-gray-100">
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-bold text-gray-900">Change Avatar</h3>
+                <button 
+                  onClick={() => setShowAvatarModal(false)}
+                  className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-all"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+            </div>
+            
+            <div className="p-6">
+              <div className="grid grid-cols-3 gap-4">
+                {[
+                  'https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah',
+                  'https://api.dicebear.com/7.x/avataaars/svg?seed=Alex',
+                  'https://api.dicebear.com/7.x/avataaars/svg?seed=Emma',
+                  'https://api.dicebear.com/7.x/avataaars/svg?seed=John',
+                  'https://api.dicebear.com/7.x/avataaars/svg?seed=Mia',
+                  'https://api.dicebear.com/7.x/avataaars/svg?seed=David'
+                ].map((avatar, index) => (
+                  <div 
+                    key={index} 
+                    className="cursor-pointer hover:scale-105 transition-transform"
+                    onClick={() => {
+                      setStudentAvatar(avatar);
+                      setShowAvatarModal(false);
+                    }}
+                  >
+                    <img 
+                      src={avatar} 
+                      alt={`Avatar ${index + 1}`} 
+                      className="w-16 h-16 rounded-full object-cover mx-auto"
+                    />
+                  </div>
+                ))}
+              </div>
+              <div className="mt-6 text-center">
+                <p className="text-sm text-gray-500">Click on any avatar to select it</p>
+              </div>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

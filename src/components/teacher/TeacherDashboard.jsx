@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Users, UserCheck, UserX, Bell, AlertTriangle, Download, Calendar, Clock, Activity, Shield, MapPin, TrendingUp, FileText, Settings, LogOut, Menu, X, Home, BookOpen, ClipboardList, MessageSquare, Search, ChevronDown, CheckCircle2, Eye, Edit, Printer, Filter, Plus, Save, XCircle, RefreshCw } from 'lucide-react';
+import { Users, User, UserCheck, UserX, Bell, AlertTriangle, Download, Calendar, Clock, Activity, Shield, MapPin, TrendingUp, FileText, Settings, LogOut, Menu, X, Home, BookOpen, ClipboardList, MessageSquare, Search, ChevronDown, CheckCircle2, Eye, Edit, Printer, Filter, Plus, Save, XCircle, RefreshCw } from 'lucide-react';
 import { BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import AttendSmartLogo from '../AttendSmartLogo';
 
 const TeacherDashboard = () => {
   const [activeTab, setActiveTab] = useState('home');
@@ -11,13 +12,32 @@ const TeacherDashboard = () => {
   const [manualOverrideStatus, setManualOverrideStatus] = useState('');
   const [showStudentDetailDrawer, setShowStudentDetailDrawer] = useState(false);
   const [selectedStudentDetails, setSelectedStudentDetails] = useState(null);
+  const [teacherAvatar, setTeacherAvatar] = useState('https://api.dicebear.com/7.x/avataaars/svg?seed=Teacher');
+  const [showAvatarModal, setShowAvatarModal] = useState(false);
+  const [showAddStudentModal, setShowAddStudentModal] = useState(false);
+  const [newStudentData, setNewStudentData] = useState({
+    name: '',
+    class: 'Class 10-A',
+    roll: ''
+  });
 
-  // Sample data for the dashboard
+  // Teacher-specific data for one school
+  const teacherData = {
+    name: 'Dr. James Wilson',
+    subject: 'Mathematics',
+    classes: ['Class 10-A', 'Class 11-B', 'Class 12-C'],
+    totalStudents: 45,
+    presentToday: 42,
+    absentToday: 3,
+    activeAlerts: 2,
+    school: 'Greenwood High School'
+  };
+
   const summaryStats = [
-    { label: 'Total Students', value: 45, icon: Users, color: 'from-blue-500 to-blue-600' },
-    { label: 'Present Today', value: 42, icon: UserCheck, color: 'from-green-500 to-green-600' },
-    { label: 'Absent Today', value: 3, icon: UserX, color: 'from-red-500 to-red-600' },
-    { label: 'Active Alerts', value: 2, icon: Bell, color: 'from-orange-500 to-orange-600' },
+    { label: 'Total Students', value: teacherData.totalStudents, icon: Users, color: 'from-blue-500 to-blue-600' },
+    { label: 'Present Today', value: teacherData.presentToday, icon: UserCheck, color: 'from-green-500 to-green-600' },
+    { label: 'Absent Today', value: teacherData.absentToday, icon: UserX, color: 'from-red-500 to-red-600' },
+    { label: 'Active Alerts', value: teacherData.activeAlerts, icon: Bell, color: 'from-orange-500 to-orange-600' },
   ];
 
   const attendanceData = [
@@ -33,9 +53,9 @@ const TeacherDashboard = () => {
     { id: 1, name: 'Rahul Sharma', class: 'Class 10-A', roll: 15, status: 'present', method: 'RFID', lastUpdated: '2024-04-15 09:15:22' },
     { id: 2, name: 'Priya Patel', class: 'Class 10-A', roll: 22, status: 'present', method: 'Face Recognition', lastUpdated: '2024-04-15 09:14:45' },
     { id: 3, name: 'Amit Kumar', class: 'Class 10-A', roll: 5, status: 'absent', method: 'Pending', lastUpdated: 'N/A' },
-    { id: 4, name: 'Sneha Singh', class: 'Class 10-A', roll: 30, status: 'present', method: 'RFID', lastUpdated: '2024-04-15 09:08:37' },
-    { id: 5, name: 'Vikram Reddy', class: 'Class 10-A', roll: 38, status: 'absent', method: 'Pending', lastUpdated: 'N/A' },
-    { id: 6, name: 'Anjali Mehta', class: 'Class 10-A', roll: 8, status: 'present', method: 'Face Recognition', lastUpdated: '2024-04-15 09:12:18' },
+    { id: 4, name: 'Sneha Singh', class: 'Class 11-B', roll: 30, status: 'present', method: 'RFID', lastUpdated: '2024-04-15 09:08:37' },
+    { id: 5, name: 'Vikram Reddy', class: 'Class 11-B', roll: 38, status: 'absent', method: 'Pending', lastUpdated: 'N/A' },
+    { id: 6, name: 'Anjali Mehta', class: 'Class 12-C', roll: 8, status: 'present', method: 'Face Recognition', lastUpdated: '2024-04-15 09:12:18' },
   ];
 
   const alerts = [
@@ -83,6 +103,12 @@ const TeacherDashboard = () => {
     return date.toLocaleDateString([], { year: 'numeric', month: 'short', day: 'numeric' });
   };
 
+  const getStudentAvatar = (studentName) => {
+    // Generate a consistent avatar based on student name
+    const seed = studentName.replace(/\s+/g, '').toLowerCase();
+    return `https://api.dicebear.com/7.x/avataaars/svg?seed=${seed}`;
+  };
+
   const handleManualOverride = (student) => {
     setSelectedStudentForOverride(student);
     setShowManualOverrideModal(true);
@@ -111,25 +137,80 @@ const TeacherDashboard = () => {
     alert(`Exporting attendance report in ${format} format for ${selectedClass}`);
   };
 
+  const downloadPresentStudentsCSV = () => {
+    // Filter present students
+    const presentStudents = classWiseAttendance.filter(student => student.status === 'present');
+    
+    // Create CSV content
+    let csvContent = 'Name,Roll Number,Class,Status,Method,Last Updated\n';
+    presentStudents.forEach(student => {
+      csvContent += `${student.name},${student.roll},${student.class},${student.status},${student.method},${student.lastUpdated}\n`;
+    });
+    
+    // Create blob and download
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.setAttribute('href', url);
+    link.setAttribute('download', `present_students_${selectedClass}.csv`);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const handleAddStudentChange = (field, value) => {
+    setNewStudentData(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  };
+
+  const handleAddStudent = () => {
+    // In a real app, this would make an API call to add the student
+    console.log('Adding new student:', newStudentData);
+    
+    // Reset form and close modal
+    setNewStudentData({
+      name: '',
+      class: 'Class 10-A',
+      roll: ''
+    });
+    setShowAddStudentModal(false);
+    
+    // Show success message (in a real app)
+    alert(`Student ${newStudentData.name} added successfully!`);
+  };
+
   return (
     <div className="flex h-screen bg-gradient-to-br from-blue-50 to-indigo-50">
       {/* Sidebar */}
-      <div className="w-64 bg-white shadow-xl flex flex-col">
-        <div className="p-6 border-b border-gray-100">
+      <div className="w-64 md:w-72 bg-white shadow-xl flex flex-col">
+        <div className="p-5 border-b border-gray-100">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-xl flex items-center justify-center shadow-lg">
-              <Shield className="w-7 h-7 text-white" />
+            <div className="relative">
+              <img 
+                src={teacherAvatar} 
+                alt="Teacher Avatar" 
+                className="w-12 h-12 rounded-xl object-cover shadow-lg"
+              />
+              <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-green-500 rounded-full border-2 border-white"></div>
             </div>
-            <div>
-              <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-                AttendSmart
-              </span>
-              <p className="text-xs text-gray-500">Teacher Dashboard</p>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2">
+                <AttendSmartLogo size="sm" />
+                <span className="text-lg font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent truncate block">
+                  AttendSmart
+                </span>
+              </div>
+              <p className="text-xs text-gray-500 truncate">{teacherData.school}</p>
+              <p className="text-sm font-medium text-gray-700 truncate">{teacherData.name}</p>
+              <p className="text-xs text-gray-500 truncate">{teacherData.subject} Teacher</p>
             </div>
           </div>
         </div>
 
-        <nav className="flex-1 p-4 space-y-1">
+        <nav className="flex-1 p-4 pt-0 space-y-1">
           {[
             { id: 'home', icon: Home, label: 'Dashboard Home' },
             { id: 'attendance', icon: UserCheck, label: 'Attendance' },
@@ -157,14 +238,21 @@ const TeacherDashboard = () => {
           ))}
         </nav>
 
-        <div className="p-4 border-t border-gray-100 space-y-1">
-          <button className="w-full flex items-center gap-4 px-4 py-3.5 rounded-xl text-gray-600 hover:bg-gray-50 transition-all">
-            <Settings className="w-5 h-5" />
-            <span className="font-medium">Settings</span>
+        <div className="p-4 pb-4 border-t border-gray-100 space-y-1">
+          <button 
+            onClick={() => setShowAvatarModal(true)}
+            className="w-full flex items-center gap-3 md:gap-4 px-4 py-3.5 rounded-xl text-gray-600 hover:bg-gray-50 transition-all"
+          >
+            <User className="w-5 h-5 flex-shrink-0" />
+            <span className="font-medium whitespace-nowrap overflow-hidden text-ellipsis">Change Avatar</span>
           </button>
-          <button className="w-full flex items-center gap-4 px-4 py-3.5 rounded-xl text-gray-600 hover:bg-gray-50 transition-all">
-            <LogOut className="w-5 h-5" />
-            <span className="font-medium">Logout</span>
+          <button className="w-full flex items-center gap-3 md:gap-4 px-4 py-3.5 rounded-xl text-gray-600 hover:bg-gray-50 transition-all">
+            <Settings className="w-5 h-5 flex-shrink-0" />
+            <span className="font-medium whitespace-nowrap overflow-hidden text-ellipsis">Settings</span>
+          </button>
+          <button className="w-full flex items-center gap-3 md:gap-4 px-4 py-3.5 rounded-xl text-gray-600 hover:bg-gray-50 transition-all">
+            <LogOut className="w-5 h-5 flex-shrink-0" />
+            <span className="font-medium whitespace-nowrap overflow-hidden text-ellipsis">Logout</span>
           </button>
         </div>
       </div>
@@ -175,7 +263,7 @@ const TeacherDashboard = () => {
         <div className="bg-white border-b border-gray-100 px-8 py-4 shadow-sm">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div className="flex items-center gap-4 flex-1">
-              <h1 className="text-2xl font-bold text-gray-900 hidden md:block">Teacher Dashboard</h1>
+              <h1 className="text-2xl font-bold text-gray-900 hidden md:block">{teacherData.name}'s Dashboard</h1>
               <div className="relative flex-1 max-w-md">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <input
@@ -184,6 +272,13 @@ const TeacherDashboard = () => {
                   className="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all shadow-sm"
                 />
               </div>
+              <button 
+                onClick={() => setShowAddStudentModal(true)}
+                className="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-xl hover:bg-blue-600 transition-all"
+              >
+                <Plus className="w-4 h-4" />
+                <span className="hidden md:inline">Add New Student</span>
+              </button>
             </div>
             <div className="flex items-center gap-4">
               <div className="hidden md:flex items-center gap-2 bg-gray-100 rounded-xl px-3 py-2">
@@ -195,11 +290,9 @@ const TeacherDashboard = () => {
                 onChange={(e) => setSelectedClass(e.target.value)}
                 className="bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-sm font-medium text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm"
               >
-                <option value="Class 10-A">Class 10-A</option>
-                <option value="Class 10-B">Class 10-B</option>
-                <option value="Class 9-A">Class 9-A</option>
-                <option value="Class 9-B">Class 9-B</option>
-                <option value="Class 8-A">Class 8-A</option>
+                {teacherData.classes.map((classItem) => (
+                  <option key={classItem} value={classItem}>{classItem}</option>
+                ))}
               </select>
             </div>
           </div>
@@ -319,7 +412,16 @@ const TeacherDashboard = () => {
                     <tbody>
                       {classWiseAttendance.map((student) => (
                         <tr key={student.id} className="border-b border-gray-100 hover:bg-gray-50">
-                          <td className="py-4 px-4 font-medium text-gray-900">{student.name}</td>
+                          <td className="py-4 px-4 font-medium text-gray-900">
+                                                      <div className="flex items-center gap-3">
+                                                        <img 
+                                                          src={getStudentAvatar(student.name)} 
+                                                          alt={student.name} 
+                                                          className="w-8 h-8 rounded-full object-cover"
+                                                        />
+                                                        <span>{student.name}</span>
+                                                      </div>
+                                                    </td>
                           <td className="py-4 px-4 text-gray-600">{student.class}</td>
                           <td className="py-4 px-4 text-gray-600">{student.roll}</td>
                           <td className="py-4 px-4">
@@ -365,6 +467,13 @@ const TeacherDashboard = () => {
                     Filter
                   </button>
                   <button 
+                    onClick={downloadPresentStudentsCSV}
+                    className="flex items-center gap-2 px-4 py-2 bg-green-500 text-white rounded-xl hover:bg-green-600 transition-all"
+                  >
+                    <Download className="w-4 h-4" />
+                    Download Present Students (CSV)
+                  </button>
+                  <button 
                     onClick={() => exportReport('PDF')}
                     className="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-xl hover:bg-blue-600 transition-all"
                   >
@@ -384,11 +493,9 @@ const TeacherDashboard = () => {
                       onChange={(e) => setSelectedClass(e.target.value)}
                       className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
                     >
-                      <option value="Class 10-A">Class 10-A</option>
-                      <option value="Class 10-B">Class 10-B</option>
-                      <option value="Class 9-A">Class 9-A</option>
-                      <option value="Class 9-B">Class 9-B</option>
-                      <option value="Class 8-A">Class 8-A</option>
+                      {teacherData.classes.map((classItem) => (
+                        <option key={classItem} value={classItem}>{classItem}</option>
+                      ))}
                     </select>
                   </div>
                   <div>
@@ -421,6 +528,43 @@ const TeacherDashboard = () => {
                 </div>
               </div>
 
+              {/* Add New Student Form */}
+              <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 mb-6">
+                <h3 className="text-lg font-bold text-gray-900 mb-4">Add New Student for Attendance</h3>
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Student Name</label>
+                    <input
+                      type="text"
+                      placeholder="Enter student name"
+                      className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Roll Number</label>
+                    <input
+                      type="number"
+                      placeholder="Enter roll number"
+                      className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Status</label>
+                    <select className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500">
+                      <option>Present</option>
+                      <option>Absent</option>
+                      <option>Late</option>
+                      <option>Proxy</option>
+                    </select>
+                  </div>
+                  <div className="flex items-end">
+                    <button className="w-full px-4 py-2 bg-blue-500 text-white rounded-xl hover:bg-blue-600 transition-all">
+                      Add Student
+                    </button>
+                  </div>
+                </div>
+              </div>
+
               {/* Attendance Table */}
               <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
                 <div className="overflow-x-auto">
@@ -439,7 +583,16 @@ const TeacherDashboard = () => {
                     <tbody>
                       {classWiseAttendance.map((student) => (
                         <tr key={student.id} className="border-b border-gray-100 hover:bg-gray-50">
-                          <td className="py-4 px-4 font-medium text-gray-900">{student.name}</td>
+                          <td className="py-4 px-4 font-medium text-gray-900">
+                                                      <div className="flex items-center gap-3">
+                                                        <img 
+                                                          src={getStudentAvatar(student.name)} 
+                                                          alt={student.name} 
+                                                          className="w-8 h-8 rounded-full object-cover"
+                                                        />
+                                                        <span>{student.name}</span>
+                                                      </div>
+                                                    </td>
                           <td className="py-4 px-4 text-gray-600">{student.class}</td>
                           <td className="py-4 px-4 text-gray-600">{student.roll}</td>
                           <td className="py-4 px-4">
@@ -1194,6 +1347,124 @@ const TeacherDashboard = () => {
                   </div>
                 </div>
               )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Avatar Change Modal */}
+      {showAvatarModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl w-full max-w-md max-h-96 overflow-y-auto">
+            <div className="p-6 border-b border-gray-100">
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-bold text-gray-900">Change Avatar</h3>
+                <button 
+                  onClick={() => setShowAvatarModal(false)}
+                  className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-all"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+            </div>
+            
+            <div className="p-6">
+              <div className="grid grid-cols-3 gap-4">
+                {[
+                  'https://api.dicebear.com/7.x/avataaars/svg?seed=Teacher',
+                  'https://api.dicebear.com/7.x/avataaars/svg?seed=Professor',
+                  'https://api.dicebear.com/7.x/avataaars/svg?seed=Educator',
+                  'https://api.dicebear.com/7.x/avataaars/svg?seed=Mentor',
+                  'https://api.dicebear.com/7.x/avataaars/svg?seed=Instructor',
+                  'https://api.dicebear.com/7.x/avataaars/svg?seed=Tutor'
+                ].map((avatar, index) => (
+                  <div 
+                    key={index} 
+                    className="cursor-pointer hover:scale-105 transition-transform"
+                    onClick={() => {
+                      setTeacherAvatar(avatar);
+                      setShowAvatarModal(false);
+                    }}
+                  >
+                    <img 
+                      src={avatar} 
+                      alt={`Avatar ${index + 1}`} 
+                      className="w-16 h-16 rounded-full object-cover mx-auto"
+                    />
+                  </div>
+                ))}
+              </div>
+              <div className="mt-6 text-center">
+                <p className="text-sm text-gray-500">Click on any avatar to select it</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      // Add Student Modal
+      {showAddStudentModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl w-full max-w-md p-6">
+            <div className="flex justify-between items-center mb-6">
+              <h3 className="text-xl font-bold text-gray-900">Add New Student</h3>
+              <button 
+                onClick={() => setShowAddStudentModal(false)}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+            
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Student Name</label>
+                <input
+                  type="text"
+                  value={newStudentData.name}
+                  onChange={(e) => handleAddStudentChange('name', e.target.value)}
+                  className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="Enter student name"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Class</label>
+                <select
+                  value={newStudentData.class}
+                  onChange={(e) => handleAddStudentChange('class', e.target.value)}
+                  className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  {teacherData.classes.map((classItem) => (
+                    <option key={classItem} value={classItem}>{classItem}</option>
+                  ))}
+                </select>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Roll Number</label>
+                <input
+                  type="number"
+                  value={newStudentData.roll}
+                  onChange={(e) => handleAddStudentChange('roll', e.target.value)}
+                  className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="Enter roll number"
+                />
+              </div>
+            </div>
+            
+            <div className="flex gap-3 mt-8">
+              <button
+                onClick={() => setShowAddStudentModal(false)}
+                className="flex-1 px-4 py-2 border border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 transition-all"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleAddStudent}
+                className="flex-1 px-4 py-2 bg-blue-500 text-white rounded-xl hover:bg-blue-600 transition-all"
+              >
+                Add Student
+              </button>
             </div>
           </div>
         </div>

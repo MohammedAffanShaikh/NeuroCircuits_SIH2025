@@ -1,14 +1,27 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Eye, EyeOff, User, Lock, School } from 'lucide-react';
+import AttendSmartLogo from './AttendSmartLogo';
 
 const LoginPage = ({ onLogin }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [userType, setUserType] = useState('student');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+  const [isSignUp, setIsSignUp] = useState(false);
+
+  const handleGoogleLogin = () => {
+    // Simulate Google login
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+      onLogin(userType); // Use the currently selected user type
+    }, 1000);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -18,11 +31,22 @@ const LoginPage = ({ onLogin }) => {
     // Simulate API call
     setTimeout(() => {
       setIsLoading(false);
-      // Simple validation
-      if (username && password) {
+      // Validation
+      if (!username || !password) {
+        setError(`Please enter both username and password to ${isSignUp ? 'sign up' : 'sign in'}`);
+        return;
+      }
+      
+      if (isSignUp) {
+        if (password !== confirmPassword) {
+          setError('Passwords do not match');
+          return;
+        }
+        // Simulate sign up
         onLogin(userType);
       } else {
-        setError('Please enter both username and password');
+        // Simulate sign in
+        onLogin(userType);
       }
     }, 1000);
   };
@@ -47,9 +71,9 @@ const LoginPage = ({ onLogin }) => {
                 damping: 20,
                 delay: 0.2
               }}
-              className="w-24 h-24 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-6"
+              className="w-24 h-24 mx-auto mb-6"
             >
-              <School className="w-12 h-12 text-white" />
+              <AttendSmartLogo size="xl" className="drop-shadow-lg" />
             </motion.div>
             <h1 className="text-4xl md:text-5xl font-bold text-white mb-4 text-center">AttendSmart</h1>
             <p className="text-blue-100 text-lg md:text-xl text-center mb-8">Smart Attendance Management System</p>
@@ -82,8 +106,14 @@ const LoginPage = ({ onLogin }) => {
           <div className="w-full md:w-1/2 flex items-center justify-center p-4 md:p-8">
             <div className="w-full max-w-md">
               <div className="text-center mb-8">
-                <h2 className="text-3xl font-bold text-gray-900 mb-2">Welcome Back</h2>
-                <p className="text-gray-600">Sign in to your account to continue</p>
+                <h2 className="text-3xl font-bold text-gray-900 mb-2">{isSignUp ? 'Create Account' : 'Welcome Back'}</h2>
+                <p className="text-gray-600">{isSignUp ? 'Sign up for a new account' : 'Sign in to your account to continue'}</p>
+                <button 
+                  onClick={() => setIsSignUp(!isSignUp)}
+                  className="mt-2 text-blue-600 hover:text-blue-500 text-sm font-medium"
+                >
+                  {isSignUp ? 'Already have an account? Sign in' : 'Need an account? Sign up'}
+                </button>
               </div>
               
               <form onSubmit={handleSubmit} className="space-y-6">
@@ -183,6 +213,40 @@ const LoginPage = ({ onLogin }) => {
                   </div>
                 </div>
                 
+                {isSignUp && (
+                  <div>
+                    <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-2">
+                      Confirm Password
+                    </label>
+                    <div className="relative">
+                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <Lock className="h-5 w-5 text-gray-400" />
+                      </div>
+                      <input
+                        id="confirmPassword"
+                        name="confirmPassword"
+                        type={showConfirmPassword ? "text" : "password"}
+                        required
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                        className="block w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                        placeholder="Confirm your password"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                        className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                      >
+                        {showConfirmPassword ? (
+                          <EyeOff className="h-5 w-5 text-gray-400 hover:text-gray-600" />
+                        ) : (
+                          <Eye className="h-5 w-5 text-gray-400 hover:text-gray-600" />
+                        )}
+                      </button>
+                    </div>
+                  </div>
+                )}
+                
                 <div className="flex items-center justify-between">
                   <div className="flex items-center">
                     <input
@@ -216,7 +280,7 @@ const LoginPage = ({ onLogin }) => {
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
                   ) : null}
-                  {isLoading ? 'Signing in...' : 'Sign in'}
+                  {isLoading ? (isSignUp ? 'Creating account...' : 'Signing in...') : (isSignUp ? 'Sign up' : 'Sign in')}
                 </motion.button>
               </form>
               
@@ -233,11 +297,15 @@ const LoginPage = ({ onLogin }) => {
                 </div>
                 
                 <div className="mt-6 grid grid-cols-2 gap-3">
-                  <button className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-lg shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 transition-all">
+                  <button 
+                    onClick={handleGoogleLogin}
+                    disabled={isLoading}
+                    className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-lg shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
                     <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M12.24 10.285V14.4h6.806c-.275 1.765-2.056 5.174-6.806 5.174-4.095 0-7.439-3.389-7.439-7.574s3.345-7.574 7.439-7.574c2.33 0 3.891.989 4.785 1.849l3.254-3.138C18.189 1.186 15.479 0 12.24 0c-6.635 0-12 5.365-12 12s5.365 12 12 12c6.926 0 11.52-4.869 11.52-11.726 0-.788-.085-1.39-.189-1.989H12.24z"/>
                     </svg>
-                    <span className="ml-2">Google</span>
+                    <span className="ml-2">{isLoading ? 'Signing in...' : 'Google'}</span>
                   </button>
                   
                   <button className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-lg shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 transition-all">
@@ -249,9 +317,18 @@ const LoginPage = ({ onLogin }) => {
                 </div>
               </div>
               
-              <div className="mt-8 text-center">
+              <div className="mt-6 text-center">
+                <p className="text-sm text-gray-600">
+                  Don't have an account?{' '}
+                  <a href="#" className="font-medium text-blue-600 hover:text-blue-500">
+                    Sign up
+                  </a>
+                </p>
+              </div>
+              
+              <div className="mt-6 text-center">
                 <p className="text-xs text-gray-600">
-                  By signing in, you agree to our{' '}
+                  By signing in or signing up, you agree to our{' '}
                   <a href="#" className="font-medium text-blue-600 hover:text-blue-500">
                     Terms of Service
                   </a>{' '}
@@ -260,6 +337,7 @@ const LoginPage = ({ onLogin }) => {
                     Privacy Policy
                   </a>
                 </p>
+                <p className="text-xs text-gray-500 mt-2">Secure attendance management for educational institutions</p>
               </div>
             </div>
           </div>
