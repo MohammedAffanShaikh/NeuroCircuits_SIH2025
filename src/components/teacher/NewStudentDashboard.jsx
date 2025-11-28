@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Calendar, BookOpen, Award, TrendingUp, AlertCircle, Clock, Bell, User, MessageSquare, CheckCircle, FileText, Target, LogOut, Home, Search, ChevronDown, Eye, Download, Printer, Filter, Plus, X, PieChart as PieChartIcon, LineChart as LineChartIcon, Star, Settings, Edit, RefreshCw, School } from 'lucide-react';
+import { Calendar, BookOpen, Award, TrendingUp, AlertCircle, Clock, Bell, User, MessageSquare, CheckCircle, FileText, Target, LogOut, Home, Search, ChevronDown, Eye, Download, Printer, Filter, Plus, X, PieChart as PieChartIcon, LineChart as LineChartIcon, Star, Settings, Edit, RefreshCw, School, Calculator, FlaskConical, Landmark } from 'lucide-react';
 import { LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { motion } from 'framer-motion';
 import AttendSmartLogo from '../AttendSmartLogo';
@@ -729,7 +729,13 @@ const NewStudentDashboard = () => {
                     <tbody>
                       {recentGrades.map((grade, index) => (
                         <tr key={index} className="border-b border-gray-100 hover:bg-gray-50">
-                          <td className="py-2 px-2 font-medium text-gray-900">{grade.subject}</td>
+                          <td className="py-2 px-2 font-medium text-gray-900">
+                            {grade.subject === 'Mathematics' && <Calculator className="inline w-3 h-3 text-gray-500 mr-1" />}
+                            {grade.subject === 'Science' && <FlaskConical className="inline w-3 h-3 text-gray-500 mr-1" />}
+                            {grade.subject === 'English' && <BookOpen className="inline w-3 h-3 text-gray-500 mr-1" />}
+                            {grade.subject === 'History' && <Landmark className="inline w-3 h-3 text-gray-500 mr-1" />}
+                            {grade.subject}
+                          </td>
                           <td className="py-2 px-2 text-gray-600">{grade.assignment}</td>
                           <td className="py-2 px-2 text-gray-600">{grade.date}</td>
                           <td className="py-2 px-2 text-gray-600">{grade.score}</td>
