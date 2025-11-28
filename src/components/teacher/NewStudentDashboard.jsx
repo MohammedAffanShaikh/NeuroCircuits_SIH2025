@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import AttendSmartLogo from '../AttendSmartLogo';
 import UltraModernHeader from '../UltraModernHeader';
 
+
 const NewStudentDashboard = () => {
   const [activeTab, setActiveTab] = useState('home');
   const [studentAvatar, setStudentAvatar] = useState('https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah');
@@ -123,7 +124,7 @@ const NewStudentDashboard = () => {
         initial={{ x: -100, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
         transition={{ duration: 0.5 }}
-        className="w-48 bg-white shadow-lg flex flex-col h-screen"
+        className="w-48 bg-white shadow-lg flex flex-col h-screen transform transition-transform duration-300"
       >
         <div className="p-3 border-b border-gray-100">
           <div className="flex items-center gap-2">
@@ -167,7 +168,7 @@ const NewStudentDashboard = () => {
                 activeTab === tab.id
                   ? 'bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-md shadow-blue-500/20'
                   : 'text-gray-600 hover:bg-blue-50 hover:text-blue-600'
-              }`}
+              } transform transition-transform duration-300`}
             >
               <tab.icon className="w-3.5 h-3.5" />
               <span className="font-medium text-xs">{tab.label}</span>
@@ -191,7 +192,7 @@ const NewStudentDashboard = () => {
       </motion.div>
 
       {/* Main Content */}
-      <div className="flex-1 overflow-y-auto overscroll-contain flex flex-col h-screen">
+      <div className="flex-1 overflow-y-auto overscroll-contain flex flex-col h-screen transform transition-transform duration-300">
         {/* Ultra Modern Header */}
         <div className="flex-shrink-0">
           <UltraModernHeader 
@@ -209,7 +210,7 @@ const NewStudentDashboard = () => {
           {activeTab === 'home' && (
             <div>
               {/* Welcome Banner */}
-              <div className="bg-gradient-to-r from-blue-500 via-indigo-600 to-purple-700 rounded-lg p-3 mb-3 shadow-sm backdrop-blur-sm border border-white/20 relative overflow-hidden">
+              <div className="bg-gradient-to-r from-blue-500 via-indigo-600 to-purple-700 rounded-lg p-3 mb-3 shadow-sm backdrop-blur-sm border border-white/20 relative overflow-hidden transform transition-transform duration-300 hover:scale-[1.02]">
                 <div className="relative z-10 flex items-center gap-3">
                   <div className="relative">
                     <img 
@@ -249,7 +250,7 @@ const NewStudentDashboard = () => {
                     <motion.div 
                       key={index}
                       whileHover={{ y: -1 }}
-                      className={`bg-gradient-to-br ${stat.color} rounded-lg p-2 shadow-sm border border-white/10 backdrop-blur-sm hover:shadow-md transition-all duration-300 relative overflow-hidden`}
+                      className={`bg-gradient-to-br ${stat.color} rounded-lg p-2 shadow-sm border border-white/10 backdrop-blur-sm hover:shadow-md transition-all duration-300 relative overflow-hidden transform transition-transform duration-300 hover:scale-105`}
                     >
                       <div className="flex items-center justify-between mb-1 relative z-10">
                         <div className="w-6 h-6 bg-white/20 rounded-md flex items-center justify-center border border-white/20">
@@ -317,7 +318,7 @@ const NewStudentDashboard = () => {
               {/* Upcoming Assignments and Tests */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
                 {/* Upcoming Assignments */}
-                <div className="bg-white rounded-md p-3 shadow-sm border border-gray-100">
+                <div className="bg-white rounded-md p-3 shadow-sm border border-gray-100 transform transition-transform duration-300 hover:scale-[1.02]">
                   <div className="flex items-center justify-between mb-2">
                     <h3 className="text-[10px] font-bold text-gray-900">Upcoming Assignments</h3>
                     <button className="text-[9px] text-blue-600 hover:text-blue-700 font-medium">View All</button>
@@ -369,7 +370,7 @@ const NewStudentDashboard = () => {
           {activeTab === 'assignments' && (
             <div>
               {/* Header Row Above Assignment Cards */}
-              <div className="flex items-center justify-between mb-3 p-3 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-md">
+              <div className="flex items-center justify-between mb-3 p-3 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-md transform transition-transform duration-300 hover:scale-[1.02]">
                 <div className="flex items-center gap-3">
                   <FileText className="w-5 h-5 text-white" />
                   <div>
@@ -406,7 +407,7 @@ const NewStudentDashboard = () => {
               
               {/* Single Horizontal Row with All Assignment Information */}
               <div className="grid grid-cols-4 gap-2 mb-3">
-                <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-md p-3 shadow-sm border border-white/10 backdrop-blur-sm relative overflow-hidden">
+                <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-md p-3 shadow-sm border border-white/10 backdrop-blur-sm relative overflow-hidden transform transition-transform duration-300 hover:scale-105">
                   <div className="absolute top-0 right-0 w-12 h-12 bg-white/5 rounded-full -mt-6 -mr-6"></div>
                   <div className="absolute bottom-0 left-0 w-10 h-10 bg-white/10 rounded-full -mb-5 -ml-5"></div>
                   <div className="flex items-center justify-between relative z-10">
@@ -422,7 +423,7 @@ const NewStudentDashboard = () => {
                   </div>
                 </div>
                 
-                <div className="bg-gradient-to-br from-green-500 to-emerald-600 rounded-md p-3 shadow-sm border border-white/10 backdrop-blur-sm relative overflow-hidden">
+                <div className="bg-gradient-to-br from-green-500 to-emerald-600 rounded-md p-3 shadow-sm border border-white/10 backdrop-blur-sm relative overflow-hidden transform transition-transform duration-300 hover:scale-105">
                   <div className="absolute top-0 right-0 w-12 h-12 bg-white/5 rounded-full -mt-6 -mr-6"></div>
                   <div className="absolute bottom-0 left-0 w-10 h-10 bg-white/10 rounded-full -mb-5 -ml-5"></div>
                   <div className="flex items-center justify-between relative z-10">
@@ -438,7 +439,7 @@ const NewStudentDashboard = () => {
                   </div>
                 </div>
                 
-                <div className="bg-gradient-to-br from-amber-500 to-orange-600 rounded-md p-3 shadow-sm border border-white/10 backdrop-blur-sm relative overflow-hidden">
+                <div className="bg-gradient-to-br from-amber-500 to-orange-600 rounded-md p-3 shadow-sm border border-white/10 backdrop-blur-sm relative overflow-hidden transform transition-transform duration-300 hover:scale-105">
                   <div className="absolute top-0 right-0 w-12 h-12 bg-white/5 rounded-full -mt-6 -mr-6"></div>
                   <div className="absolute bottom-0 left-0 w-10 h-10 bg-white/10 rounded-full -mb-5 -ml-5"></div>
                   <div className="flex items-center justify-between relative z-10">
@@ -454,7 +455,7 @@ const NewStudentDashboard = () => {
                   </div>
                 </div>
                 
-                <div className="bg-gradient-to-br from-red-500 to-rose-600 rounded-md p-3 shadow-sm border border-white/10 backdrop-blur-sm relative overflow-hidden">
+                <div className="bg-gradient-to-br from-red-500 to-rose-600 rounded-md p-3 shadow-sm border border-white/10 backdrop-blur-sm relative overflow-hidden transform transition-transform duration-300 hover:scale-105">
                   <div className="absolute top-0 right-0 w-12 h-12 bg-white/5 rounded-full -mt-6 -mr-6"></div>
                   <div className="absolute bottom-0 left-0 w-10 h-10 bg-white/10 rounded-full -mb-5 -ml-5"></div>
                   <div className="flex items-center justify-between relative z-10">
@@ -485,7 +486,7 @@ const NewStudentDashboard = () => {
                 </div>
               </div>
 
-              <div className="bg-white rounded-md p-2 shadow-sm border border-gray-100">
+              <div className="bg-white rounded-md p-2 shadow-sm border border-gray-100 transform transition-transform duration-300 hover:scale-[1.02]">
                 <div className="overflow-x-auto">
                   <table className="w-full text-[9px]">
                     <thead>
@@ -526,7 +527,7 @@ const NewStudentDashboard = () => {
           {activeTab === 'grades' && (
             <div>
               {/* Single Performance Row Above Cards */}
-              <div className="flex items-center justify-between mb-3 p-3 bg-gradient-to-r from-purple-500 to-indigo-600 rounded-md">
+              <div className="flex items-center justify-between mb-3 p-3 bg-gradient-to-r from-purple-500 to-indigo-600 rounded-md transform transition-transform duration-300 hover:scale-[1.02]">
                 <div className="flex items-center gap-3">
                   <Award className="w-5 h-5 text-white" />
                   <div>
@@ -563,7 +564,7 @@ const NewStudentDashboard = () => {
               
               {/* All 4 Cards in One Row */}
               <div className="grid grid-cols-4 gap-3 mb-3">
-                <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-md p-4 shadow-sm border border-white/10 backdrop-blur-sm relative overflow-hidden">
+                <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-md p-4 shadow-sm border border-white/10 backdrop-blur-sm relative overflow-hidden transform transition-transform duration-300 hover:scale-105">
                   <div className="absolute top-0 right-0 w-16 h-16 bg-white/5 rounded-full -mt-8 -mr-8"></div>
                   <div className="absolute bottom-0 left-0 w-12 h-12 bg-white/10 rounded-full -mb-6 -ml-6"></div>
                   <div className="flex items-center justify-between relative z-10">
@@ -579,7 +580,7 @@ const NewStudentDashboard = () => {
                   </div>
                 </div>
                 
-                <div className="bg-gradient-to-br from-green-500 to-emerald-600 rounded-md p-4 shadow-sm border border-white/10 backdrop-blur-sm relative overflow-hidden">
+                <div className="bg-gradient-to-br from-green-500 to-emerald-600 rounded-md p-4 shadow-sm border border-white/10 backdrop-blur-sm relative overflow-hidden transform transition-transform duration-300 hover:scale-105">
                   <div className="absolute top-0 right-0 w-16 h-16 bg-white/5 rounded-full -mt-8 -mr-8"></div>
                   <div className="absolute bottom-0 left-0 w-12 h-12 bg-white/10 rounded-full -mb-6 -ml-6"></div>
                   <div className="flex items-center justify-between relative z-10">
@@ -595,7 +596,7 @@ const NewStudentDashboard = () => {
                   </div>
                 </div>
                 
-                <div className="bg-gradient-to-br from-amber-500 to-orange-600 rounded-md p-4 shadow-sm border border-white/10 backdrop-blur-sm relative overflow-hidden">
+                <div className="bg-gradient-to-br from-amber-500 to-orange-600 rounded-md p-4 shadow-sm border border-white/10 backdrop-blur-sm relative overflow-hidden transform transition-transform duration-300 hover:scale-105">
                   <div className="absolute top-0 right-0 w-16 h-16 bg-white/5 rounded-full -mt-8 -mr-8"></div>
                   <div className="absolute bottom-0 left-0 w-12 h-12 bg-white/10 rounded-full -mb-6 -ml-6"></div>
                   <div className="flex items-center justify-between relative z-10">
@@ -611,7 +612,7 @@ const NewStudentDashboard = () => {
                   </div>
                 </div>
                 
-                <div className="bg-gradient-to-br from-purple-500 to-indigo-600 rounded-md p-4 shadow-sm border border-white/10 backdrop-blur-sm relative overflow-hidden">
+                <div className="bg-gradient-to-br from-purple-500 to-indigo-600 rounded-md p-4 shadow-sm border border-white/10 backdrop-blur-sm relative overflow-hidden transform transition-transform duration-300 hover:scale-105">
                   <div className="absolute top-0 right-0 w-16 h-16 bg-white/5 rounded-full -mt-8 -mr-8"></div>
                   <div className="absolute bottom-0 left-0 w-12 h-12 bg-white/10 rounded-full -mb-6 -ml-6"></div>
                   <div className="flex items-center justify-between relative z-10">
@@ -648,7 +649,7 @@ const NewStudentDashboard = () => {
 
 
               {/* Subject-wise Grades with More Details */}
-              <div className="bg-white rounded-md p-3 shadow-sm border border-gray-100 mb-3">
+              <div className="bg-white rounded-md p-3 shadow-sm border border-gray-100 mb-3 transform transition-transform duration-300 hover:scale-[1.02]">
                 <div className="flex items-center justify-between mb-3">
                   <h3 className="text-[10px] font-bold text-gray-900">Subject-wise Performance</h3>
                   <button className="text-[9px] text-blue-600 hover:text-blue-700 font-medium">View Analytics</button>
@@ -668,7 +669,7 @@ const NewStudentDashboard = () => {
                     };
                     
                     return (
-                      <div key={index} className="border border-gray-200 rounded-lg p-3 hover:shadow-md transition-shadow">
+                      <div key={index} className="border border-gray-200 rounded-lg p-3 hover:shadow-md transition-shadow transform transition-transform duration-300 hover:scale-105">
                         <div className="flex justify-between items-start mb-2">
                           <div>
                             <h4 className="text-[10px] font-bold text-gray-900">{grade.subject}</h4>
@@ -708,7 +709,7 @@ const NewStudentDashboard = () => {
               </div>
 
               {/* Detailed Grade Report */}
-              <div className="bg-white rounded-md p-3 shadow-sm border border-gray-100">
+              <div className="bg-white rounded-md p-3 shadow-sm border border-gray-100 transform transition-transform duration-300 hover:scale-[1.02]">
                 <div className="flex items-center justify-between mb-3">
                   <h3 className="text-[10px] font-bold text-gray-900">Detailed Grade Report</h3>
                   <button className="text-[9px] text-blue-600 hover:text-blue-700 font-medium">View All</button>
@@ -768,68 +769,68 @@ const NewStudentDashboard = () => {
               </div>
 
               {/* Notice Board - Two Panel Layout */}
-              <div className="bg-white rounded-lg shadow-xs border border-gray-100 overflow-hidden">
+              <div className="bg-white rounded-lg shadow-xs border border-gray-100 overflow-hidden transform transition-transform duration-300 hover:scale-[1.02]">
                 <div className="grid grid-cols-1 lg:grid-cols-3 h-[400px]">
                   {/* Left Panel - Notices List */}
                   <div className="lg:col-span-1 border-r border-gray-200 flex flex-col">
                     {/* Notices List */}
                     <div className="flex-1 overflow-y-auto">
                       {/* Notice Item 1 - Selected */}
-                      <div className="p-2.5 rounded-md border border-blue-300 bg-blue-50 cursor-pointer hover:bg-blue-100 transition-colors relative overflow-hidden">
+                      <div className="p-1.5 rounded-md border border-blue-300 bg-blue-50 cursor-pointer hover:bg-blue-100 transition-colors relative overflow-hidden transform transition-transform duration-300 hover:scale-[1.02]">
                         <div className="relative z-10">
-                          <h3 className="font-bold text-gray-900 text-[10.5px] mb-1">Science Fair Registration</h3>
-                          <p className="text-[9.5px] text-gray-600 mb-1 truncate">Registration for the annual Science Fair is now open...</p>
+                          <h3 className="font-bold text-gray-900 text-[9.5px] mb-1">Science Fair Registration</h3>
+                          <p className="text-[8.5px] text-gray-600 mb-1 truncate">Registration for the annual Science Fair is now open...</p>
                           <div className="flex items-center justify-between mb-1">
-                            <span className="text-[9.5px] text-gray-500">Ms. Williams • Apr 10, 2024</span>
+                            <span className="text-[8.5px] text-gray-500">Ms. Williams • Apr 10, 2024</span>
                           </div>
                           <div className="flex flex-wrap gap-1">
-                            <span className="px-1.5 py-0.5 bg-green-100 text-green-800 text-[9.5px] font-medium rounded-full">Opportunity</span>
-                            <span className="px-1.5 py-0.5 bg-blue-100 text-blue-800 text-[9.5px] font-medium rounded-full">Grades 9-12</span>
+                            <span className="px-1 py-0.5 bg-green-100 text-green-800 text-[8.5px] font-medium rounded-full">Opportunity</span>
+                            <span className="px-1 py-0.5 bg-blue-100 text-blue-800 text-[8.5px] font-medium rounded-full">Grades 9-12</span>
                           </div>
                         </div>
                       </div>
                       
                       {/* Notice Item 2 */}
-                      <div className="p-2.5 rounded-md border border-gray-200 bg-white cursor-pointer hover:bg-gray-50 transition-colors relative overflow-hidden">
+                      <div className="p-1.5 rounded-md border border-gray-200 bg-white cursor-pointer hover:bg-gray-50 transition-colors relative overflow-hidden transform transition-transform duration-300 hover:scale-[1.02]">
                         <div className="relative z-10">
-                          <h3 className="font-bold text-gray-900 text-[10.5px] mb-1">Mathematics Olympiad Results</h3>
-                          <p className="text-[9.5px] text-gray-600 mb-1 truncate">Congratulations to our students who participated in the State Mathematics Olympiad...</p>
+                          <h3 className="font-bold text-gray-900 text-[9.5px] mb-1">Mathematics Olympiad Results</h3>
+                          <p className="text-[8.5px] text-gray-600 mb-1 truncate">Congratulations to our students who participated in the State Mathematics Olympiad...</p>
                           <div className="flex items-center justify-between mb-1">
-                            <span className="text-[9.5px] text-gray-500">Dr. Sharma • Apr 12, 2024</span>
+                            <span className="text-[8.5px] text-gray-500">Dr. Sharma • Apr 12, 2024</span>
                           </div>
                           <div className="flex flex-wrap gap-1">
-                            <span className="px-1.5 py-0.5 bg-blue-100 text-blue-800 text-[9.5px] font-medium rounded-full">Achievement</span>
-                            <span className="px-1.5 py-0.5 bg-purple-100 text-purple-800 text-[9.5px] font-medium rounded-full">Mathematics</span>
+                            <span className="px-1 py-0.5 bg-blue-100 text-blue-800 text-[8.5px] font-medium rounded-full">Achievement</span>
+                            <span className="px-1 py-0.5 bg-purple-100 text-purple-800 text-[8.5px] font-medium rounded-full">Mathematics</span>
                           </div>
                         </div>
                       </div>
                       
                       {/* Notice Item 3 */}
-                      <div className="p-2.5 rounded-md border border-gray-200 bg-white cursor-pointer hover:bg-gray-50 transition-colors relative overflow-hidden">
+                      <div className="p-1.5 rounded-md border border-gray-200 bg-white cursor-pointer hover:bg-gray-50 transition-colors relative overflow-hidden transform transition-transform duration-300 hover:scale-[1.02]">
                         <div className="relative z-10">
-                          <h3 className="font-bold text-gray-900 text-[10.5px] mb-1">Summer Sports Camp Registration</h3>
-                          <p className="text-[9.5px] text-gray-600 mb-1 truncate">Registration for the annual Summer Sports Camp is now open for all students...</p>
+                          <h3 className="font-bold text-gray-900 text-[9.5px] mb-1">Summer Sports Camp Registration</h3>
+                          <p className="text-[8.5px] text-gray-600 mb-1 truncate">Registration for the annual Summer Sports Camp is now open for all students...</p>
                           <div className="flex items-center justify-between mb-1">
-                            <span className="text-[9.5px] text-gray-500">Coach Rajiv • Apr 8, 2024</span>
+                            <span className="text-[8.5px] text-gray-500">Coach Rajiv • Apr 8, 2024</span>
                           </div>
                           <div className="flex flex-wrap gap-1">
-                            <span className="px-1.5 py-0.5 bg-amber-100 text-amber-800 text-[9.5px] font-medium rounded-full">Sports</span>
-                            <span className="px-1.5 py-0.5 bg-blue-100 text-blue-800 text-[9.5px] font-medium rounded-full">Summer Program</span>
+                            <span className="px-1 py-0.5 bg-amber-100 text-amber-800 text-[8.5px] font-medium rounded-full">Sports</span>
+                            <span className="px-1 py-0.5 bg-blue-100 text-blue-800 text-[8.5px] font-medium rounded-full">Summer Program</span>
                           </div>
                         </div>
                       </div>
                       
                       {/* Notice Item 4 */}
-                      <div className="p-2.5 rounded-md border border-gray-200 bg-white cursor-pointer hover:bg-gray-50 transition-colors relative overflow-hidden">
+                      <div className="p-1.5 rounded-md border border-gray-200 bg-white cursor-pointer hover:bg-gray-50 transition-colors relative overflow-hidden transform transition-transform duration-300 hover:scale-[1.02]">
                         <div className="relative z-10">
-                          <h3 className="font-bold text-gray-900 text-[10.5px] mb-1">Library Extended Hours</h3>
-                          <p className="text-[9.5px] text-gray-600 mb-1 truncate">The school library will have extended hours during exam week...</p>
+                          <h3 className="font-bold text-gray-900 text-[9.5px] mb-1">Library Extended Hours</h3>
+                          <p className="text-[8.5px] text-gray-600 mb-1 truncate">The school library will have extended hours during exam week...</p>
                           <div className="flex items-center justify-between mb-1">
-                            <span className="text-[9.5px] text-gray-500">Mrs. Brown • Apr 15, 2024</span>
+                            <span className="text-[8.5px] text-gray-500">Mrs. Brown • Apr 15, 2024</span>
                           </div>
                           <div className="flex flex-wrap gap-1">
-                            <span className="px-1.5 py-0.5 bg-indigo-100 text-indigo-800 text-[9.5px] font-medium rounded-full">Library</span>
-                            <span className="px-1.5 py-0.5 bg-blue-100 text-blue-800 text-[9.5px] font-medium rounded-full">Exam Week</span>
+                            <span className="px-1 py-0.5 bg-indigo-100 text-indigo-800 text-[8.5px] font-medium rounded-full">Library</span>
+                            <span className="px-1 py-0.5 bg-blue-100 text-blue-800 text-[8.5px] font-medium rounded-full">Exam Week</span>
                           </div>
                         </div>
                       </div>
@@ -908,7 +909,7 @@ const NewStudentDashboard = () => {
               </div>
 
               {/* Profile Settings */}
-              <div className="bg-white rounded-lg p-3 shadow-sm border border-gray-100 mb-4">
+              <div className="bg-white rounded-lg p-3 shadow-sm border border-gray-100 mb-4 transform transition-transform duration-300 hover:scale-[1.02]">
                 <div className="flex items-center justify-between mb-3">
                   <h3 className="text-[10px] font-bold text-gray-900">Profile Settings</h3>
                   <button 
@@ -996,7 +997,7 @@ const NewStudentDashboard = () => {
               </div>
 
               {/* Notifications Settings */}
-              <div className="bg-white rounded-lg p-3 shadow-sm border border-gray-100 mb-4">
+              <div className="bg-white rounded-lg p-3 shadow-sm border border-gray-100 mb-4 transform transition-transform duration-300 hover:scale-[1.02]">
                 <div className="flex items-center justify-between mb-3">
                   <h3 className="text-[10px] font-bold text-gray-900">Notifications Settings</h3>
                   <button 
@@ -1056,7 +1057,7 @@ const NewStudentDashboard = () => {
               </div>
 
               {/* Security Settings */}
-              <div className="bg-white rounded-lg p-3 shadow-sm border border-gray-100 mb-4">
+              <div className="bg-white rounded-lg p-3 shadow-sm border border-gray-100 mb-4 transform transition-transform duration-300 hover:scale-[1.02]">
                 <div className="flex items-center justify-between mb-3">
                   <h3 className="text-[10px] font-bold text-gray-900">Security Settings</h3>
                   <button 
