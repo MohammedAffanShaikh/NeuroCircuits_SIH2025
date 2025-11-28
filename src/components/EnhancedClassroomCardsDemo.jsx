@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
-import ClassroomCard from './ClassroomCard';
+import React from 'react';
 import EnhancedClassroomCard from './EnhancedClassroomCard';
 
-const ClassroomCardsDemo = () => {
-  const [classrooms, setClassrooms] = useState([
+const EnhancedClassroomCardsDemo = () => {
+  const classrooms = [
     {
       id: 1,
       title: "Mathematics",
@@ -46,7 +45,7 @@ const ClassroomCardsDemo = () => {
       teacher: "Dr. James Wilson",
       theme: "amber"
     }
-  ]);
+  ];
 
   const handleMenuClick = (classroom) => {
     alert(`Menu options for ${classroom.title}`);
@@ -57,17 +56,17 @@ const ClassroomCardsDemo = () => {
   };
 
   return (
-    <div className="p-6 max-w-7xl mx-auto">
+    <div className="p-6 max-w-7xl mx-auto bg-gray-50 min-h-screen">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Classroom Cards Demo</h1>
-        <p className="text-gray-600">Educational card blocks inspired by Google Classroom</p>
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">Enhanced Classroom Cards Demo</h1>
+        <p className="text-gray-600">Educational card blocks with prominent stationery items</p>
       </div>
       
       <div className="mb-8">
         <h2 className="text-xl font-semibold text-gray-800 mb-4">My Classes</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {classrooms.map((classroom) => (
-            <ClassroomCard
+            <EnhancedClassroomCard
               key={classroom.id}
               title={classroom.title}
               subtitle={classroom.subtitle}
@@ -82,45 +81,6 @@ const ClassroomCardsDemo = () => {
       
       <div className="mb-8">
         <h2 className="text-xl font-semibold text-gray-800 mb-4">Single Card Examples</h2>
-        <div className="flex flex-wrap gap-6">
-          <ClassroomCard
-            title="Mathematics"
-            subtitle="Class 10-A • 2024-25"
-            teacher="Dr. James Wilson"
-            theme="blue"
-          />
-          <ClassroomCard
-            title="Science Lab"
-            subtitle="Class 10-A • 2024-25"
-            teacher="Dr. James Wilson"
-            theme="green"
-          />
-          <ClassroomCard
-            title="English Literature"
-            subtitle="Class 10-A • 2024-25"
-            teacher="Dr. James Wilson"
-            theme="teal"
-          />
-        </div>
-      </div>
-      
-      <div className="mb-8">
-        <h2 className="text-xl font-semibold text-gray-800 mb-4">Enhanced Cards with Stationery Items</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
-          {classrooms.map((classroom) => (
-            <EnhancedClassroomCard
-              key={`enhanced-${classroom.id}`}
-              title={classroom.title}
-              subtitle={classroom.subtitle}
-              teacher={classroom.teacher}
-              theme={classroom.theme}
-              onClick={() => handleCardClick(classroom)}
-              onMenuClick={() => handleMenuClick(classroom)}
-            />
-          ))}
-        </div>
-        
-        <h3 className="text-lg font-semibold text-gray-800 mb-4">Enhanced Single Card Examples</h3>
         <div className="flex flex-wrap gap-6">
           <EnhancedClassroomCard
             title="Mathematics"
@@ -146,4 +106,4 @@ const ClassroomCardsDemo = () => {
   );
 };
 
-export default ClassroomCardsDemo;
+export default EnhancedClassroomCardsDemo;

@@ -42,29 +42,14 @@ export default function App() {
     setIsLoggedIn(true);
     setUserType('student');
   };
+  
+
 
   return (
     <ThemeProvider>
       <div>
         {!isLoggedIn ? (
           <div>
-            <div style={{ position: 'fixed', top: '10px', right: '10px', zIndex: 1000 }}>
-              <button 
-                onClick={directStudentAccess}
-                style={{
-                  padding: '10px 15px',
-                  backgroundColor: '#3b82f6',
-                  color: 'white',
-                  border: 'none',
-                  borderRadius: '5px',
-                  cursor: 'pointer',
-                  fontSize: '14px',
-                  fontWeight: 'bold'
-                }}
-              >
-                Quick Student Access
-              </button>
-            </div>
             <LoginPage onLogin={handleLogin} />
           </div>
         ) : (

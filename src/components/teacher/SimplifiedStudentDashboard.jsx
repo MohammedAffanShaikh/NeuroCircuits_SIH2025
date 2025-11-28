@@ -37,10 +37,10 @@ const SimplifiedStudentDashboard = () => {
   ];
 
   const summaryStats = [
-    { label: 'Attendance', value: `${studentData.attendancePercentage}%`, icon: CheckCircle, color: 'from-green-500 to-emerald-600', change: '+2.1%' },
-    { label: 'Current Grade', value: studentData.currentGrade, icon: Award, color: 'from-blue-500 to-indigo-600', change: '+0.3' },
-    { label: 'GPA', value: studentData.gpa, icon: TrendingUp, color: 'from-purple-500 to-indigo-600', change: '+0.1' },
-    { label: 'Assignments', value: assignments.filter(a => a.status === 'pending').length, icon: FileText, color: 'from-amber-500 to-orange-600', change: '-1' },
+    { label: 'Attendance', value: `${studentData.attendancePercentage}%`, icon: CheckCircle, color: 'from-blue-600 to-indigo-500', change: '+2.1%' },
+    { label: 'Current Grade', value: studentData.currentGrade, icon: Award, color: 'from-indigo-500 to-purple-600', change: '+0.3' },
+    { label: 'GPA', value: studentData.gpa, icon: TrendingUp, color: 'from-violet-600 to-purple-500', change: '+0.1' },
+    { label: 'Assignments', value: assignments.filter(a => a.status === 'pending').length, icon: FileText, color: 'from-indigo-600 to-indigo-500', change: '-1' },
   ];
 
   // Sample avatars
@@ -140,30 +140,30 @@ const SimplifiedStudentDashboard = () => {
           {activeTab === 'home' && (
             <div>
               {/* Welcome Banner - Matching teacher dashboard style with image avatar */}
-              <div className="bg-gradient-to-r from-blue-500 via-indigo-600 to-purple-700 rounded-lg p-5 mb-6 shadow-md backdrop-blur-sm border border-white/20 relative overflow-hidden">
+              <div className="bg-gradient-to-r from-blue-600 via-indigo-500 to-indigo-600 rounded-md p-4 mb-5 shadow-sm backdrop-blur-sm border border-white/20 relative overflow-hidden">
                 {/* Geometric background elements */}
-                <div className="absolute -top-6 -right-6 w-24 h-24 bg-white/10 rounded-full"></div>
-                <div className="absolute -bottom-6 -left-6 w-20 h-20 bg-white/10 rounded-full"></div>
-                <div className="absolute top-4 right-4 w-8 h-8 bg-white/10 rotate-45"></div>
-                <div className="absolute bottom-4 left-4 w-6 h-6 bg-white/20 rounded-full"></div>
+                <div className="absolute -top-5 -right-5 w-20 h-20 bg-white/10 rounded-full"></div>
+                <div className="absolute -bottom-5 -left-5 w-16 h-16 bg-white/10 rounded-full"></div>
+                <div className="absolute top-3 right-3 w-6 h-6 bg-white/10 rotate-45"></div>
+                <div className="absolute bottom-3 left-3 w-5 h-5 bg-white/20 rounded-full"></div>
                 
-                <div className="relative z-10 flex items-center gap-3">
+                <div className="relative z-10 flex items-center gap-2.5">
                   <div className="relative">
                     <img 
                       src={studentAvatar} 
                       alt="Student Avatar" 
-                      className="w-14 h-14 rounded-full object-cover shadow-md border-2 border-white/30 cursor-pointer"
+                      className="w-12 h-12 rounded-full object-cover shadow-md border-2 border-white/30 cursor-pointer"
                       onClick={() => setShowAvatarModal(true)}
                     />
                   </div>
                   <div>
-                    <h2 className="text-sm font-bold text-white mb-1.5">
+                    <h2 className="text-[13px] font-bold text-white mb-1">
                       Welcome back, {studentData.name.split(' ')[1]}! 👋
                     </h2>
-                    <p className="text-blue-100 text-xs mb-1">
+                    <p className="text-blue-100 text-[11px] mb-1">
                       {studentData.class} • Roll #{studentData.rollNumber}
                     </p>
-                    <p className="text-blue-100 text-xs">
+                    <p className="text-blue-100 text-[11px]">
                       Current GPA: {studentData.gpa} • Attendance: {studentData.attendancePercentage}%
                     </p>
                   </div>
@@ -171,7 +171,7 @@ const SimplifiedStudentDashboard = () => {
               </div>
 
               {/* Summary Stats - Reduced card sizes by 1 unit and added geometric designs */}
-              <div className="flex gap-2.5 mb-6">
+              <div className="flex gap-2 mb-5">
                 {summaryStats.map((stat, index) => (
                   <div key={index} className={`flex-grow bg-gradient-to-br ${stat.color} rounded-lg p-3 shadow-sm border border-white/30 backdrop-blur-sm text-white relative overflow-hidden`}>
                     {/* Geometric design elements */}
@@ -195,12 +195,12 @@ const SimplifiedStudentDashboard = () => {
                 {/* Geometric background elements */}
                 <div className="absolute -top-3 -right-3 w-12 h-12 bg-blue-500/5 rounded-full"></div>
                 <div className="absolute -bottom-3 -left-3 w-10 h-10 bg-indigo-500/5 rounded-full"></div>
-                <div className="absolute top-2 right-2 w-4 h-4 bg-purple-500/10 rotate-45"></div>
+                <div className="absolute top-2 right-2 w-4 h-4 bg-indigo-500/10 rotate-45"></div>
                 
                 <div className="relative z-10">
                   <div className="flex justify-between items-center mb-2.5">
                     <div className="flex items-center gap-1">
-                      <div className="p-1 bg-gradient-to-br from-blue-500 to-indigo-600 rounded">
+                      <div className="p-1 bg-gradient-to-br from-blue-600 to-indigo-500 rounded">
                         <FileText className="w-3.5 h-3.5 text-white" />
                       </div>
                       <div>
@@ -210,7 +210,7 @@ const SimplifiedStudentDashboard = () => {
                     </div>
                     <button 
                       onClick={() => setActiveTab('assignments')}
-                      className="text-[9px] text-blue-600 hover:text-blue-700 font-medium bg-blue-50 hover:bg-blue-100 px-1.5 py-0.5 rounded transition-all"
+                      className="text-[9px] text-indigo-600 hover:text-indigo-700 font-medium bg-indigo-50 hover:bg-indigo-100 px-1.5 py-0.5 rounded transition-all"
                     >
                       View All
                     </button>
@@ -218,7 +218,7 @@ const SimplifiedStudentDashboard = () => {
                   
                   <div className="space-y-1.5">
                     {assignments.map((assignment) => (
-                      <div key={assignment.id} className="flex items-center gap-1.5 p-1.5 rounded-md hover:bg-gray-50 transition-all border border-gray-100 hover:border-blue-200 group">
+                      <div key={assignment.id} className="flex items-center gap-1.5 p-1.5 rounded-md hover:bg-indigo-50/50 transition-all border border-gray-100 hover:border-indigo-200 group">
                         <div className="flex-shrink-0 w-1.5 h-1.5 rounded-full bg-red-500 group-hover:animate-pulse"></div>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-start justify-between">
@@ -230,10 +230,10 @@ const SimplifiedStudentDashboard = () => {
                           <div className="flex items-center justify-between mt-0.5">
                             <p className="text-[9px] text-gray-600">{assignment.subject}</p>
                             <div className="flex items-center gap-0.5">
-                              <span className="text-[7px] px-0.5 py-0.5 bg-blue-100 text-blue-800 rounded-full font-medium">
+                              <span className="text-[7px] px-0.5 py-0.5 bg-indigo-100 text-indigo-800 rounded-full font-medium">
                                 {assignment.priority}
                               </span>
-                              <span className="text-[7px] px-0.5 py-0.5 bg-yellow-100 text-yellow-800 rounded-full font-medium">
+                              <span className="text-[7px] px-0.5 py-0.5 bg-amber-100 text-amber-800 rounded-full font-medium">
                                 Pending
                               </span>
                             </div>
@@ -246,7 +246,7 @@ const SimplifiedStudentDashboard = () => {
                   <div className="mt-2 pt-1.5 border-t border-gray-100">
                     <div className="flex items-center justify-between text-[9px]">
                       <span className="text-gray-500">You have {assignments.filter(a => a.status === 'pending').length} pending assignments</span>
-                      <div className="flex items-center gap-0.5 text-blue-600">
+                      <div className="flex items-center gap-0.5 text-indigo-600">
                         <span>See details</span>
                         <svg className="w-2 h-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -281,64 +281,64 @@ const SimplifiedStudentDashboard = () => {
               </div>
               
               {/* Assignment Status Cards in Single Row - Updated colors and geometric designs */}
-              <div className="flex gap-3 mb-5">
-                <div className="flex-1 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-md p-2.5 shadow-sm border border-indigo-200/30 backdrop-blur-sm text-white relative overflow-hidden">
+              <div className="flex gap-4 mb-6">
+                <div className="flex-1 bg-gradient-to-br from-blue-600 to-indigo-500 rounded-md p-3 shadow-sm border border-blue-200/30 backdrop-blur-sm text-white relative overflow-hidden">
                   {/* Geometric design elements */}
-                  <div className="absolute -top-3 -right-3 w-12 h-12 bg-white/10 rounded-full"></div>
-                  <div className="absolute -bottom-3 -left-3 w-10 h-10 bg-white/10 rounded-full"></div>
-                  <div className="absolute top-2 right-2 w-4 h-4 bg-white/20 rotate-45"></div>
+                  <div className="absolute -top-4 -right-4 w-14 h-14 bg-white/10 rounded-full"></div>
+                  <div className="absolute -bottom-4 -left-4 w-12 h-12 bg-white/10 rounded-full"></div>
+                  <div className="absolute top-3 right-3 w-5 h-5 bg-white/20 rotate-45"></div>
                   
                   <div className="flex items-center justify-between relative z-10">
                     <div>
-                      <p className="text-indigo-100 text-[9px]">Total Assignments</p>
-                      <p className="text-lg font-bold mt-1">{assignments.length}</p>
+                      <p className="text-blue-100 text-[10px]">Total Assignments</p>
+                      <p className="text-lg font-bold mt-2">{assignments.length}</p>
                     </div>
-                    <FileText className="w-5 h-5 text-indigo-200" />
+                    <FileText className="w-6 h-6 text-blue-200" />
                   </div>
                 </div>
                 
-                <div className="flex-1 bg-gradient-to-br from-green-500 to-emerald-600 rounded-md p-2.5 shadow-sm border border-green-200/30 backdrop-blur-sm text-white relative overflow-hidden">
+                <div className="flex-1 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-md p-3 shadow-sm border border-indigo-200/30 backdrop-blur-sm text-white relative overflow-hidden">
                   {/* Geometric design elements */}
-                  <div className="absolute -top-3 -right-3 w-12 h-12 bg-white/10 rounded-full"></div>
-                  <div className="absolute -bottom-3 -left-3 w-10 h-10 bg-white/10 rounded-full"></div>
-                  <div className="absolute top-2 right-2 w-4 h-4 bg-white/20 rotate-45"></div>
+                  <div className="absolute -top-4 -right-4 w-14 h-14 bg-white/10 rounded-full"></div>
+                  <div className="absolute -bottom-4 -left-4 w-12 h-12 bg-white/10 rounded-full"></div>
+                  <div className="absolute top-3 right-3 w-5 h-5 bg-white/20 rotate-45"></div>
                   
                   <div className="flex items-center justify-between relative z-10">
                     <div>
-                      <p className="text-green-100 text-[9px]">Completed</p>
-                      <p className="text-lg font-bold mt-1">{assignments.filter(a => a.status === 'submitted' || a.status === 'graded').length}</p>
+                      <p className="text-indigo-100 text-[10px]">Completed</p>
+                      <p className="text-lg font-bold mt-2">{assignments.filter(a => a.status === 'submitted' || a.status === 'graded').length}</p>
                     </div>
-                    <CheckCircle className="w-5 h-5 text-green-200" />
+                    <CheckCircle className="w-6 h-6 text-indigo-200" />
                   </div>
                 </div>
                 
-                <div className="flex-1 bg-gradient-to-br from-amber-500 to-orange-600 rounded-md p-2.5 shadow-sm border border-amber-200/30 backdrop-blur-sm text-white relative overflow-hidden">
+                <div className="flex-1 bg-gradient-to-br from-violet-600 to-purple-500 rounded-md p-3 shadow-sm border border-violet-200/30 backdrop-blur-sm text-white relative overflow-hidden">
                   {/* Geometric design elements */}
-                  <div className="absolute -top-3 -right-3 w-12 h-12 bg-white/10 rounded-full"></div>
-                  <div className="absolute -bottom-3 -left-3 w-10 h-10 bg-white/10 rounded-full"></div>
-                  <div className="absolute top-2 right-2 w-4 h-4 bg-white/20 rotate-45"></div>
+                  <div className="absolute -top-4 -right-4 w-14 h-14 bg-white/10 rounded-full"></div>
+                  <div className="absolute -bottom-4 -left-4 w-12 h-12 bg-white/10 rounded-full"></div>
+                  <div className="absolute top-3 right-3 w-5 h-5 bg-white/20 rotate-45"></div>
                   
                   <div className="flex items-center justify-between relative z-10">
                     <div>
-                      <p className="text-amber-100 text-[9px]">Pending</p>
-                      <p className="text-lg font-bold mt-1">{assignments.filter(a => a.status === 'pending').length}</p>
+                      <p className="text-violet-100 text-[10px]">Pending</p>
+                      <p className="text-lg font-bold mt-2">{assignments.filter(a => a.status === 'pending').length}</p>
                     </div>
-                    <Clock className="w-5 h-5 text-amber-200" />
+                    <Clock className="w-6 h-6 text-violet-200" />
                   </div>
                 </div>
                 
-                <div className="flex-1 bg-gradient-to-br from-red-500 to-rose-600 rounded-md p-2.5 shadow-sm border border-red-200/30 backdrop-blur-sm text-white relative overflow-hidden">
+                <div className="flex-1 bg-gradient-to-br from-indigo-600 to-indigo-500 rounded-md p-3 shadow-sm border border-indigo-200/30 backdrop-blur-sm text-white relative overflow-hidden">
                   {/* Geometric design elements */}
-                  <div className="absolute -top-3 -right-3 w-12 h-12 bg-white/10 rounded-full"></div>
-                  <div className="absolute -bottom-3 -left-3 w-10 h-10 bg-white/10 rounded-full"></div>
-                  <div className="absolute top-2 right-2 w-4 h-4 bg-white/20 rotate-45"></div>
+                  <div className="absolute -top-4 -right-4 w-14 h-14 bg-white/10 rounded-full"></div>
+                  <div className="absolute -bottom-4 -left-4 w-12 h-12 bg-white/10 rounded-full"></div>
+                  <div className="absolute top-3 right-3 w-5 h-5 bg-white/20 rotate-45"></div>
                   
                   <div className="flex items-center justify-between relative z-10">
                     <div>
-                      <p className="text-red-100 text-[9px]">High Priority</p>
-                      <p className="text-lg font-bold mt-1">{assignments.filter(a => a.priority === 'high').length}</p>
+                      <p className="text-indigo-100 text-[10px]">High Priority</p>
+                      <p className="text-lg font-bold mt-2">{assignments.filter(a => a.priority === 'high').length}</p>
                     </div>
-                    <AlertCircle className="w-5 h-5 text-red-200" />
+                    <AlertCircle className="w-6 h-6 text-indigo-200" />
                   </div>
                 </div>
               </div>
@@ -346,7 +346,7 @@ const SimplifiedStudentDashboard = () => {
               {/* Assignments Table - With new colors and geometric designs */}
               <div className="bg-white rounded-md shadow-sm border border-gray-100 overflow-hidden relative">
                 {/* Geometric background elements */}
-                <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-indigo-500 to-purple-600"></div>
+                <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-blue-600 to-indigo-500"></div>
                 <div className="absolute -top-4 -right-4 w-20 h-20 bg-indigo-500/10 rounded-full"></div>
                 <div className="absolute -bottom-4 -left-4 w-16 h-16 bg-purple-500/10 rounded-full"></div>
                 <div className="absolute top-6 right-6 w-6 h-6 bg-indigo-500/20 rotate-45"></div>
@@ -395,13 +395,13 @@ const SimplifiedStudentDashboard = () => {
                           <tr key={assignment.id} className="hover:bg-indigo-50/50 transition-colors duration-150">
                             <td className="px-3 py-2 whitespace-nowrap">
                               <div className="flex items-center">
-                                <AssignmentIcon className="w-2.5 h-2.5 text-gray-400 mr-1" />
+                                <AssignmentIcon className="w-2.5 h-2.5 text-indigo-400 mr-1" />
                                 <div className="text-[9px] font-medium text-gray-900">{assignment.title}</div>
                               </div>
                             </td>
                             <td className="px-3 py-2 whitespace-nowrap">
                               <div className="flex items-center">
-                                <SubjectIcon className="w-2.5 h-2.5 text-gray-400 mr-1" />
+                                <SubjectIcon className="w-2.5 h-2.5 text-indigo-400 mr-1" />
                                 <div className="text-[9px] text-gray-900">{assignment.subject}</div>
                               </div>
                             </td>
@@ -409,7 +409,7 @@ const SimplifiedStudentDashboard = () => {
                             <td className="px-3 py-2 whitespace-nowrap">
                               <span className={`px-1.5 py-0.5 text-[8px] font-medium rounded-full ${
                                 assignment.priority === 'high' ? 'bg-red-100 text-red-800' :
-                                assignment.priority === 'medium' ? 'bg-yellow-100 text-yellow-800' :
+                                assignment.priority === 'medium' ? 'bg-amber-100 text-amber-800' :
                                 'bg-green-100 text-green-800'
                               }`}>
                                 {assignment.priority.charAt(0).toUpperCase() + assignment.priority.slice(1)}
@@ -417,9 +417,9 @@ const SimplifiedStudentDashboard = () => {
                             </td>
                             <td className="px-3 py-2 whitespace-nowrap">
                               <span className={`px-1.5 py-0.5 text-[8px] font-medium rounded-full ${
-                                assignment.status === 'submitted' ? 'bg-green-100 text-green-800' :
+                                assignment.status === 'submitted' ? 'bg-indigo-100 text-indigo-800' :
                                 assignment.status === 'graded' ? 'bg-blue-100 text-blue-800' :
-                                'bg-yellow-100 text-yellow-800'
+                                'bg-amber-100 text-amber-800'
                               }`}>
                                 {assignment.status.charAt(0).toUpperCase() + assignment.status.slice(1)}
                               </span>
@@ -441,71 +441,71 @@ const SimplifiedStudentDashboard = () => {
           {activeTab === 'grades' && (
             <div>
               {/* Banner for Grades Section - Matched dashboard size */}
-              <div className="bg-gradient-to-r from-green-500 via-emerald-600 to-teal-700 rounded-md p-3 mb-4 shadow-sm backdrop-blur-sm border border-white/20 relative overflow-hidden">
-                <div className="absolute -top-4 -right-4 w-16 h-16 bg-white/10 rounded-full"></div>
-                <div className="absolute -bottom-4 -left-4 w-14 h-14 bg-white/10 rounded-full"></div>
-                <div className="absolute top-3 right-3 w-6 h-6 bg-white/10 rotate-45"></div>
+              <div className="bg-gradient-to-r from-blue-600 via-indigo-500 to-indigo-600 rounded-md p-4 mb-5 shadow-sm backdrop-blur-sm border border-white/20 relative overflow-hidden">
+                <div className="absolute -top-5 -right-5 w-20 h-20 bg-white/10 rounded-full"></div>
+                <div className="absolute -bottom-5 -left-5 w-16 h-16 bg-white/10 rounded-full"></div>
+                <div className="absolute top-4 right-4 w-7 h-7 bg-white/10 rotate-45"></div>
                 
                 <div className="relative z-10 flex items-center justify-between">
                   <div>
-                    <h2 className="text-xs font-bold text-white mb-1">Academic Performance</h2>
-                    <p className="text-[9px] text-green-100">Track your grades and academic progress</p>
+                    <h2 className="text-sm font-bold text-white mb-1.5">Academic Performance</h2>
+                    <p className="text-xs text-blue-100">Track your grades and academic progress</p>
                   </div>
-                  <div className="flex items-center gap-1.5">
-                    <div className="bg-white/20 rounded-md p-1.5">
-                      <Award className="w-4 h-4 text-white" />
+                  <div className="flex items-center gap-2">
+                    <div className="bg-white/20 rounded-md p-2">
+                      <Award className="w-5 h-5 text-white" />
                     </div>
                   </div>
                 </div>
               </div>
               
               {/* Grade Status Cards in Single Row - Matched dashboard size */}
-              <div className="flex gap-3 mb-5">
-                <div className="flex-1 bg-gradient-to-br from-green-500 to-emerald-600 rounded-md p-2.5 shadow-sm border border-green-200/30 backdrop-blur-sm text-white relative overflow-hidden">
-                  <div className="absolute -top-3 -right-3 w-12 h-12 bg-white/10 rounded-full"></div>
-                  <div className="absolute -bottom-3 -left-3 w-10 h-10 bg-white/10 rounded-full"></div>
+              <div className="flex gap-4 mb-6">
+                <div className="flex-1 bg-gradient-to-br from-blue-600 to-indigo-500 rounded-md p-3 shadow-sm border border-blue-200/30 backdrop-blur-sm text-white relative overflow-hidden">
+                  <div className="absolute -top-4 -right-4 w-14 h-14 bg-white/10 rounded-full"></div>
+                  <div className="absolute -bottom-4 -left-4 w-12 h-12 bg-white/10 rounded-full"></div>
                   <div className="flex items-center justify-between relative z-10">
                     <div>
-                      <p className="text-[9px] text-green-100">Current GPA</p>
-                      <p className="text-base font-bold mt-1">{studentData.gpa}</p>
+                      <p className="text-[10px] text-blue-100">Current GPA</p>
+                      <p className="text-base font-bold mt-2">{studentData.gpa}</p>
                     </div>
-                    <TrendingUp className="w-5 h-5 text-green-200 relative z-10" />
+                    <TrendingUp className="w-6 h-6 text-blue-200 relative z-10" />
                   </div>
                 </div>
                 
-                <div className="flex-1 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-md p-2.5 shadow-sm border border-blue-200/30 backdrop-blur-sm text-white relative overflow-hidden">
-                  <div className="absolute -top-3 -right-3 w-12 h-12 bg-white/10 rounded-full"></div>
-                  <div className="absolute -bottom-3 -left-3 w-10 h-10 bg-white/10 rounded-full"></div>
+                <div className="flex-1 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-md p-3 shadow-sm border border-indigo-200/30 backdrop-blur-sm text-white relative overflow-hidden">
+                  <div className="absolute -top-4 -right-4 w-14 h-14 bg-white/10 rounded-full"></div>
+                  <div className="absolute -bottom-4 -left-4 w-12 h-12 bg-white/10 rounded-full"></div>
                   <div className="flex items-center justify-between relative z-10">
                     <div>
-                      <p className="text-[9px] text-blue-100">Average Score</p>
-                      <p className="text-base font-bold mt-1">87.5%</p>
+                      <p className="text-[10px] text-indigo-100">Average Score</p>
+                      <p className="text-base font-bold mt-2">87.5%</p>
                     </div>
-                    <Award className="w-5 h-5 text-blue-200 relative z-10" />
+                    <Award className="w-6 h-6 text-indigo-200 relative z-10" />
                   </div>
                 </div>
                 
-                <div className="flex-1 bg-gradient-to-br from-amber-500 to-orange-600 rounded-md p-2.5 shadow-sm border border-amber-200/30 backdrop-blur-sm text-white relative overflow-hidden">
-                  <div className="absolute -top-3 -right-3 w-12 h-12 bg-white/10 rounded-full"></div>
-                  <div className="absolute -bottom-3 -left-3 w-10 h-10 bg-white/10 rounded-full"></div>
+                <div className="flex-1 bg-gradient-to-br from-violet-600 to-purple-500 rounded-md p-3 shadow-sm border border-violet-200/30 backdrop-blur-sm text-white relative overflow-hidden">
+                  <div className="absolute -top-4 -right-4 w-14 h-14 bg-white/10 rounded-full"></div>
+                  <div className="absolute -bottom-4 -left-4 w-12 h-12 bg-white/10 rounded-full"></div>
                   <div className="flex items-center justify-between relative z-10">
                     <div>
-                      <p className="text-[9px] text-amber-100">Class Rank</p>
-                      <p className="text-base font-bold mt-1">5th</p>
+                      <p className="text-[10px] text-violet-100">Class Rank</p>
+                      <p className="text-base font-bold mt-2">5th</p>
                     </div>
-                    <Users className="w-5 h-5 text-amber-200 relative z-10" />
+                    <Users className="w-6 h-6 text-violet-200 relative z-10" />
                   </div>
                 </div>
                 
-                <div className="flex-1 bg-gradient-to-br from-purple-500 to-indigo-600 rounded-md p-2.5 shadow-sm border border-purple-200/30 backdrop-blur-sm text-white relative overflow-hidden">
-                  <div className="absolute -top-3 -right-3 w-12 h-12 bg-white/10 rounded-full"></div>
-                  <div className="absolute -bottom-3 -left-3 w-10 h-10 bg-white/10 rounded-full"></div>
+                <div className="flex-1 bg-gradient-to-br from-indigo-600 to-indigo-500 rounded-md p-3 shadow-sm border border-indigo-200/30 backdrop-blur-sm text-white relative overflow-hidden">
+                  <div className="absolute -top-4 -right-4 w-14 h-14 bg-white/10 rounded-full"></div>
+                  <div className="absolute -bottom-4 -left-4 w-12 h-12 bg-white/10 rounded-full"></div>
                   <div className="flex items-center justify-between relative z-10">
                     <div>
-                      <p className="text-[9px] text-purple-100">Total Subjects</p>
-                      <p className="text-base font-bold mt-1">4</p>
+                      <p className="text-[10px] text-indigo-100">Total Subjects</p>
+                      <p className="text-base font-bold mt-2">4</p>
                     </div>
-                    <BookOpen className="w-5 h-5 text-purple-200 relative z-10" />
+                    <BookOpen className="w-6 h-6 text-indigo-200 relative z-10" />
                   </div>
                 </div>
               </div>
@@ -548,10 +548,10 @@ const SimplifiedStudentDashboard = () => {
                         const SubjectIcon = subjectIcons[subject.subject] || BookOpen;
                         
                         return (
-                          <tr key={subject.id} className="hover:bg-gray-50">
+                          <tr key={subject.id} className="hover:bg-indigo-50/50">
                             <td className="px-2.5 py-1.5 whitespace-nowrap">
                               <div className="flex items-center text-[10px] font-medium text-gray-900">
-                                <SubjectIcon className="w-2.5 h-2.5 mr-1 text-gray-400" />
+                                <SubjectIcon className="w-2.5 h-2.5 mr-1 text-indigo-400" />
                                 {subject.subject}
                               </div>
                             </td>
@@ -560,9 +560,9 @@ const SimplifiedStudentDashboard = () => {
                             </td>
                             <td className="px-2.5 py-1.5 whitespace-nowrap">
                               <span className={`px-1 inline-flex text-[8px] leading-3 font-semibold rounded-full ${
-                                subject.grade.startsWith('A') ? 'bg-green-100 text-green-800' : 
+                                subject.grade.startsWith('A') ? 'bg-indigo-100 text-indigo-800' : 
                                 subject.grade.startsWith('B') ? 'bg-blue-100 text-blue-800' : 
-                                'bg-yellow-100 text-yellow-800'
+                                'bg-purple-100 text-purple-800'
                               }`}>
                                 {subject.grade}
                               </span>
@@ -571,9 +571,9 @@ const SimplifiedStudentDashboard = () => {
                               <div className="w-16 bg-gray-200 rounded-full h-1">
                                 <div 
                                   className={`h-1 rounded-full ${
-                                    subject.score >= 90 ? 'bg-green-500' : 
+                                    subject.score >= 90 ? 'bg-indigo-500' : 
                                     subject.score >= 80 ? 'bg-blue-500' : 
-                                    'bg-yellow-500'
+                                    'bg-purple-500'
                                   }`} 
                                   style={{ width: `${subject.score}%` }}
                                 ></div>
@@ -583,8 +583,8 @@ const SimplifiedStudentDashboard = () => {
                               <div className="text-[10px] text-gray-500">{subject.teacher}</div>
                             </td>
                             <td className="px-2.5 py-1.5 whitespace-nowrap text-[10px] font-medium">
-                              <button className="text-blue-600 hover:text-blue-900 mr-1.5">Details</button>
-                              <button className="text-green-600 hover:text-green-900">Report</button>
+                              <button className="text-indigo-600 hover:text-indigo-900 mr-1.5">Details</button>
+                              <button className="text-indigo-600 hover:text-indigo-900">Report</button>
                             </td>
                           </tr>
                         );
@@ -606,7 +606,7 @@ const SimplifiedStudentDashboard = () => {
                   <div className="flex items-center justify-between">
                     <span className="text-gray-500 text-[9px]">Ms. Williams • Apr 10, 2024</span>
                     <div className="flex gap-1">
-                      <span className="px-1 py-0.5 bg-green-100 text-green-800 text-[9px] font-medium rounded-full">Opportunity</span>
+                      <span className="px-1 py-0.5 bg-indigo-100 text-indigo-800 text-[9px] font-medium rounded-full">Opportunity</span>
                       <span className="px-1 py-0.5 bg-blue-100 text-blue-800 text-[9px] font-medium rounded-full">Grades 9-12</span>
                     </div>
                   </div>
@@ -630,7 +630,7 @@ const SimplifiedStudentDashboard = () => {
                   <div className="flex items-center justify-between">
                     <span className="text-gray-500 text-[9px]">Coach Rajiv • Apr 8, 2024</span>
                     <div className="flex gap-1">
-                      <span className="px-1 py-0.5 bg-amber-100 text-amber-800 text-[9px] font-medium rounded-full">Sports</span>
+                      <span className="px-1 py-0.5 bg-violet-100 text-violet-800 text-[9px] font-medium rounded-full">Sports</span>
                       <span className="px-1 py-0.5 bg-blue-100 text-blue-800 text-[9px] font-medium rounded-full">Summer Program</span>
                     </div>
                   </div>
@@ -655,7 +655,7 @@ const SimplifiedStudentDashboard = () => {
                   <div className="flex items-center justify-between">
                     <span className="text-gray-500 text-[9px]">Administration • Apr 14, 2024</span>
                     <div className="flex gap-1">
-                      <span className="px-1 py-0.5 bg-green-100 text-green-800 text-[9px] font-medium rounded-full">Meeting</span>
+                      <span className="px-1 py-0.5 bg-indigo-100 text-indigo-800 text-[9px] font-medium rounded-full">Meeting</span>
                       <span className="px-1 py-0.5 bg-purple-100 text-purple-800 text-[9px] font-medium rounded-full">Parents</span>
                     </div>
                   </div>
@@ -667,7 +667,7 @@ const SimplifiedStudentDashboard = () => {
                   <div className="flex items-center justify-between">
                     <span className="text-gray-500 text-[9px]">IT Department • Apr 13, 2024</span>
                     <div className="flex gap-1">
-                      <span className="px-1 py-0.5 bg-yellow-100 text-yellow-800 text-[9px] font-medium rounded-full">Maintenance</span>
+                      <span className="px-1 py-0.5 bg-amber-100 text-amber-800 text-[9px] font-medium rounded-full">Maintenance</span>
                       <span className="px-1 py-0.5 bg-blue-100 text-blue-800 text-[9px] font-medium rounded-full">Computers</span>
                     </div>
                   </div>
@@ -705,11 +705,11 @@ const SimplifiedStudentDashboard = () => {
                       <img 
                         src={studentAvatar} 
                         alt="Student Avatar" 
-                        className="w-12 h-12 rounded-lg object-cover shadow-md border-2 border-blue-100"
+                        className="w-12 h-12 rounded-lg object-cover shadow-md border-2 border-indigo-100"
                       />
                       <button 
                         onClick={() => setShowAvatarModal(true)}
-                        className="absolute bottom-0 right-0 bg-blue-500 text-white p-1 rounded-full hover:bg-blue-600 transition-all shadow-md"
+                        className="absolute bottom-0 right-0 bg-indigo-500 text-white p-1 rounded-full hover:bg-indigo-600 transition-all shadow-md"
                       >
                         <Edit className="w-2 h-2" />
                       </button>
@@ -719,7 +719,7 @@ const SimplifiedStudentDashboard = () => {
                       <p className="text-gray-600 text-[9px]">{profileData.class} • Roll #{profileData.rollNumber}</p>
                       <button 
                         onClick={() => setShowAvatarModal(true)}
-                        className="text-blue-600 hover:text-blue-700 text-[9px] font-medium mt-1"
+                        className="text-indigo-600 hover:text-indigo-700 text-[9px] font-medium mt-1"
                       >
                         Change Avatar
                       </button>
@@ -733,7 +733,7 @@ const SimplifiedStudentDashboard = () => {
                         type="text" 
                         value={profileData.name}
                         onChange={(e) => setProfileData({...profileData, name: e.target.value})}
-                        className="w-full px-2.5 py-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-[9px]"
+                        className="w-full px-2.5 py-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-300 text-[9px]"
                       />
                     </div>
                     
@@ -743,7 +743,7 @@ const SimplifiedStudentDashboard = () => {
                         type="email" 
                         value={profileData.email}
                         onChange={(e) => setProfileData({...profileData, email: e.target.value})}
-                        className="w-full px-2.5 py-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-[9px]"
+                        className="w-full px-2.5 py-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-300 text-[9px]"
                       />
                     </div>
                     
@@ -753,7 +753,7 @@ const SimplifiedStudentDashboard = () => {
                         type="text" 
                         value={profileData.class}
                         onChange={(e) => setProfileData({...profileData, class: e.target.value})}
-                        className="w-full px-2.5 py-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-[9px]"
+                        className="w-full px-2.5 py-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-300 text-[9px]"
                       />
                     </div>
                     
@@ -763,7 +763,7 @@ const SimplifiedStudentDashboard = () => {
                         type="text" 
                         value={profileData.rollNumber}
                         onChange={(e) => setProfileData({...profileData, rollNumber: e.target.value})}
-                        className="w-full px-2.5 py-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-[9px]"
+                        className="w-full px-2.5 py-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-300 text-[9px]"
                       />
                     </div>
                     
@@ -791,7 +791,7 @@ const SimplifiedStudentDashboard = () => {
                           });
                           alert('Profile updated successfully!');
                         }}
-                        className="px-1.5 py-0.5 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded hover:from-blue-600 hover:to-indigo-700 transition-all shadow-sm hover:shadow text-[9px]"
+                        className="px-1.5 py-0.5 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded hover:from-indigo-600 hover:to-purple-700 transition-all shadow-sm hover:shadow text-[9px]"
                       >
                         Save Changes
                       </button>
@@ -805,7 +805,7 @@ const SimplifiedStudentDashboard = () => {
                     <h3 className="text-[10px] font-bold text-gray-900 mb-2.5">Settings</h3>
                     <div className="space-y-1">
                       <button 
-                        className="w-full text-left px-1.5 py-0.5 bg-blue-50 text-blue-600 rounded font-medium text-[9px]"
+                        className="w-full text-left px-1.5 py-0.5 bg-indigo-50 text-indigo-600 rounded font-medium text-[9px]"
                       >
                         Account
                       </button>

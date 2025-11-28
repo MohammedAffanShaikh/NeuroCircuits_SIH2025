@@ -9,6 +9,7 @@ const UltraModernHeader = ({
   userName, 
   userRole, 
   onLogout,
+  onAlertsClick,
   onMenuToggle,
   isMenuOpen,
   showMenuButton = false
@@ -278,7 +279,7 @@ const UltraModernHeader = ({
               <motion.div 
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.98 }}
-                className="hidden md:flex items-center gap-1 bg-white/60 backdrop-blur-sm rounded-md px-1.5 py-1 border border-white/40 shadow-sm hover:shadow transition-all duration-300 cursor-pointer group"
+                className="hidden md:flex items-center gap-1 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-md px-1.5 py-1 border border-white/40 shadow-sm hover:shadow transition-all duration-300 cursor-pointer group"
               >
                 <motion.div
                   animate={{ 
@@ -291,79 +292,37 @@ const UltraModernHeader = ({
                     repeatType: "reverse"
                   }}
                 >
-                  <Calendar className="w-2.5 h-2.5 text-indigo-500" />
+                  <Calendar className="w-2.5 h-2.5 text-white" />
                 </motion.div>
-                <span className="text-[10px] font-medium text-gray-700">{currentDate}</span>
+                <span className="text-[10px] font-medium text-white">{currentDate}</span>
               </motion.div>
               
-              {/* Class dropdown */}
+              {/* Class input */}
               <motion.div 
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 className="relative"
               >
-                <motion.select
+                <motion.input
+                  type="text"
                   value={selectedClass}
                   onChange={(e) => setSelectedClass(e.target.value)}
                   whileFocus={{ scale: 1.02 }}
-                  className="bg-white/60 backdrop-blur-sm border border-white/40 rounded-md px-1.5 py-1 text-[11px] font-medium text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 shadow-sm hover:shadow transition-all duration-300 appearance-none cursor-pointer"
-                >
-                  {classes.map((classItem) => (
-                    <motion.option 
-                      key={classItem} 
-                      value={classItem}
-                      whileHover={{ backgroundColor: "rgba(99, 102, 241, 0.1)" }}
-                    >
-                      {classItem}
-                    </motion.option>
-                  ))}
-                </motion.select>
-                <motion.div
-                  animate={{ 
-                    rotate: [0, 5, -5, 0],
-                  }}
-                  transition={{ 
-                    duration: 2,
-                    repeat: Infinity,
-                    repeatType: "reverse"
-                  }}
-                  className="absolute right-2 top-1/2 transform -translate-y-1/2 pointer-events-none"
-                >
-                  <ChevronDown className="w-3 h-3 text-purple-500" />
-                </motion.div>
+                  className="bg-gradient-to-r from-purple-500 to-indigo-500 border border-white/40 rounded-md px-1.5 py-1 text-[10px] font-medium text-white placeholder-white/80 focus:outline-none focus:ring-2 focus:ring-purple-300 shadow-sm hover:shadow transition-all duration-300 appearance-none"
+                  placeholder="Enter class name"
+                />
               </motion.div>
               
-              {/* Quick Help */}
-              <motion.div 
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="relative p-1 rounded-lg bg-white/60 backdrop-blur-sm border border-white/40 shadow-sm hover:shadow transition-all duration-300 cursor-pointer group"
-              >
-                <HelpCircle className="w-3 h-3 text-gray-600 group-hover:text-blue-500 transition-colors duration-300" />
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-gradient-to-r from-blue-500 to-indigo-500 text-white text-[9px] rounded-full flex items-center justify-center font-bold"
-                >
-                  ?
-                </motion.div>
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  whileHover={{ opacity: 1, y: 0 }}
-                  className="absolute right-0 top-full mt-2 w-44 bg-white/90 backdrop-blur-xl rounded-lg shadow-lg border border-white/30 p-2.5 z-50 hidden group-hover:block"
-                >
-                  <div className="text-[11px] text-gray-600">Quick Help</div>
-                  <div className="text-[10px] text-gray-500 mt-1">Need assistance? Click here for help documentation.</div>
-                </motion.div>
-              </motion.div>
+
               
               {/* Notifications */}
               <motion.div 
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="relative p-1 rounded-lg bg-white/60 backdrop-blur-sm border border-white/40 shadow-sm hover:shadow transition-all duration-300 cursor-pointer"
+                className="relative p-1 rounded-lg bg-gradient-to-r from-amber-500 to-orange-500 border border-white/40 shadow-sm hover:shadow transition-all duration-300 cursor-pointer"
+                onClick={onAlertsClick}
               >
-                <Bell className="w-3 h-3 text-gray-600" />
+                <Bell className="w-3 h-3 text-white" />
                 <motion.span 
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
@@ -373,110 +332,13 @@ const UltraModernHeader = ({
                   3
                 </motion.span>
                 <motion.div
-                  className="absolute inset-0 rounded-xl bg-blue-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                  className="absolute inset-0 rounded-xl bg-amber-400/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                   initial={false}
                   animate={{ scale: isSearchFocused ? 1.2 : 1 }}
                 />
               </motion.div>
               
-              {/* Profile avatar with dropdown */}
-              <div className="relative">
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={toggleProfileMenu}
-                  className="flex items-center gap-2.5 focus:outline-none relative"
-                >
-                  {/* Pulsing ring animation */}
-                  <motion.div
-                    className="absolute inset-0 rounded-xl bg-gradient-to-br from-blue-500 to-purple-500 opacity-0"
-                    animate={{ 
-                      scale: [1, 1.2, 1],
-                      opacity: [0, 0.3, 0]
-                    }}
-                    transition={{
-                      duration: 2,
-                      repeat: Infinity
-                    }}
-                  />
-                  <div className={`w-7 h-7 rounded-lg bg-gradient-to-br ${getAvatarColor(userName)} flex items-center justify-center text-white font-bold text-[10px] shadow-sm border border-white/30 transition-all duration-300 hover:shadow-md relative z-10`}>
-                    {getAvatarInitials(userName)}
-                  </div>
-                  {/* Online status indicator */}
-                  <div className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 rounded-full border border-white z-10"></div>
-                </motion.button>
-                
-                {/* Profile dropdown menu with enhanced effects */}
-                <AnimatePresence>
-                  {isProfileMenuOpen && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                      animate={{ opacity: 1, y: 0, scale: 1 }}
-                      exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                      transition={{ 
-                        type: "spring", 
-                        stiffness: 300, 
-                        damping: 25 
-                      }}
-                      className="absolute right-0 mt-1.5 w-56 bg-white/90 backdrop-blur-xl rounded-xl shadow-2xl border border-white/30 z-50 overflow-hidden"
-                    >
-                      {/* Glowing border effect */}
-                      <div className="absolute inset-0 rounded-xl pointer-events-none border border-blue-500/30 shadow-[0_0_15px_rgba(59,130,246,0.3)]"></div>
-                      
-                      <div className="p-4 border-b border-white/30 relative">
-                        <div className="flex items-center gap-2.5">
-                          <div className={`w-9 h-9 rounded-lg bg-gradient-to-br ${getAvatarColor(userName)} flex items-center justify-center text-white font-bold text-[11px] relative`}>
-                            {getAvatarInitials(userName)}
-                            <div className="absolute -bottom-0.5 -right-0.5 w-2 h-2 bg-green-500 rounded-full border border-white"></div>
-                          </div>
-                          <div>
-                            <p className="font-bold text-gray-900 text-[11px]">{userName}</p>
-                            <p className="text-[10px] text-gray-600">{userRole}</p>
-                            <p className="text-[9px] text-gray-500 mt-1 bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-800 rounded-full px-1.5 py-0.5 inline-block">
-                              {userType}
-                            </p>
-                          </div>
-                        </div>
-                        
-                        {/* Decorative element */}
-                        <motion.div
-                          className="absolute top-2 right-2 w-1.5 h-1.5 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full"
-                          animate={{ 
-                            scale: [1, 1.2, 1],
-                            opacity: [0.7, 1, 0.7]
-                          }}
-                          transition={{
-                            duration: 2,
-                            repeat: Infinity
-                          }}
-                        />
-                      </div>
-                      
-                      <div className="py-1.5">
-                        <motion.button 
-                          whileHover={{ backgroundColor: "rgba(59, 130, 246, 0.1)" }}
-                          whileTap={{ scale: 0.98 }}
-                          className="w-full px-2.5 py-1.5 text-left text-gray-700 transition-colors duration-200 flex items-center gap-1.5 text-[11px]"
-                        >
-                          <span>Profile Settings</span>
-                        </motion.button>
-                        
-                        <motion.button 
-                          whileHover={{ backgroundColor: "rgba(239, 68, 68, 0.1)" }}
-                          whileTap={{ scale: 0.98 }}
-                          onClick={onLogout}
-                          className="w-full px-2.5 py-1.5 text-left text-gray-700 transition-colors duration-200 flex items-center gap-1.5 text-[11px]"
-                        >
-                          <svg className="w-3 h-3 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                          </svg>
-                          <span>Logout</span>
-                        </motion.button>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
+
             </motion.div>
           </div>
         </div>

@@ -6,6 +6,7 @@ import { motion } from 'framer-motion';
 import AttendSmartLogo from '../AttendSmartLogo';
 import UltraModernHeader from '../UltraModernHeader';
 import ClassroomCard from '../ClassroomCard';
+import EnhancedClassroomCard from '../EnhancedClassroomCard';
 import LanguageSelector from '../LanguageSelector';
 import ParticleBackground from '../ParticleBackground';
 
@@ -18,9 +19,18 @@ const TeacherDashboard = () => {
   const [teacherData, setTeacherData] = useState({
     name: 'Dr. James Wilson',
     subject: 'Mathematics',
-    classes: ['Class 10-A', 'Class 11-B', 'Class 12-C'],
+    classes: [
+      { name: 'Class 10-A', subject: 'History', color: 'blue' },
+      { name: 'Class 11-B', subject: 'Geography', color: 'green' },
+      { name: 'Class 12-C', subject: 'Science', color: 'purple' },
+      { name: 'Class 9-D', subject: 'English', color: 'indigo' },
+      { name: 'Class 8-E', subject: 'Art', color: 'cyan' },
+      { name: 'Class 7-F', subject: 'Music', color: 'amber' }
+    ],
     school: 'Greenwood High School'
   });
+  
+
   
   const [teacherAvatar, setTeacherAvatar] = useState('https://api.dicebear.com/7.x/avataaars/svg?seed=James');
   const [showAvatarModal, setShowAvatarModal] = useState(false);
@@ -46,11 +56,17 @@ const TeacherDashboard = () => {
   
   // State for new student form
   const [showAddStudentForm, setShowAddStudentForm] = useState(false);
+  const [showAddClassForm, setShowAddClassForm] = useState(false);
   const [newStudent, setNewStudent] = useState({
     name: '',
     class: 'Class 10-A',
     roll: '',
     method: 'Manual'
+  });
+  const [newClass, setNewClass] = useState({
+    name: '',
+    subject: teacherData.subject,
+    color: 'blue'
   });
   
   // State for editing student
@@ -75,6 +91,19 @@ const TeacherDashboard = () => {
       setStudentAttendanceData([...studentAttendanceData, newStudentObj]);
       setNewStudent({ name: '', class: 'Class 10-A', roll: '', method: 'Manual' });
       setShowAddStudentForm(false);
+    }
+  };
+  
+  // Function to add a new class
+  const addNewClass = () => {
+    if (newClass.name) {
+      const updatedClasses = [...teacherData.classes, { name: newClass.name, subject: newClass.subject, color: newClass.color || 'blue' }];
+      setTeacherData({
+        ...teacherData,
+        classes: updatedClasses
+      });
+      setNewClass({ name: '', subject: teacherData.subject, color: 'blue' });
+      setShowAddClassForm(false);
     }
   };
   
@@ -136,6 +165,12 @@ const TeacherDashboard = () => {
   const handleNewStudentChange = (e) => {
     const { name, value } = e.target;
     setNewStudent({ ...newStudent, [name]: value });
+  };
+  
+  // Function to handle new class form input changes
+  const handleNewClassChange = (e) => {
+    const { name, value } = e.target;
+    setNewClass({ ...newClass, [name]: value });
   };
   
   // Function to close the add student form
@@ -278,7 +313,7 @@ const TeacherDashboard = () => {
       </motion.div>
 
       {/* Main Content */}
-      <div className="flex-1 overflow-y-auto overscroll-contain flex flex-col h-screen">
+      <div className="flex-1 overflow-y-auto overscroll-contain flex flex-col">
         {/* Ultra Modern Header */}
         <div className="flex-shrink-0">
           <UltraModernHeader 
@@ -287,33 +322,40 @@ const TeacherDashboard = () => {
             userName={teacherData.name}
             userRole={`${teacherData.subject} Teacher`}
             onLogout={() => console.log('Logout clicked')}
+            onAlertsClick={() => setActiveTab('alerts')}
           />
         </div>
 
         {/* Dashboard Content */}
-        <div className="p-6 flex-grow overflow-y-auto overscroll-contain">
+        <div className="p-6 flex-grow overflow-y-auto overscroll-contain min-h-[500px]">
           {/* Home Tab */}
           {activeTab === 'home' && (
             <div>
-              {/* Welcome Banner */}
-              <div className="bg-gradient-to-r from-blue-500 via-indigo-600 to-purple-700 rounded-lg p-5 mb-5 shadow-md backdrop-blur-sm border border-white/20 relative overflow-hidden">
-                <div className="relative z-10 flex items-center gap-3">
+              {/* Welcome Banner - Matching student dashboard style */}
+              <div className="bg-gradient-to-r from-blue-600 via-indigo-500 to-indigo-600 rounded-md p-4 mb-2 shadow-sm backdrop-blur-sm border border-white/20 relative overflow-hidden drop-shadow-sm">
+                {/* Geometric background elements */}
+                <div className="absolute -top-5 -right-5 w-20 h-20 bg-white/10 rounded-full"></div>
+                <div className="absolute -bottom-5 -left-5 w-16 h-16 bg-white/10 rounded-full"></div>
+                <div className="absolute top-3 right-3 w-6 h-6 bg-white/10 rotate-45"></div>
+                <div className="absolute bottom-3 left-3 w-5 h-5 bg-white/20 rounded-full"></div>
+                
+                <div className="relative z-10 flex items-center gap-2.5">
                   <div className="relative">
                     <img 
                       src={teacherAvatar} 
                       alt="Teacher Avatar" 
-                      className="w-14 h-14 rounded-full object-cover shadow-md border-2 border-white/30 cursor-pointer"
+                      className="w-12 h-12 rounded-full object-cover shadow-md border-2 border-white/30 cursor-pointer"
                       onClick={() => setShowAvatarModal(true)}
                     />
                   </div>
                   <div>
-                    <h2 className="text-sm font-bold text-white mb-1.5">
+                    <h2 className="text-[13px] font-bold text-white mb-1">
                       Welcome back, {teacherData.name.split(' ')[1]}! 👋
                     </h2>
-                    <p className="text-blue-100 text-xs mb-1">
+                    <p className="text-blue-100 text-[11px] mb-1">
                       {teacherData.subject} Teacher at {teacherData.school}
                     </p>
-                    <p className="text-blue-100 text-xs">
+                    <p className="text-blue-100 text-[11px]">
                       You have {teacherData.classes.length} classes today
                     </p>
                   </div>
@@ -321,52 +363,64 @@ const TeacherDashboard = () => {
               </div>
 
               {/* Summary Stats */}
-              <div className="flex gap-3 mb-7">
-                <div className="flex-grow bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg p-4 shadow-sm border border-blue-200/30 backdrop-blur-sm text-white relative overflow-hidden">
-                  <div className="absolute -top-6 -right-6 w-24 h-24 bg-blue-300/10 rounded-full"></div>
-                  <div className="absolute -bottom-6 -left-6 w-20 h-20 bg-blue-700/10 rounded-full"></div>
+              <div className="flex gap-2 mb-3">
+                <div className="flex-grow bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg p-3 shadow-sm border border-white/30 backdrop-blur-sm text-white relative overflow-hidden">
+                  {/* Geometric design elements */}
+                  <div className="absolute -top-4 -right-4 w-16 h-16 bg-white/10 rounded-full"></div>
+                  <div className="absolute -bottom-4 -left-4 w-14 h-14 bg-white/10 rounded-full"></div>
+                  <div className="absolute top-2 right-2 w-6 h-6 bg-white/10 rotate-45"></div>
                   <div className="flex items-center justify-between relative z-10">
                     <div>
-                      <p className="text-blue-100 text-xs">Total Students</p>
-                      <p className="text-xl font-bold mt-1">{studentAttendanceData.length}</p>
+                      <p className="text-blue-100 text-[11px]">Total Students</p>
+                      <p className="text-lg font-bold mt-0.5">{studentAttendanceData.length}</p>
+                      <p className="text-blue-100 text-[9px] mt-0.5">Across all classes</p>
                     </div>
-                    <Users className="w-8 h-8 text-blue-200 relative z-10" />
+                    <Users className="w-6 h-6 text-blue-200 relative z-10" />
                   </div>
                 </div>
                 
-                <div className="flex-grow bg-gradient-to-br from-green-500 to-green-600 rounded-lg p-4 shadow-sm border border-green-200/30 backdrop-blur-sm text-white relative overflow-hidden">
-                  <div className="absolute -top-6 -right-6 w-24 h-24 bg-green-300/10 rounded-full"></div>
-                  <div className="absolute -bottom-6 -left-6 w-20 h-20 bg-green-700/10 rounded-full"></div>
+                <div className="flex-grow bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg p-3 shadow-sm border border-white/30 backdrop-blur-sm text-white relative overflow-hidden">
+                  {/* Geometric design elements */}
+                  <div className="absolute -top-4 -right-4 w-16 h-16 bg-white/10 rounded-full"></div>
+                  <div className="absolute -bottom-4 -left-4 w-14 h-14 bg-white/10 rounded-full"></div>
+                  <div className="absolute top-2 right-2 w-6 h-6 bg-white/10 rotate-45"></div>
                   <div className="flex items-center justify-between relative z-10">
                     <div>
-                      <p className="text-green-100 text-xs">Present Today</p>
-                      <p className="text-xl font-bold mt-1">{presentCount}</p>
+                      <p className="text-indigo-100 text-[11px]">Present Today</p>
+                      <p className="text-lg font-bold mt-0.5">{presentCount}</p>
+                      <p className="text-indigo-100 text-[9px] mt-0.5">Currently marked</p>
                     </div>
-                    <UserCheck className="w-8 h-8 text-green-200 relative z-10" />
+                    <UserCheck className="w-6 h-6 text-indigo-200 relative z-10" />
                   </div>
                 </div>
                 
-                <div className="flex-grow bg-gradient-to-br from-red-500 to-red-600 rounded-lg p-4 shadow-sm border border-red-200/30 backdrop-blur-sm text-white relative overflow-hidden">
-                  <div className="absolute -top-6 -right-6 w-24 h-24 bg-red-300/10 rounded-full"></div>
-                  <div className="absolute -bottom-6 -left-6 w-20 h-20 bg-red-700/10 rounded-full"></div>
+                <div className="flex-grow bg-gradient-to-br from-purple-500 to-indigo-600 rounded-lg p-3 shadow-sm border border-white/30 backdrop-blur-sm text-white relative overflow-hidden">
+                  {/* Geometric design elements */}
+                  <div className="absolute -top-4 -right-4 w-16 h-16 bg-white/10 rounded-full"></div>
+                  <div className="absolute -bottom-4 -left-4 w-14 h-14 bg-white/10 rounded-full"></div>
+                  <div className="absolute top-2 right-2 w-6 h-6 bg-white/10 rotate-45"></div>
                   <div className="flex items-center justify-between relative z-10">
                     <div>
-                      <p className="text-red-100 text-xs">Absent Today</p>
-                      <p className="text-xl font-bold mt-1">{absentCount}</p>
+                      <p className="text-purple-100 text-[11px]">Absent Today</p>
+                      <p className="text-lg font-bold mt-0.5">{absentCount}</p>
+                      <p className="text-purple-100 text-[9px] mt-0.5">Needs attention</p>
                     </div>
-                    <UserX className="w-8 h-8 text-red-200 relative z-10" />
+                    <UserX className="w-6 h-6 text-purple-200 relative z-10" />
                   </div>
                 </div>
                 
-                <div className="flex-grow bg-gradient-to-br from-yellow-500 to-orange-500 rounded-lg p-4 shadow-sm border border-yellow-200/30 backdrop-blur-sm text-white relative overflow-hidden">
-                  <div className="absolute -top-6 -right-6 w-24 h-24 bg-yellow-300/10 rounded-full"></div>
-                  <div className="absolute -bottom-6 -left-6 w-20 h-20 bg-yellow-700/10 rounded-full"></div>
+                <div className="flex-grow bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg p-3 shadow-sm border border-white/30 backdrop-blur-sm text-white relative overflow-hidden">
+                  {/* Geometric design elements */}
+                  <div className="absolute -top-4 -right-4 w-16 h-16 bg-white/10 rounded-full"></div>
+                  <div className="absolute -bottom-4 -left-4 w-14 h-14 bg-white/10 rounded-full"></div>
+                  <div className="absolute top-2 right-2 w-6 h-6 bg-white/10 rotate-45"></div>
                   <div className="flex items-center justify-between relative z-10">
                     <div>
-                      <p className="text-yellow-100 text-xs">Late Arrivals</p>
-                      <p className="text-xl font-bold mt-1">{lateCount}</p>
+                      <p className="text-blue-100 text-[11px]">Late Arrivals</p>
+                      <p className="text-lg font-bold mt-0.5">{lateCount}</p>
+                      <p className="text-blue-100 text-[9px] mt-0.5">Arrived after start</p>
                     </div>
-                    <Clock className="w-8 h-8 text-yellow-200 relative z-10" />
+                    <Clock className="w-6 h-6 text-blue-200 relative z-10" />
                   </div>
                 </div>
               </div>
@@ -374,52 +428,74 @@ const TeacherDashboard = () => {
               {/* Charts and Recent Activity */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
                 {/* Attendance Chart */}
-                <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-4 shadow-sm border border-blue-200/30 backdrop-blur-sm">
-                  <h3 className="text-sm font-bold text-white mb-3">Weekly Attendance</h3>
-                  <div className="h-40 bg-white/20 rounded-lg p-2 backdrop-blur-sm border border-white/30">
+                <div className="flex-grow bg-gradient-to-br from-[#F3F4FF] to-[#E0F2FE] rounded-lg p-4 shadow-md border border-gray-300">
+                  <div className="flex justify-between items-center mb-2">
+                    <h3 className="text-xs font-bold text-gray-900">Weekly Attendance Trend Analysis</h3>
+                    <select 
+                      className="text-[10px] border border-gray-300 rounded-full px-3 py-1.5 bg-white"
+                      onChange={(e) => console.log('Time range changed:', e.target.value)}
+                    >
+                      <option>Last 7 Days</option>
+                      <option>Last 30 Days</option>
+                      <option>Last 90 Days</option>
+                    </select>
+                  </div>
+                  <div className="h-44">
                     <ResponsiveContainer width="100%" height="100%">
                       <LineChart data={weeklyAttendanceData}>
-                        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255,255,255,0.3)" />
+                        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#eee" />
                         <XAxis 
                           dataKey="day" 
                           axisLine={false} 
                           tickLine={false} 
-                          tick={{ fill: 'rgba(255,255,255,0.8)', fontSize: 9 }}
+                          tick={{ fill: '#666', fontSize: 8 }}
                         />
                         <YAxis 
                           axisLine={false} 
                           tickLine={false} 
-                          tick={{ fill: 'rgba(255,255,255,0.8)', fontSize: 9 }}
+                          tick={{ fill: '#666', fontSize: 8 }}
+                          domain={[0, 40]}
+                          ticks={[0, 5, 10, 15, 20, 25, 30, 35, 40]}
                         />
                         <Tooltip 
                           contentStyle={{ 
-                            backgroundColor: 'rgba(255,255,255,0.9)', 
-                            borderRadius: '12px',
-                            border: '1px solid rgba(255,255,255,0.3)',
-                            boxShadow: '0 10px 25px rgba(0,0,0,0.1)',
-                            backdropFilter: 'blur(10px)',
-                            fontSize: '12px'
+                            backgroundColor: 'white', 
+                            borderRadius: '6px',
+                            border: '1px solid #eee',
+                            boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+                            fontSize: '8px',
+                            color: '#333'
                           }}
-                          labelStyle={{ color: '#ef4444' }}
                         />
-                        <Legend />
+                        <Legend 
+                          wrapperStyle={{ fontSize: '8px' }}
+                        />
                         <Line 
                           type="monotone" 
                           dataKey="present" 
-                          name="Present" 
-                          stroke="#8b5cf6" 
+                          name="Present Students" 
+                          stroke="#8B5CF6" 
                           strokeWidth={2}
-                          dot={{ r: 4, fill: '#8b5cf6', strokeWidth: 2, stroke: '#fff' }}
-                          activeDot={{ r: 6, fill: '#8b5cf6', strokeWidth: 2, stroke: '#fff' }}
+                          dot={{ r: 3, fill: '#A78BFA' }}
+                          activeDot={{ r: 5, fill: '#A78BFA' }}
                         />
                         <Line 
                           type="monotone" 
                           dataKey="absent" 
-                          name="Absent" 
-                          stroke="#f59e0b" 
+                          name="Absent Students" 
+                          stroke="#3B82F6" 
                           strokeWidth={2}
-                          dot={{ r: 4, fill: '#f59e0b', strokeWidth: 2, stroke: '#fff' }}
-                          activeDot={{ r: 6, fill: '#f59e0b', strokeWidth: 2, stroke: '#fff' }}
+                          dot={{ r: 3, fill: '#60A5FA' }}
+                          activeDot={{ r: 5, fill: '#60A5FA' }}
+                        />
+                        <Line 
+                          type="monotone" 
+                          dataKey="late" 
+                          name="Late Arrivals" 
+                          stroke="#1D4ED8" 
+                          strokeWidth={2}
+                          dot={{ r: 3, fill: '#3B82F6' }}
+                          activeDot={{ r: 5, fill: '#3B82F6' }}
                         />
                       </LineChart>
                     </ResponsiveContainer>
@@ -434,22 +510,41 @@ const TeacherDashboard = () => {
             <div>
               <div className="flex justify-between items-center mb-6">
                 <h2 className="text-sm font-bold text-gray-900">Class Management</h2>
-                <button className="flex items-center gap-1 px-2 py-0.5 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded hover:from-blue-600 hover:to-indigo-700 transition-all shadow-sm hover:shadow text-xs">
-                  <Plus className="w-2.5 h-2.5" />
-                  Add Class
-                </button>
+                <div className="flex gap-2">
+                  <button 
+                    onClick={() => setShowAddClassForm(true)}
+                    className="flex items-center gap-1 px-3 py-1 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded hover:from-blue-600 hover:to-indigo-700 transition-all shadow-sm hover:shadow text-xs"
+                  >
+                    <Plus className="w-2.5 h-2.5" />
+                    Add Class
+                  </button>
+                </div>
               </div>
               
-              <div className="flex overflow-x-auto gap-6 pb-4">
-                {teacherData.classes.map((className, index) => (
-                  <div key={index} className="flex-shrink-0">
-                    <ClassroomCard 
-                      title={teacherData.subject}
-                      subtitle={className}
+              <div className="grid grid-cols-3 gap-6">
+                {teacherData.classes.slice(0, 3).map((classObj, index) => (
+                  <div key={index}>
+                    <EnhancedClassroomCard 
+                      title={classObj.subject}
+                      subtitle={classObj.name}
                       teacher={teacherData.name}
-                      theme={index % 3 === 0 ? 'blue' : index % 3 === 1 ? 'green' : 'purple'}
-                      onClick={() => console.log(`${className} clicked`)}
-                      onMenuClick={() => console.log(`${className} menu clicked`)}
+                      theme={classObj.color}
+                      onClick={() => console.log(`${classObj.name} clicked`)}
+                      onMenuClick={() => console.log(`${classObj.name} menu clicked`)}
+                    />
+                  </div>
+                ))}
+              </div>
+              <div className="grid grid-cols-3 gap-6 mt-6">
+                {teacherData.classes.slice(3).map((classObj, index) => (
+                  <div key={index + 3}>
+                    <EnhancedClassroomCard 
+                      title={classObj.subject}
+                      subtitle={classObj.name}
+                      teacher={teacherData.name}
+                      theme={classObj.color}
+                      onClick={() => console.log(`${classObj.name} clicked`)}
+                      onMenuClick={() => console.log(`${classObj.name} menu clicked`)}
                     />
                   </div>
                 ))}
@@ -482,81 +577,81 @@ const TeacherDashboard = () => {
               </div>
 
               {/* Attendance Table */}
-              <div className="bg-white rounded-md p-2.5 shadow-sm border border-gray-100">
+              <div className="bg-white rounded-md p-2.5 shadow-sm">
                 {/* Bulk Actions */}
-                <div className="flex gap-2 mb-3">
+                <div className="flex gap-1 mb-2.5">
                   <button 
                     onClick={markAllPresent}
-                    className="px-2 py-1 bg-gradient-to-r from-green-500 to-green-600 text-white rounded text-xs hover:from-green-600 hover:to-green-700 transition-all"
+                    className="px-2 py-0.5 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-full text-[9px] font-medium hover:from-blue-600 hover:to-indigo-700 transition-all shadow-sm hover:shadow"
                   >
                     Mark All Present
                   </button>
                   <button 
                     onClick={resetAttendance}
-                    className="px-2 py-1 bg-gradient-to-r from-gray-500 to-gray-600 text-white rounded text-xs hover:from-gray-600 hover:to-gray-700 transition-all"
+                    className="px-2 py-0.5 bg-gray-100 text-gray-700 rounded-full text-[9px] font-medium hover:bg-gray-200 transition-all"
                   >
                     Reset Attendance
                   </button>
                 </div>
-                <div className="overflow-hidden">
-                  <table className="w-full text-xs">
+                <div className="overflow-hidden rounded-sm border border-gray-200">
+                  <table className="w-full text-[9px]">
                     <thead>
-                      <tr className="border-b border-gray-200">
-                        <th className="text-left py-1 px-1.5 font-medium text-gray-500 text-xs">Student</th>
-                        <th className="text-left py-1 px-1.5 font-medium text-gray-500 text-xs">Class</th>
-                        <th className="text-left py-1 px-1.5 font-medium text-gray-500 text-xs">Roll</th>
-                        <th className="text-left py-1 px-1.5 font-medium text-gray-500 text-xs">Status</th>
-                        <th className="text-left py-1 px-1.5 font-medium text-gray-500 text-xs">Method</th>
-                        <th className="text-left py-1 px-1.5 font-medium text-gray-500 text-xs">View</th>
+                      <tr className="bg-gray-50 border-b border-gray-200">
+                        <th className="text-left py-1 px-1.5 font-medium text-gray-500 text-[9px]">Student</th>
+                        <th className="text-left py-1 px-1.5 font-medium text-gray-500 text-[9px]">Class</th>
+                        <th className="text-left py-1 px-1.5 font-medium text-gray-500 text-[9px]">Roll</th>
+                        <th className="text-left py-1 px-1.5 font-medium text-gray-500 text-[9px]">Status</th>
+                        <th className="text-left py-1 px-1.5 font-medium text-gray-500 text-[9px]">Method</th>
+                        <th className="text-left py-1 px-1.5 font-medium text-gray-500 text-[9px]">View</th>
                       </tr>
                     </thead>
                     <tbody>
                       {studentAttendanceData.map((student) => (
-                        <tr key={student.id} className="border-b border-gray-100 hover:bg-gray-50">
+                        <tr key={student.id} className="border-b border-gray-100 hover:bg-blue-50 transition-colors duration-150">
                           <td className="py-1 px-1.5">
-                            <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-1">
                               <div className="relative">
                                 <img 
                                   src={getStudentAvatar(student.name)}
                                   alt="Student Avatar" 
-                                  className="w-8 h-8 rounded-full object-cover shadow-sm border-2 border-indigo-200"
+                                  className="w-6 h-6 rounded-full object-cover shadow-sm border-2 border-indigo-200"
                                 />
-                                <div className="absolute bottom-0 right-0 w-2 h-2 bg-green-400 rounded-full border border-white"></div>
+                                <div className="absolute bottom-0 right-0 w-1 h-1 bg-green-400 rounded-full border border-white"></div>
                               </div>
-                              <span className="font-medium text-gray-900 text-xs">{student.name}</span>
+                              <span className="font-medium text-gray-900 text-[10px]">{student.name}</span>
                             </div>
                           </td>
-                          <td className="py-1 px-1.5 text-gray-600 text-xs">{student.class}</td>
-                          <td className="py-1 px-1.5 text-gray-600 text-xs">{student.roll}</td>
+                          <td className="py-1 px-1.5 text-gray-600 text-[10px]">{student.class}</td>
+                          <td className="py-1 px-1.5 text-gray-600 text-[10px]">{student.roll}</td>
                           <td className="py-1 px-1.5">
-                            <div className="flex gap-1">
+                            <div className="flex gap-0.5">
                               <button 
                                 onClick={() => editStudentStatus(student.id, 'present')}
-                                className={`px-0.5 py-0 rounded-full text-[10px] font-medium ${student.status.present ? 'bg-green-500 text-white' : 'bg-gray-100 text-gray-800 hover:bg-gray-200'}`}
+                                className={`px-1 py-0.5 rounded-full text-[9px] font-medium transition-all duration-200 ${student.status.present ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
                               >
                                 Present
                               </button>
                               <button 
                                 onClick={() => editStudentStatus(student.id, 'absent')}
-                                className={`px-0.5 py-0 rounded-full text-[10px] font-medium ${student.status.absent ? 'bg-red-500 text-white' : 'bg-gray-100 text-gray-800 hover:bg-gray-200'}`}
+                                className={`px-1 py-0.5 rounded-full text-[9px] font-medium transition-all duration-200 ${student.status.absent ? 'bg-red-100 text-red-800' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
                               >
                                 Absent
                               </button>
                               <button 
                                 onClick={() => editStudentStatus(student.id, 'late')}
-                                className={`px-0.5 py-0 rounded-full text-[10px] font-medium ${student.status.late ? 'bg-yellow-500 text-white' : 'bg-gray-100 text-gray-800 hover:bg-gray-200'}`}
+                                className={`px-1 py-0.5 rounded-full text-[9px] font-medium transition-all duration-200 ${student.status.late ? 'bg-amber-100 text-amber-800' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
                               >
                                 Late
                               </button>
                             </div>
                           </td>
-                          <td className="py-1 px-1.5 text-gray-600 text-xs">
+                          <td className="py-1 px-1.5 text-gray-600 text-[10px]">
                             <span>{student.method}</span>
                           </td>
                           <td className="py-1 px-1.5">
                             <div className="flex items-center gap-0.5">
                               <button 
-                                className="p-0.5 text-gray-500 hover:text-blue-600 hover:bg-gray-100 rounded transition-colors"
+                                className="p-0.5 text-gray-500 hover:text-blue-600 hover:bg-blue-100 rounded-full transition-colors duration-200"
                                 onClick={() => {
                                   setSelectedStudent(student);
                                   setShowStudentAttendanceModal(true);
@@ -577,86 +672,90 @@ const TeacherDashboard = () => {
 
           {/* Reports Tab */}
           {activeTab === 'reports' && (
-            <div>
-              <div className="flex justify-between items-center mb-6">
+            <div className="pt-2">
+              <div className="flex justify-between items-center mb-4">
                 <h2 className="text-sm font-bold text-gray-900">Attendance Reports & Analytics</h2>
-                <div className="flex gap-3">
+                <div className="flex gap-2">
                   <button 
                     onClick={() => console.log('Filter clicked')}
-                    className="flex items-center gap-1 px-2 py-0.5 bg-gradient-to-r from-gray-100 to-gray-200 border border-gray-200 text-gray-700 rounded hover:from-gray-200 hover:to-gray-300 transition-all shadow-sm hover:shadow text-xs"
+                    className="flex items-center gap-1 px-3 py-1.5 bg-gray-100 text-gray-700 rounded-full hover:bg-gray-200 transition-all text-xs font-medium"
                   >
-                    <Filter className="w-2.5 h-2.5" />
+                    <Filter className="w-3 h-3" />
                     Filter Data
                   </button>
                   <button 
                     onClick={() => console.log('Export Report clicked')}
-                    className="flex items-center gap-1 px-2 py-0.5 bg-gradient-to-r from-purple-500 to-pink-600 text-white rounded hover:from-purple-600 hover:to-pink-700 transition-all shadow-sm hover:shadow text-xs"
+                    className="flex items-center gap-1 px-3 py-1.5 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-full hover:from-blue-600 hover:to-indigo-700 transition-all shadow-sm hover:shadow text-xs font-medium"
                   >
-                    <Download className="w-2.5 h-2.5" />
+                    <Download className="w-3 h-3" />
                     Export Report
                   </button>
                 </div>
               </div>
               
               {/* Summary Stats */}
-              <div className="flex gap-3 mb-7">
-                <div className="flex-grow bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg p-4 shadow-sm border border-blue-200/30 backdrop-blur-sm text-white relative overflow-hidden">
-                  <div className="absolute top-0 right-0 w-24 h-24 bg-blue-300/10 rounded-full -translate-y-12 translate-x-12"></div>
-                  <div className="absolute bottom-0 left-0 w-20 h-20 bg-blue-700/10 rounded-full translate-y-10 -translate-x-10"></div>
+              <div className="flex gap-3 mb-4">
+                {/* Total Students: Purple to indigo gradient */}
+                <div className="flex-grow bg-gradient-to-br from-purple-500 to-indigo-600 rounded-lg p-4 shadow-sm border border-purple-200/30 backdrop-blur-sm text-white relative overflow-hidden">
+                  <div className="absolute -top-5 -right-5 w-20 h-20 bg-purple-300/10 rounded-full"></div>
+                  <div className="absolute -bottom-5 -left-5 w-16 h-16 bg-purple-700/10 rounded-full"></div>
                   <div className="flex items-center justify-between relative z-10">
                     <div>
-                      <p className="text-blue-100 text-xs">Total Enrolled Students</p>
+                      <p className="text-purple-100 text-xs">Total Students</p>
                       <p className="text-xl font-bold mt-1">{studentAttendanceData.length}</p>
                     </div>
-                    <Users className="w-8 h-8 text-blue-200 relative z-10" />
+                    <Users className="w-7 h-7 text-purple-200 relative z-10" />
                   </div>
                 </div>
                 
-                <div className="flex-grow bg-gradient-to-br from-green-500 to-green-600 rounded-lg p-4 shadow-sm border border-green-200/30 backdrop-blur-sm text-white relative overflow-hidden">
-                  <div className="absolute top-0 right-0 w-24 h-24 bg-green-300/10 rounded-full -translate-y-12 translate-x-12"></div>
-                  <div className="absolute bottom-0 left-0 w-20 h-20 bg-green-700/10 rounded-full translate-y-10 -translate-x-10"></div>
+                {/* Present Today: Purple to indigo gradient */}
+                <div className="flex-grow bg-gradient-to-br from-purple-500 to-indigo-600 rounded-lg p-4 shadow-sm border border-purple-200/30 backdrop-blur-sm text-white relative overflow-hidden">
+                  <div className="absolute -top-5 -right-5 w-20 h-20 bg-purple-300/10 rounded-full"></div>
+                  <div className="absolute -bottom-5 -left-5 w-16 h-16 bg-purple-700/10 rounded-full"></div>
                   <div className="flex items-center justify-between relative z-10">
                     <div>
-                      <p className="text-green-100 text-xs">Present Today</p>
+                      <p className="text-purple-100 text-xs">Present Today</p>
                       <p className="text-xl font-bold mt-1">{presentCount}</p>
                     </div>
-                    <UserCheck className="w-8 h-8 text-green-200 relative z-10" />
+                    <UserCheck className="w-7 h-7 text-purple-200 relative z-10" />
                   </div>
                 </div>
                 
-                <div className="flex-grow bg-gradient-to-br from-red-500 to-red-600 rounded-lg p-4 shadow-sm border border-red-200/30 backdrop-blur-sm text-white relative overflow-hidden">
-                  <div className="absolute top-0 right-0 w-24 h-24 bg-red-300/10 rounded-full -translate-y-12 translate-x-12"></div>
-                  <div className="absolute bottom-0 left-0 w-20 h-20 bg-red-700/10 rounded-full translate-y-10 -translate-x-10"></div>
+                {/* Absent Today: Purple to indigo gradient */}
+                <div className="flex-grow bg-gradient-to-br from-purple-500 to-indigo-600 rounded-lg p-4 shadow-sm border border-purple-200/30 backdrop-blur-sm text-white relative overflow-hidden">
+                  <div className="absolute -top-5 -right-5 w-20 h-20 bg-purple-300/10 rounded-full"></div>
+                  <div className="absolute -bottom-5 -left-5 w-16 h-16 bg-purple-700/10 rounded-full"></div>
                   <div className="flex items-center justify-between relative z-10">
                     <div>
-                      <p className="text-red-100 text-xs">Absent Today</p>
+                      <p className="text-purple-100 text-xs">Absent Today</p>
                       <p className="text-xl font-bold mt-1">{absentCount}</p>
                     </div>
-                    <UserX className="w-8 h-8 text-red-200 relative z-10" />
+                    <UserX className="w-7 h-7 text-purple-200 relative z-10" />
                   </div>
                 </div>
                 
-                <div className="flex-grow bg-gradient-to-br from-yellow-500 to-orange-500 rounded-lg p-4 shadow-sm border border-yellow-200/30 backdrop-blur-sm text-white relative overflow-hidden">
-                  <div className="absolute top-0 right-0 w-24 h-24 bg-yellow-300/10 rounded-full -translate-y-12 translate-x-12"></div>
-                  <div className="absolute bottom-0 left-0 w-20 h-20 bg-yellow-700/10 rounded-full translate-y-10 -translate-x-10"></div>
+                {/* Late Arrivals: Purple to indigo gradient */}
+                <div className="flex-grow bg-gradient-to-br from-purple-500 to-indigo-600 rounded-lg p-4 shadow-sm border border-purple-200/30 backdrop-blur-sm text-white relative overflow-hidden">
+                  <div className="absolute -top-5 -right-5 w-20 h-20 bg-purple-300/10 rounded-full"></div>
+                  <div className="absolute -bottom-5 -left-5 w-16 h-16 bg-purple-700/10 rounded-full"></div>
                   <div className="flex items-center justify-between relative z-10">
                     <div>
-                      <p className="text-yellow-100 text-xs">Late Arrivals</p>
+                      <p className="text-purple-100 text-xs">Late Arrivals</p>
                       <p className="text-xl font-bold mt-1">{lateCount}</p>
                     </div>
-                    <Clock className="w-8 h-8 text-yellow-200 relative z-10" />
+                    <Clock className="w-7 h-7 text-purple-200 relative z-10" />
                   </div>
                 </div>
               </div>
               
               {/* Charts Section */}
-              <div className="flex gap-5 mb-6">
+              <div className="flex gap-3 mb-4">
                 {/* Weekly Attendance Chart */}
-                <div className="flex-grow bg-white rounded-md p-4 shadow-sm border border-gray-100">
+                <div className="flex-grow bg-gradient-to-br from-[#F3F4FF] to-[#E0F2FE] rounded-lg p-4 shadow-md border border-gray-300">
                   <div className="flex justify-between items-center mb-2">
-                    <h3 className="text-sm font-bold text-gray-900">Weekly Attendance Trend Analysis</h3>
+                    <h3 className="text-xs font-bold text-gray-900">Weekly Attendance Trend Analysis</h3>
                     <select 
-                      className="text-xs border border-gray-300 rounded-md px-2 py-1"
+                      className="text-[10px] border border-gray-300 rounded-full px-3 py-1.5 bg-white"
                       onChange={(e) => console.log('Time range changed:', e.target.value)}
                     >
                       <option>Last 7 Days</option>
@@ -664,7 +763,7 @@ const TeacherDashboard = () => {
                       <option>Last 90 Days</option>
                     </select>
                   </div>
-                  <div className="h-48">
+                  <div className="h-44">
                     <ResponsiveContainer width="100%" height="100%">
                       <LineChart data={weeklyAttendanceData}>
                         <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#eee" />
@@ -678,6 +777,8 @@ const TeacherDashboard = () => {
                           axisLine={false} 
                           tickLine={false} 
                           tick={{ fill: '#666', fontSize: 8 }}
+                          domain={[0, 40]}
+                          ticks={[0, 5, 10, 15, 20, 25, 30, 35, 40]}
                         />
                         <Tooltip 
                           contentStyle={{ 
@@ -689,33 +790,35 @@ const TeacherDashboard = () => {
                             color: '#333'
                           }}
                         />
-                        <Legend />
+                        <Legend 
+                          wrapperStyle={{ fontSize: '8px' }}
+                        />
                         <Line 
                           type="monotone" 
                           dataKey="present" 
                           name="Present Students" 
-                          stroke="#10b981" 
-                          strokeWidth={1.5}
-                          dot={{ r: 3, fill: '#10b981' }}
-                          activeDot={{ r: 5, fill: '#10b981' }}
+                          stroke="#8B5CF6" 
+                          strokeWidth={2}
+                          dot={{ r: 3, fill: '#A78BFA' }}
+                          activeDot={{ r: 5, fill: '#A78BFA' }}
                         />
                         <Line 
                           type="monotone" 
                           dataKey="absent" 
                           name="Absent Students" 
-                          stroke="#ef4444" 
-                          strokeWidth={1.5}
-                          dot={{ r: 3, fill: '#ef4444' }}
-                          activeDot={{ r: 5, fill: '#ef4444' }}
+                          stroke="#3B82F6" 
+                          strokeWidth={2}
+                          dot={{ r: 3, fill: '#60A5FA' }}
+                          activeDot={{ r: 5, fill: '#60A5FA' }}
                         />
                         <Line 
                           type="monotone" 
                           dataKey="late" 
                           name="Late Arrivals" 
-                          stroke="#f59e0b" 
-                          strokeWidth={1.5}
-                          dot={{ r: 3, fill: '#f59e0b' }}
-                          activeDot={{ r: 5, fill: '#f59e0b' }}
+                          stroke="#1D4ED8" 
+                          strokeWidth={2}
+                          dot={{ r: 3, fill: '#3B82F6' }}
+                          activeDot={{ r: 5, fill: '#3B82F6' }}
                         />
                       </LineChart>
                     </ResponsiveContainer>
@@ -723,108 +826,45 @@ const TeacherDashboard = () => {
                 </div>
               </div>
               
-              {/* Detailed Report Table */}
-              <div className="bg-white rounded-md p-3 shadow-sm border border-gray-100">
-                <div className="flex justify-between items-center mb-2">
-                  <h3 className="text-sm font-bold text-gray-900">Detailed Class-wise Attendance Report</h3>
-                  <div className="flex gap-1.5">
-                    <button 
-                      onClick={() => console.log('Print clicked')}
-                      className="flex items-center gap-1 px-2.5 py-1 bg-gradient-to-r from-gray-500 to-gray-600 text-white rounded-md hover:from-gray-600 hover:to-gray-700 transition-all shadow-sm hover:shadow text-xs"
-                    >
-                      <Printer className="w-3 h-3" />
-                      Print Report
-                    </button>
-                    <button 
-                      onClick={() => console.log('Export CSV clicked')}
-                      className="flex items-center gap-1 px-2.5 py-1 bg-gradient-to-r from-purple-500 to-pink-600 text-white rounded-md hover:from-purple-600 hover:to-pink-700 transition-all shadow-sm hover:shadow text-xs"
-                    >
-                      <Download className="w-3 h-3" />
-                      Export to CSV
-                    </button>
-                  </div>
-                </div>
-                <div className="overflow-x-auto">
-                  <table className="w-full text-xs">
-                    <thead>
-                      <tr className="border-b border-gray-200">
-                        <th className="text-left py-1.5 px-2 font-medium text-gray-500">Class Name</th>
-                        <th className="text-left py-1.5 px-2 font-medium text-gray-500">Total Students</th>
-                        <th className="text-left py-1.5 px-2 font-medium text-gray-500">Present Count</th>
-                        <th className="text-left py-1.5 px-2 font-medium text-gray-500">Absent Count</th>
-                        <th className="text-left py-1.5 px-2 font-medium text-gray-500">Late Arrivals</th>
-                        <th className="text-left py-1.5 px-2 font-medium text-gray-500">Attendance Rate</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr className="border-b border-gray-100 hover:bg-gray-50">
-                        <td className="py-1.5 px-2 font-medium text-gray-900">Class 10-A</td>
-                        <td className="py-1.5 px-2 text-gray-600">4</td>
-                        <td className="py-1.5 px-2 text-green-600 font-medium">2</td>
-                        <td className="py-1.5 px-2 text-red-600 font-medium">1</td>
-                        <td className="py-1.5 px-2 text-yellow-600 font-medium">1</td>
-                        <td className="py-1.5 px-2 text-gray-600">75%</td>
-                      </tr>
-                      <tr className="border-b border-gray-100 hover:bg-gray-50">
-                        <td className="py-1.5 px-2 font-medium text-gray-900">Class 11-B</td>
-                        <td className="py-1.5 px-2 text-gray-600">2</td>
-                        <td className="py-1.5 px-2 text-green-600 font-medium">1</td>
-                        <td className="py-1.5 px-2 text-red-600 font-medium">1</td>
-                        <td className="py-1.5 px-2 text-yellow-600 font-medium">0</td>
-                        <td className="py-1.5 px-2 text-gray-600">50%</td>
-                      </tr>
-                      <tr className="border-b border-gray-100 hover:bg-gray-50">
-                        <td className="py-1.5 px-2 font-medium text-gray-900">Class 12-C</td>
-                        <td className="py-1.5 px-2 text-gray-600">2</td>
-                        <td className="py-1.5 px-2 text-green-600 font-medium">1</td>
-                        <td className="py-1.5 px-2 text-red-600 font-medium">0</td>
-                        <td className="py-1.5 px-2 text-yellow-600 font-medium">1</td>
-                        <td className="py-1.5 px-2 text-gray-600">75%</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-              
               {/* Additional Reports Section */}
-              <div className="mt-7 flex gap-5">
-                <div className="flex-grow bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg p-4 shadow-sm border border-indigo-200/30 backdrop-blur-sm text-white">
-                  <div className="flex items-center justify-between mb-2">
-                    <h3 className="font-bold text-base">Monthly Attendance Report</h3>
-                    <Calendar className="w-5 h-5 text-indigo-200" />
+              <div className="mt-6 flex gap-4">
+                <div className="flex-grow bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg p-3 shadow-sm border border-indigo-200/30 backdrop-blur-sm text-white">
+                  <div className="flex items-center justify-between mb-1.5">
+                    <h3 className="font-bold text-sm">Monthly Attendance Report</h3>
+                    <Calendar className="w-4 h-4 text-indigo-200" />
                   </div>
-                  <p className="text-indigo-100 text-xs mb-3">Comprehensive attendance analysis for the current month</p>
+                  <p className="text-indigo-100 text-[9px] mb-2.5">Comprehensive attendance analysis for the current month</p>
                   <button 
                     onClick={() => console.log('View Monthly Report clicked')}
-                    className="px-2.5 py-1 bg-white text-indigo-600 rounded-md hover:bg-gray-100 transition-all text-xs font-medium"
+                    className="px-2 py-0.5 bg-white text-indigo-600 rounded-md hover:bg-gray-100 transition-all text-[9px] font-medium"
                   >
                     View Detailed Report
                   </button>
                 </div>
                 
-                <div className="flex-grow bg-gradient-to-br from-cyan-500 to-teal-600 rounded-lg p-4 shadow-sm border border-cyan-200/30 backdrop-blur-sm text-white">
-                  <div className="flex items-center justify-between mb-2">
-                    <h3 className="font-bold text-base">Class Performance Comparison</h3>
-                    <TrendingUp className="w-5 h-5 text-cyan-200" />
+                <div className="flex-grow bg-gradient-to-br from-cyan-500 to-teal-600 rounded-lg p-3 shadow-sm border border-cyan-200/30 backdrop-blur-sm text-white">
+                  <div className="flex items-center justify-between mb-1.5">
+                    <h3 className="font-bold text-sm">Class Performance Comparison</h3>
+                    <TrendingUp className="w-4 h-4 text-cyan-200" />
                   </div>
-                  <p className="text-cyan-100 text-xs mb-3">Compare attendance performance across different classes</p>
+                  <p className="text-cyan-100 text-[9px] mb-2.5">Compare attendance performance across different classes</p>
                   <button 
                     onClick={() => console.log('View Class Performance clicked')}
-                    className="px-2.5 py-1 bg-white text-cyan-600 rounded-md hover:bg-gray-100 transition-all text-xs font-medium"
+                    className="px-2 py-0.5 bg-white text-cyan-600 rounded-md hover:bg-gray-100 transition-all text-[9px] font-medium"
                   >
                     Compare Performance
                   </button>
                 </div>
                 
-                <div className="flex-grow bg-gradient-to-br from-amber-500 to-orange-600 rounded-lg p-4 shadow-sm border border-amber-200/30 backdrop-blur-sm text-white">
-                  <div className="flex items-center justify-between mb-2">
-                    <h3 className="font-bold text-base">Individual Student Records</h3>
-                    <Users className="w-5 h-5 text-amber-200" />
+                <div className="flex-grow bg-gradient-to-br from-amber-500 to-orange-600 rounded-lg p-3 shadow-sm border border-amber-200/30 backdrop-blur-sm text-white">
+                  <div className="flex items-center justify-between mb-1.5">
+                    <h3 className="font-bold text-sm">Individual Student Records</h3>
+                    <Users className="w-4 h-4 text-amber-200" />
                   </div>
-                  <p className="text-amber-100 text-xs mb-3">Detailed attendance history for each student</p>
+                  <p className="text-amber-100 text-[9px] mb-2.5">Detailed attendance history for each student</p>
                   <button 
                     onClick={() => console.log('View Student Details clicked')}
-                    className="px-2.5 py-1 bg-white text-amber-600 rounded-md hover:bg-gray-100 transition-all text-xs font-medium"
+                    className="px-2 py-0.5 bg-white text-amber-600 rounded-md hover:bg-gray-100 transition-all text-[9px] font-medium"
                   >
                     View Student Records
                   </button>
@@ -835,114 +875,113 @@ const TeacherDashboard = () => {
 
           {/* Alerts Tab */}
           {activeTab === 'alerts' && (
-            <div style={{padding: '18px'}}>
-              <h2 style={{fontSize: '14px', fontWeight: 'bold', marginBottom: '6px'}}>Alert Management & Notifications</h2>
+            <div style={{padding: '16px'}}>
+              <h2 style={{fontSize: '12px', fontWeight: 'bold', marginBottom: '4px'}}>Alert Management & Notifications</h2>
               
               {/* Alert Summary Cards */}
-              <div style={{display: 'flex', gap: '13px', marginBottom: '16px'}}>
-                <div style={{background: 'linear-gradient(to bottom right, #f87171, #ef4444)', padding: '13px', borderRadius: '6px', border: '1px solid rgba(248, 113, 113, 0.3)', textAlign: 'center', flex: '1', position: 'relative', overflow: 'hidden', color: 'white', boxShadow: '0 2px 4px rgba(0,0,0,0.1)'}}>
-                  <div style={{position: 'absolute', top: '-30px', right: '-30px', width: '100px', height: '100px', backgroundColor: 'rgba(254, 202, 202, 0.15)', borderRadius: '50%', zIndex: '0'}}></div>
-                  <div style={{position: 'absolute', bottom: '-20px', left: '-20px', width: '80px', height: '80px', backgroundColor: 'rgba(252, 165, 165, 0.2)', borderRadius: '50%', zIndex: '0'}}></div>
+              <div style={{display: 'flex', gap: '12px', marginBottom: '15px'}}>
+                <div style={{background: 'linear-gradient(to bottom right, #f87171, #ef4444)', padding: '12px', borderRadius: '5px', border: '1px solid rgba(248, 113, 113, 0.3)', textAlign: 'center', flex: '1', position: 'relative', overflow: 'hidden', color: 'white', boxShadow: '0 2px 4px rgba(0,0,0,0.1)'}}>
+                  <div style={{position: 'absolute', top: '-29px', right: '-29px', width: '95px', height: '95px', backgroundColor: 'rgba(254, 202, 202, 0.15)', borderRadius: '50%', zIndex: '0'}}></div>
+                  <div style={{position: 'absolute', bottom: '-19px', left: '-19px', width: '75px', height: '75px', backgroundColor: 'rgba(252, 165, 165, 0.2)', borderRadius: '50%', zIndex: '0'}}></div>
                   <div style={{position: 'relative', zIndex: '1'}}>
-                    <h3 style={{fontSize: '20px', fontWeight: 'bold', marginBottom: '3px'}}>3</h3>
-                    <p style={{fontSize: '10px', opacity: '0.9'}}>Critical Alerts</p>
+                    <h3 style={{fontSize: '19px', fontWeight: 'bold', marginBottom: '2px'}}>3</h3>
+                    <p style={{fontSize: '9px', opacity: '0.9'}}>Critical Alerts</p>
                   </div>
                 </div>
                 
-                <div style={{background: 'linear-gradient(to bottom right, #fbbf24, #f59e0b)', padding: '13px', borderRadius: '6px', border: '1px solid rgba(251, 191, 36, 0.3)', textAlign: 'center', flex: '1', position: 'relative', overflow: 'hidden', color: 'white', boxShadow: '0 2px 4px rgba(0,0,0,0.1)'}}>
-                  <div style={{position: 'absolute', top: '-30px', right: '-30px', width: '100px', height: '100px', backgroundColor: 'rgba(251, 191, 36, 0.15)', borderRadius: '50%', zIndex: '0'}}></div>
-                  <div style={{position: 'absolute', bottom: '-20px', left: '-20px', width: '80px', height: '80px', backgroundColor: 'rgba(245, 158, 11, 0.2)', borderRadius: '50%', zIndex: '0'}}></div>
+                <div style={{background: 'linear-gradient(to bottom right, #fbbf24, #f59e0b)', padding: '12px', borderRadius: '5px', border: '1px solid rgba(251, 191, 36, 0.3)', textAlign: 'center', flex: '1', position: 'relative', overflow: 'hidden', color: 'white', boxShadow: '0 2px 4px rgba(0,0,0,0.1)'}}>
+                  <div style={{position: 'absolute', top: '-29px', right: '-29px', width: '95px', height: '95px', backgroundColor: 'rgba(251, 191, 36, 0.15)', borderRadius: '50%', zIndex: '0'}}></div>
+                  <div style={{position: 'absolute', bottom: '-19px', left: '-19px', width: '75px', height: '75px', backgroundColor: 'rgba(245, 158, 11, 0.2)', borderRadius: '50%', zIndex: '0'}}></div>
                   <div style={{position: 'relative', zIndex: '1'}}>
-                    <h3 style={{fontSize: '20px', fontWeight: 'bold', marginBottom: '3px'}}>7</h3>
-                    <p style={{fontSize: '10px', opacity: '0.9'}}>Warnings</p>
+                    <h3 style={{fontSize: '19px', fontWeight: 'bold', marginBottom: '2px'}}>7</h3>
+                    <p style={{fontSize: '9px', opacity: '0.9'}}>Warnings</p>
                   </div>
                 </div>
                 
-                <div style={{background: 'linear-gradient(to bottom right, #60a5fa, #3b82f6)', padding: '13px', borderRadius: '6px', border: '1px solid rgba(96, 165, 250, 0.3)', textAlign: 'center', flex: '1', position: 'relative', overflow: 'hidden', color: 'white', boxShadow: '0 2px 4px rgba(0,0,0,0.1)'}}>
-                  <div style={{position: 'absolute', top: '-30px', right: '-30px', width: '100px', height: '100px', backgroundColor: 'rgba(191, 219, 254, 0.15)', borderRadius: '50%', zIndex: '0'}}></div>
-                  <div style={{position: 'absolute', bottom: '-20px', left: '-20px', width: '80px', height: '80px', backgroundColor: 'rgba(96, 165, 250, 0.2)', borderRadius: '50%', zIndex: '0'}}></div>
+                <div style={{background: 'linear-gradient(to bottom right, #60a5fa, #3b82f6)', padding: '12px', borderRadius: '5px', border: '1px solid rgba(96, 165, 250, 0.3)', textAlign: 'center', flex: '1', position: 'relative', overflow: 'hidden', color: 'white', boxShadow: '0 2px 4px rgba(0,0,0,0.1)'}}>
+                  <div style={{position: 'absolute', top: '-29px', right: '-29px', width: '95px', height: '95px', backgroundColor: 'rgba(191, 219, 254, 0.15)', borderRadius: '50%', zIndex: '0'}}></div>
+                  <div style={{position: 'absolute', bottom: '-19px', left: '-19px', width: '75px', height: '75px', backgroundColor: 'rgba(96, 165, 250, 0.2)', borderRadius: '50%', zIndex: '0'}}></div>
                   <div style={{position: 'relative', zIndex: '1'}}>
-                    <h3 style={{fontSize: '20px', fontWeight: 'bold', marginBottom: '3px'}}>12</h3>
-                    <p style={{fontSize: '10px', opacity: '0.9'}}>Informational Notices</p>
+                    <h3 style={{fontSize: '19px', fontWeight: 'bold', marginBottom: '2px'}}>12</h3>
+                    <p style={{fontSize: '9px', opacity: '0.9'}}>Informational Notices</p>
                   </div>
                 </div>
                 
-                <div style={{background: 'linear-gradient(to bottom right, #a78bfa, #8b5cf6)', padding: '13px', borderRadius: '6px', border: '1px solid rgba(167, 139, 250, 0.3)', textAlign: 'center', flex: '1', position: 'relative', overflow: 'hidden', color: 'white', boxShadow: '0 2px 4px rgba(0,0,0,0.1)'}}>
-                  <div style={{position: 'absolute', top: '-30px', right: '-30px', width: '100px', height: '100px', backgroundColor: 'rgba(221, 214, 254, 0.15)', borderRadius: '50%', zIndex: '0'}}></div>
-                  <div style={{position: 'absolute', bottom: '-20px', left: '-20px', width: '80px', height: '80px', backgroundColor: 'rgba(192, 132, 252, 0.2)', borderRadius: '50%', zIndex: '0'}}></div>
+                <div style={{background: 'linear-gradient(to bottom right, #a78bfa, #8b5cf6)', padding: '12px', borderRadius: '5px', border: '1px solid rgba(167, 139, 250, 0.3)', textAlign: 'center', flex: '1', position: 'relative', overflow: 'hidden', color: 'white', boxShadow: '0 2px 4px rgba(0,0,0,0.1)'}}>
+                  <div style={{position: 'absolute', top: '-29px', right: '-29px', width: '95px', height: '95px', backgroundColor: 'rgba(221, 214, 254, 0.15)', borderRadius: '50%', zIndex: '0'}}></div>
+                  <div style={{position: 'absolute', bottom: '-19px', left: '-19px', width: '75px', height: '75px', backgroundColor: 'rgba(192, 132, 252, 0.2)', borderRadius: '50%', zIndex: '0'}}></div>
                   <div style={{position: 'relative', zIndex: '1'}}>
-                    <h3 style={{fontSize: '20px', fontWeight: 'bold', marginBottom: '3px'}}>5</h3>
-                    <p style={{fontSize: '10px', opacity: '0.9'}}>General Info</p>
+                    <h3 style={{fontSize: '19px', fontWeight: 'bold', marginBottom: '2px'}}>5</h3>
+                    <p style={{fontSize: '9px', opacity: '0.9'}}>General Info</p>
                   </div>
                 </div>
               </div>
               
               {/* Alerts List */}
-              <div style={{backgroundColor: 'white', padding: '14px', borderRadius: '6px', border: '1px solid #e5e7eb'}}>
-                <h3 style={{fontSize: '12px', fontWeight: 'bold', marginBottom: '12px'}}>Recent Alerts & Notifications</h3>
-                <div style={{display: 'flex', flexDirection: 'column', gap: '13px'}}>
-                  <div style={{display: 'flex', alignItems: 'flex-start', gap: '8px', padding: '13px', backgroundColor: '#fef2f2', border: '1px solid #fecaca', borderRadius: '6px'}}>
-                    <div style={{color: '#dc2626', marginTop: '3px'}}>⚠️</div>
+              <div style={{backgroundColor: 'white', padding: '12px', borderRadius: '4px', border: '1px solid #e5e7eb'}}>
+                <h3 style={{fontSize: '10px', fontWeight: 'bold', marginBottom: '10px'}}>Recent Alerts & Notifications</h3>
+                <div style={{display: 'flex', flexDirection: 'column', gap: '11px'}}>
+                  <div style={{display: 'flex', alignItems: 'flex-start', gap: '6px', padding: '11px', backgroundColor: '#fef2f2', border: '1px solid #fecaca', borderRadius: '4px'}}>
+                    <div style={{color: '#dc2626', marginTop: '1px'}}>⚠️</div>
                     <div style={{flex: 1}}>
-                      <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: '3px'}}>
-                        <h4 style={{fontWeight: '600', color: '#111827', fontSize: '14px'}}>High Absenteeism Detected</h4>
-                        <span style={{fontSize: '8px', color: '#6b7280'}}>2 hours ago</span>
+                      <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: '1px'}}>
+                        <h4 style={{fontWeight: '600', color: '#111827', fontSize: '12px'}}>High Absenteeism Detected</h4>
+                        <span style={{fontSize: '6px', color: '#6b7280'}}>2 hours ago</span>
                       </div>
-                      <p style={{fontSize: '10px', color: '#6b7280', marginBottom: '8px'}}>Multiple students in Class 10-A have been absent for more than 3 consecutive days. Immediate attention required.</p>
-                      <div style={{display: 'flex', gap: '8px', marginBottom: '8px'}}>
-                        <span style={{backgroundColor: '#fee2e2', color: '#b91c1c', padding: '2px 6px', borderRadius: '9999px', fontSize: '8px'}}>Critical</span>
-                        <span style={{fontSize: '8px', color: '#6b7280'}}>Class 10-A</span>
+                      <p style={{fontSize: '8px', color: '#6b7280', marginBottom: '6px'}}>Multiple students in Class 10-A have been absent for more than 3 consecutive days. Immediate attention required.</p>
+                      <div style={{display: 'flex', gap: '6px', marginBottom: '6px'}}>
+                        <span style={{backgroundColor: '#fee2e2', color: '#b91c1c', padding: '2px 4px', borderRadius: '9999px', fontSize: '6px'}}>Critical</span>
+                        <span style={{fontSize: '6px', color: '#6b7280'}}>Class 10-A</span>
                       </div>
-                      <div style={{display: 'flex', gap: '8px'}}>
-                        <button style={{padding: '4px 10px', backgroundColor: '#dc2626', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: '500', fontSize: '10px'}}>Take Action</button>
-                        <button style={{padding: '4px 10px', backgroundColor: '#ffffff', color: '#dc2626', border: '1px solid #dc2626', borderRadius: '4px', cursor: 'pointer', fontWeight: '500', fontSize: '10px'}}>View Details</button>
+                      <div style={{display: 'flex', gap: '6px'}}>
+                        <button style={{padding: '2px 8px', backgroundColor: '#dc2626', color: 'white', border: 'none', borderRadius: '2px', cursor: 'pointer', fontWeight: '500', fontSize: '8px'}}>Take Action</button>
+                        <button style={{padding: '2px 8px', backgroundColor: '#ffffff', color: '#dc2626', border: '1px solid #dc2626', borderRadius: '2px', cursor: 'pointer', fontWeight: '500', fontSize: '8px'}}>View Details</button>
                       </div>
                     </div>
                     <button style={{color: '#9ca3af', cursor: 'pointer'}}>✕</button>
                   </div>
                   
-                  <div style={{display: 'flex', alignItems: 'flex-start', gap: '8px', padding: '13px', backgroundColor: '#fffbeb', border: '1px solid #fde68a', borderRadius: '6px'}}>
-                    <div style={{color: '#d97706', marginTop: '3px'}}>⚠️</div>
+                  <div style={{display: 'flex', alignItems: 'flex-start', gap: '6px', padding: '11px', backgroundColor: '#fffbeb', border: '1px solid #fde68a', borderRadius: '4px'}}>
+                    <div style={{color: '#d97706', marginTop: '1px'}}>⚠️</div>
                     <div style={{flex: 1}}>
-                      <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: '3px'}}>
-                        <h4 style={{fontWeight: '600', color: '#111827', fontSize: '14px'}}>Late Arrival Trend</h4>
-                        <span style={{fontSize: '8px', color: '#6b7280'}}>1 day ago</span>
+                      <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: '1px'}}>
+                        <h4 style={{fontWeight: '600', color: '#111827', fontSize: '12px'}}>Late Arrival Trend</h4>
+                        <span style={{fontSize: '6px', color: '#6b7280'}}>1 day ago</span>
                       </div>
-                      <p style={{fontSize: '10px', color: '#6b7280', marginBottom: '8px'}}>Increased number of late arrivals detected in Class 11-B this week compared to previous weeks.</p>
-                      <div style={{display: 'flex', gap: '8px', marginBottom: '8px'}}>
-                        <span style={{backgroundColor: '#fef3c7', color: '#d97706', padding: '2px 6px', borderRadius: '9999px', fontSize: '8px'}}>Warning</span>
-                        <span style={{fontSize: '8px', color: '#6b7280'}}>Class 11-B</span>
+                      <p style={{fontSize: '8px', color: '#6b7280', marginBottom: '6px'}}>Increased number of late arrivals detected in Class 11-B this week compared to previous weeks.</p>
+                      <div style={{display: 'flex', gap: '6px', marginBottom: '6px'}}>
+                        <span style={{backgroundColor: '#fef3c7', color: '#d97706', padding: '2px 4px', borderRadius: '9999px', fontSize: '6px'}}>Warning</span>
+                        <span style={{fontSize: '6px', color: '#6b7280'}}>Class 11-B</span>
                       </div>
-                      <div style={{display: 'flex', gap: '8px'}}>
-                        <button style={{padding: '4px 10px', backgroundColor: '#d97706', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: '500', fontSize: '10px'}}>Review Policy</button>
-                        <button style={{padding: '4px 10px', backgroundColor: '#ffffff', color: '#d97706', border: '1px solid #d97706', borderRadius: '4px', cursor: 'pointer', fontWeight: '500', fontSize: '10px'}}>View Details</button>
+                      <div style={{display: 'flex', gap: '6px'}}>
+                        <button style={{padding: '2px 8px', backgroundColor: '#d97706', color: 'white', border: 'none', borderRadius: '2px', cursor: 'pointer', fontWeight: '500', fontSize: '8px'}}>Review Policy</button>
+                        <button style={{padding: '2px 8px', backgroundColor: '#ffffff', color: '#d97706', border: '1px solid #d97706', borderRadius: '2px', cursor: 'pointer', fontWeight: '500', fontSize: '8px'}}>View Details</button>
                       </div>
                     </div>
                     <button style={{color: '#9ca3af', cursor: 'pointer'}}>✕</button>
                   </div>
                   
-                  <div style={{display: 'flex', alignItems: 'flex-start', gap: '8px', padding: '13px', backgroundColor: '#eff6ff', border: '1px solid #bfdbfe', borderRadius: '6px'}}>
-                    <div style={{color: '#2563eb', marginTop: '3px'}}>🔔</div>
+                  <div style={{display: 'flex', alignItems: 'flex-start', gap: '6px', padding: '11px', backgroundColor: '#eff6ff', border: '1px solid #bfdbfe', borderRadius: '4px'}}>
+                    <div style={{color: '#2563eb', marginTop: '1px'}}>🔔</div>
                     <div style={{flex: 1}}>
-                      <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: '3px'}}>
-                        <h4 style={{fontWeight: '600', color: '#111827', fontSize: '14px'}}>System Maintenance Scheduled</h4>
-                        <span style={{fontSize: '8px', color: '#6b7280'}}>3 days ago</span>
+                      <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: '1px'}}>
+                        <h4 style={{fontWeight: '600', color: '#111827', fontSize: '12px'}}>System Maintenance Scheduled</h4>
+                        <span style={{fontSize: '6px', color: '#6b7280'}}>3 days ago</span>
                       </div>
-                      <p style={{fontSize: '10px', color: '#6b7280', marginBottom: '8px'}}>Planned system maintenance on April 20, 2024 from 10:00 PM to 2:00 AM. Service may be temporarily unavailable.</p>
-                      <div style={{display: 'flex', gap: '8px', marginBottom: '8px'}}>
-                        <span style={{backgroundColor: '#dbeafe', color: '#1d4ed8', padding: '2px 6px', borderRadius: '9999px', fontSize: '8px'}}>Notice</span>
-                        <span style={{fontSize: '8px', color: '#6b7280'}}>System Admin</span>
+                      <p style={{fontSize: '8px', color: '#6b7280', marginBottom: '6px'}}>Planned system maintenance on April 20, 2024 from 10:00 PM to 2:00 AM. Service may be temporarily unavailable.</p>
+                      <div style={{display: 'flex', gap: '6px', marginBottom: '6px'}}>
+                        <span style={{backgroundColor: '#dbeafe', color: '#1d4ed8', padding: '2px 4px', borderRadius: '9999px', fontSize: '6px'}}>Notice</span>
+                        <span style={{fontSize: '6px', color: '#6b7280'}}>System Admin</span>
                       </div>
-                      <div style={{display: 'flex', gap: '8px'}}>
-                        <button style={{padding: '4px 10px', backgroundColor: '#2563eb', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: '500', fontSize: '10px'}}>Acknowledge</button>
-                        <button style={{padding: '4px 10px', backgroundColor: '#ffffff', color: '#2563eb', border: '1px solid #2563eb', borderRadius: '4px', cursor: 'pointer', fontWeight: '500', fontSize: '10px'}}>More Info</button>
+                      <div style={{display: 'flex', gap: '6px'}}>
+                        <button style={{padding: '2px 8px', backgroundColor: '#2563eb', color: 'white', border: 'none', borderRadius: '2px', cursor: 'pointer', fontWeight: '500', fontSize: '8px'}}>Acknowledge</button>
+                        <button style={{padding: '2px 8px', backgroundColor: '#ffffff', color: '#2563eb', border: '1px solid #2563eb', borderRadius: '2px', cursor: 'pointer', fontWeight: '500', fontSize: '8px'}}>More Info</button>
                       </div>
                     </div>
                     <button style={{color: '#9ca3af', cursor: 'pointer'}}>✕</button>
                   </div>
                 </div>
                 
-
               </div>
             </div>
           )}
@@ -1222,9 +1261,9 @@ const TeacherDashboard = () => {
                   onChange={handleNewStudentChange}
                   className="w-full px-3 py-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-xs"
                 >
-                  <option value="Class 10-A">Class 10-A</option>
-                  <option value="Class 11-B">Class 11-B</option>
-                  <option value="Class 12-C">Class 12-C</option>
+                  {teacherData.classes.map((classObj, index) => (
+                    <option key={index} value={classObj.name}>{classObj.name}</option>
+                  ))}
                 </select>
               </div>
               
@@ -1268,6 +1307,83 @@ const TeacherDashboard = () => {
                   className="flex-1 px-3 py-1.5 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded hover:from-blue-600 hover:to-indigo-700 transition-all shadow-sm hover:shadow text-xs"
                 >
                   Add Student
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      
+      {/* Add Class Form Modal */}
+      {showAddClassForm && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl p-6 max-w-md w-full max-h-[90vh] overflow-auto">
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-lg font-bold text-gray-900">Add New Class</h3>
+              <button 
+                onClick={() => setShowAddClassForm(false)}
+                className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+              >
+                <X className="w-5 h-5 text-gray-500" />
+              </button>
+            </div>
+            
+            <div className="space-y-4">
+              <div>
+                <label className="block text-xs font-medium text-gray-700 mb-1.5">Class Name</label>
+                <input 
+                  type="text" 
+                  name="name"
+                  value={newClass.name}
+                  onChange={handleNewClassChange}
+                  className="w-full px-3 py-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-xs"
+                  placeholder="Enter class name (e.g., Class 9-D)"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-xs font-medium text-gray-700 mb-1.5">Subject</label>
+                <input 
+                  type="text" 
+                  name="subject"
+                  value={newClass.subject}
+                  onChange={handleNewClassChange}
+                  className="w-full px-3 py-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-xs"
+                  placeholder="Enter subject name"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-xs font-medium text-gray-700 mb-1.5">Color</label>
+                <select 
+                  name="color"
+                  value={newClass.color || 'blue'}
+                  onChange={handleNewClassChange}
+                  className="w-full px-3 py-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-xs"
+                >
+                  <option value="blue">Blue</option>
+                  <option value="green">Green</option>
+                  <option value="purple">Purple</option>
+                  <option value="indigo">Indigo</option>
+                  <option value="cyan">Cyan</option>
+                  <option value="amber">Amber</option>
+                  <option value="teal">Teal</option>
+                  <option value="rose">Rose</option>
+                </select>
+              </div>
+              
+              <div className="flex gap-3 pt-4">
+                <button 
+                  onClick={() => setShowAddClassForm(false)}
+                  className="flex-1 px-3 py-1.5 border border-gray-300 text-gray-700 rounded hover:bg-gray-50 transition-all text-xs"
+                >
+                  Cancel
+                </button>
+                <button 
+                  onClick={addNewClass}
+                  className="flex-1 px-3 py-1.5 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded hover:from-blue-600 hover:to-indigo-700 transition-all shadow-sm hover:shadow text-xs"
+                >
+                  Add Class
                 </button>
               </div>
             </div>
