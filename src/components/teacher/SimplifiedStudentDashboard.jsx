@@ -532,6 +532,61 @@ const SimplifiedStudentDashboard = () => {
                 </div>
               </div>
               
+              {/* 3-Month Attendance Graph */}
+              <div className="bg-white rounded-md shadow-sm border border-gray-100 p-4 mb-6">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="font-bold text-gray-900 text-[11px]">3-Month Attendance Trend</h3>
+                  <div className="flex gap-1">
+                    <span className="px-1.5 py-0.5 bg-indigo-100 text-indigo-800 text-[9px] font-medium rounded-full">Jan - Mar 2024</span>
+                  </div>
+                </div>
+                <div className="flex items-end h-24 gap-2 mt-4">
+                  {[
+                    { month: 'Jan', present: 28, late: 2, absent: 1, total: 31 },
+                    { month: 'Feb', present: 26, late: 1, absent: 1, total: 28 },
+                    { month: 'Mar', present: 29, late: 1, absent: 1, total: 31 }
+                  ].map((month, index) => (
+                    <div key={index} className="flex flex-col items-center flex-1">
+                      <div className="text-[8px] text-gray-500 mb-1">{month.month}</div>
+                      <div className="flex flex-col w-full">
+                        {/* Present days - green */}
+                        <div 
+                          className="w-full bg-green-600 rounded-t"
+                          style={{ height: `${(month.present / month.total) * 100}%` }}
+                        ></div>
+                        {/* Late days - yellow */}
+                        <div 
+                          className="w-full bg-yellow-500"
+                          style={{ height: `${(month.late / month.total) * 100}%` }}
+                        ></div>
+                        {/* Absent days - red */}
+                        <div 
+                          className="w-full bg-red-600 rounded-b"
+                          style={{ height: `${(month.absent / month.total) * 100}%` }}
+                        ></div>
+                      </div>
+                      <div className="text-[9px] font-bold text-gray-900 mt-1">
+                        {Math.round((month.present / month.total) * 100)}%
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <div className="flex justify-center gap-4 mt-3">
+                  <div className="flex items-center gap-1">
+                    <div className="w-2 h-2 bg-green-600 rounded-full"></div>
+                    <span className="text-[8px] text-gray-600">Present</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
+                    <span className="text-[8px] text-gray-600">Late</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <div className="w-2 h-2 bg-red-600 rounded-full"></div>
+                    <span className="text-[8px] text-gray-600">Absent</span>
+                  </div>
+                </div>
+              </div>
+              
               {/* Attendance Details Table */}
               <div className="bg-white rounded-md shadow-sm border border-gray-100 overflow-hidden">
                 <div className="overflow-x-auto">
