@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Calendar, BookOpen, Award, TrendingUp, AlertCircle, Clock, Bell, User, MessageSquare, CheckCircle, FileText, Target, LogOut, Home, Search, ChevronDown, Eye, Download, Printer, Filter, Plus, X, PieChart as PieChartIcon, LineChart as LineChartIcon, Star, Settings, Edit, RefreshCw, School, Calculator, FlaskConical, Landmark } from 'lucide-react';
+import { Calendar, BookOpen, Award, TrendingUp, AlertCircle, Clock, Bell, User, MessageSquare, CheckCircle, FileText, Target, LogOut, Home, Search, ChevronDown, Eye, Download, Printer, Filter, Plus, X, PieChart as PieChartIcon, LineChart as LineChartIcon, Star, Settings, Edit, RefreshCw, School, Calculator, FlaskConical, Landmark, Lock } from 'lucide-react';
 import { LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { motion } from 'framer-motion';
 import AttendSmartLogo from '../AttendSmartLogo';
@@ -911,7 +911,12 @@ const NewStudentDashboard = () => {
               <div className="bg-white rounded-lg p-3 shadow-sm border border-gray-100 mb-4">
                 <div className="flex items-center justify-between mb-3">
                   <h3 className="text-[10px] font-bold text-gray-900">Profile Settings</h3>
-                  <button className="text-[10px] text-blue-600 hover:text-blue-700 font-medium">Edit</button>
+                  <button 
+                    onClick={() => alert('Edit profile settings')}
+                    className="text-[10px] text-blue-600 hover:text-blue-700 font-medium"
+                  >
+                    Edit
+                  </button>
                 </div>
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
@@ -929,7 +934,10 @@ const NewStudentDashboard = () => {
                         <p className="text-[10px] text-gray-500">{profileData.email}</p>
                       </div>
                     </div>
-                    <button className="p-1.5 text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-colors">
+                    <button 
+                      onClick={() => alert('Edit profile information')}
+                      className="p-1.5 text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-colors"
+                    >
                       <Edit className="w-3 h-3" />
                     </button>
                   </div>
@@ -943,7 +951,10 @@ const NewStudentDashboard = () => {
                         <p className="text-[10px] text-gray-500">{profileData.class}</p>
                       </div>
                     </div>
-                    <button className="p-1.5 text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-colors">
+                    <button 
+                      onClick={() => alert('Edit class information')}
+                      className="p-1.5 text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-colors"
+                    >
                       <Edit className="w-3 h-3" />
                     </button>
                   </div>
@@ -957,7 +968,10 @@ const NewStudentDashboard = () => {
                         <p className="text-[10px] text-gray-500">{profileData.rollNumber}</p>
                       </div>
                     </div>
-                    <button className="p-1.5 text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-colors">
+                    <button 
+                      onClick={() => alert('Edit roll number')}
+                      className="p-1.5 text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-colors"
+                    >
                       <Edit className="w-3 h-3" />
                     </button>
                   </div>
@@ -971,7 +985,10 @@ const NewStudentDashboard = () => {
                         <p className="text-[10px] text-gray-500">{profileData.school}</p>
                       </div>
                     </div>
-                    <button className="p-1.5 text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-colors">
+                    <button 
+                      onClick={() => alert('Edit school information')}
+                      className="p-1.5 text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-colors"
+                    >
                       <Edit className="w-3 h-3" />
                     </button>
                   </div>
@@ -982,7 +999,12 @@ const NewStudentDashboard = () => {
               <div className="bg-white rounded-lg p-3 shadow-sm border border-gray-100 mb-4">
                 <div className="flex items-center justify-between mb-3">
                   <h3 className="text-[10px] font-bold text-gray-900">Notifications Settings</h3>
-                  <button className="text-[10px] text-blue-600 hover:text-blue-700 font-medium">Edit</button>
+                  <button 
+                    onClick={() => alert('Edit notification settings')}
+                    className="text-[10px] text-blue-600 hover:text-blue-700 font-medium"
+                  >
+                    Edit
+                  </button>
                 </div>
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
@@ -1037,7 +1059,12 @@ const NewStudentDashboard = () => {
               <div className="bg-white rounded-lg p-3 shadow-sm border border-gray-100 mb-4">
                 <div className="flex items-center justify-between mb-3">
                   <h3 className="text-[10px] font-bold text-gray-900">Security Settings</h3>
-                  <button className="text-[10px] text-blue-600 hover:text-blue-700 font-medium">Edit</button>
+                  <button 
+                    onClick={() => alert('Edit security settings')}
+                    className="text-[10px] text-blue-600 hover:text-blue-700 font-medium"
+                  >
+                    Edit
+                  </button>
                 </div>
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
@@ -1050,7 +1077,10 @@ const NewStudentDashboard = () => {
                         <p className="text-[10px] text-gray-500">Change your account password</p>
                       </div>
                     </div>
-                    <button className="p-1.5 text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-colors">
+                    <button 
+                      onClick={() => alert('Change password')}
+                      className="p-1.5 text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-colors"
+                    >
                       <Edit className="w-3 h-3" />
                     </button>
                   </div>
