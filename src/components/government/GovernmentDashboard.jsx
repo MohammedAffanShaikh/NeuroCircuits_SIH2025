@@ -183,8 +183,8 @@ const GovernmentDashboard = ({ onLogout }) => {
                 
                 <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-3">
                   <div>
-                    <h2 className="text-sm font-bold text-white mb-1.5">Good Morning, Official! 👋</h2>
-                    <p className="text-xs text-blue-100 mb-2">Monitor educational statistics and policy implementation across districts</p>
+                    <h2 className="text-base font-bold text-white mb-1.5">Good Morning, Official! 👋</h2>
+                    <p className="text-[10px] text-blue-100 mb-2">Monitor educational statistics and policy implementation across districts</p>
                     <div className="flex flex-wrap gap-2 mt-2">
                       <div className="flex items-center bg-white/10 rounded-full px-2.5 py-1">
                         <div className="w-2 h-2 bg-green-400 rounded-full mr-1.5"></div>
@@ -221,11 +221,11 @@ const GovernmentDashboard = ({ onLogout }) => {
                           <IconComponent className="w-4 h-4 text-white" />
                         </div>
                         <div className="text-right">
-                          <div className="text-lg font-bold text-white">{stat.value}</div>
-                          <div className="text-[9px] text-white/80">{stat.label}</div>
+                          <div className="text-base font-bold text-white">{stat.value}</div>
+                          <div className="text-[10px] text-white/80">{stat.label}</div>
                         </div>
                       </div>
-                      <div className="text-[9px] text-white/90 font-medium">+{stat.change} from last period</div>
+                      <div className="text-[10px] text-white/90 font-medium">+{stat.change} from last period</div>
                     </div>
                   );
                 })}
@@ -243,19 +243,19 @@ const GovernmentDashboard = ({ onLogout }) => {
                     <div className="flex gap-1">
                       <button 
                         onClick={() => setReportPeriod('weekly')}
-                        className={`px-2 py-1 text-[9px] rounded-md ${reportPeriod === 'weekly' ? 'bg-white text-blue-600' : 'bg-white/20 text-white'}`}
+                        className={`px-2 py-1 text-[10px] rounded-md ${reportPeriod === 'weekly' ? 'bg-white text-blue-600' : 'bg-white/20 text-white'}`}
                       >
                         Weekly
                       </button>
                       <button 
                         onClick={() => setReportPeriod('monthly')}
-                        className={`px-2 py-1 text-[9px] rounded-md ${reportPeriod === 'monthly' ? 'bg-white text-blue-600' : 'bg-white/20 text-white'}`}
+                        className={`px-2 py-1 text-[10px] rounded-md ${reportPeriod === 'monthly' ? 'bg-white text-blue-600' : 'bg-white/20 text-white'}`}
                       >
                         Monthly
                       </button>
                       <button 
                         onClick={() => setReportPeriod('yearly')}
-                        className={`px-2 py-1 text-[9px] rounded-md ${reportPeriod === 'yearly' ? 'bg-white text-blue-600' : 'bg-white/20 text-white'}`}
+                        className={`px-2 py-1 text-[10px] rounded-md ${reportPeriod === 'yearly' ? 'bg-white text-blue-600' : 'bg-white/20 text-white'}`}
                       >
                         Yearly
                       </button>
@@ -282,7 +282,7 @@ const GovernmentDashboard = ({ onLogout }) => {
                             borderRadius: '8px',
                             border: '1px solid #e5e7eb',
                             boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-                            fontSize: '12px'
+                            fontSize: '11px'
                           }} 
                         />
                         <Line 
@@ -305,7 +305,7 @@ const GovernmentDashboard = ({ onLogout }) => {
                   
                   <div className="flex items-center justify-between mb-4">
                     <h2 className="text-sm font-bold text-gray-900">Recent Alerts</h2>
-                    <button className="text-[9px] text-blue-600 hover:text-blue-700 font-medium">View All</button>
+                    <button className="text-[10px] text-blue-600 hover:text-blue-700 font-medium">View All</button>
                   </div>
                   <div className="space-y-3">
                     {alerts.slice(0, 3).map((alert) => (
@@ -356,7 +356,7 @@ const GovernmentDashboard = ({ onLogout }) => {
                         <option value="North">North District</option>
                         <option value="South">South District</option>
                       </select>
-                      <button className="flex items-center gap-1 px-3 py-1.5 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-md hover:from-blue-600 hover:to-indigo-700 transition-all text-[10px] shadow-sm hover:shadow-md">
+                      <button className="flex items-center gap-1 px-3 py-1.5 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-md hover:from-blue-600 hover:to-indigo-700 transition-all text-[10px] shadow-sm hover:shadow-md font-medium">
                         <Plus className="w-3 h-3" />
                         Add School
                       </button>
@@ -368,12 +368,12 @@ const GovernmentDashboard = ({ onLogout }) => {
                   <table className="w-full">
                     <thead className="bg-gradient-to-r from-blue-50 to-indigo-50">
                       <tr>
-                        <th className="px-3 py-2 text-left text-[9px] font-semibold text-indigo-700 uppercase tracking-wider">School Name</th>
-                        <th className="px-3 py-2 text-left text-[9px] font-semibold text-indigo-700 uppercase tracking-wider">Students</th>
-                        <th className="px-3 py-2 text-left text-[9px] font-semibold text-indigo-700 uppercase tracking-wider">Attendance</th>
-                        <th className="px-3 py-2 text-left text-[9px] font-semibold text-indigo-700 uppercase tracking-wider">Performance</th>
-                        <th className="px-3 py-2 text-left text-[9px] font-semibold text-indigo-700 uppercase tracking-wider">Alerts</th>
-                        <th className="px-3 py-2 text-left text-[9px] font-semibold text-indigo-700 uppercase tracking-wider">Actions</th>
+                        <th className="px-3 py-2 text-left text-[10px] font-semibold text-indigo-700 uppercase tracking-wider">School Name</th>
+                        <th className="px-3 py-2 text-left text-[10px] font-semibold text-indigo-700 uppercase tracking-wider">Students</th>
+                        <th className="px-3 py-2 text-left text-[10px] font-semibold text-indigo-700 uppercase tracking-wider">Attendance</th>
+                        <th className="px-3 py-2 text-left text-[10px] font-semibold text-indigo-700 uppercase tracking-wider">Performance</th>
+                        <th className="px-3 py-2 text-left text-[10px] font-semibold text-indigo-700 uppercase tracking-wider">Alerts</th>
+                        <th className="px-3 py-2 text-left text-[10px] font-semibold text-indigo-700 uppercase tracking-wider">Actions</th>
                       </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-50">
@@ -390,13 +390,13 @@ const GovernmentDashboard = ({ onLogout }) => {
                           <td className="px-3 py-2 whitespace-nowrap text-[10px] font-medium text-gray-900">{school.alerts}</td>
                           <td className="px-3 py-2 whitespace-nowrap text-[10px]">
                             <div className="flex items-center gap-1">
-                              <button className="p-1.5 text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-colors">
+                              <button className="p-1 text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-colors">
                                 <Eye className="w-3 h-3" />
                               </button>
-                              <button className="p-1.5 text-gray-500 hover:text-orange-600 hover:bg-orange-50 rounded-md transition-colors">
+                              <button className="p-1 text-gray-500 hover:text-orange-600 hover:bg-orange-50 rounded-md transition-colors">
                                 <Edit className="w-3 h-3" />
                               </button>
-                              <button className="p-1.5 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-md transition-colors">
+                              <button className="p-1 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-md transition-colors">
                                 <Trash2 className="w-3 h-3" />
                               </button>
                             </div>
@@ -413,10 +413,10 @@ const GovernmentDashboard = ({ onLogout }) => {
           {/* Schools Tab */}
           {activeTab === 'schools' && (
             <div>
-              <div className="flex justify-between items-center mb-8">
-                <h2 className="text-2xl font-bold text-gray-900">School Management</h2>
-                <button className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-xl hover:from-blue-600 hover:to-indigo-700 transition-all shadow-md hover:shadow-lg">
-                  <Plus className="w-4 h-4" />
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-base font-bold text-gray-900">School Management</h2>
+                <button className="flex items-center gap-1 px-3 py-1.5 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-lg hover:from-blue-600 hover:to-indigo-700 transition-all shadow-sm hover:shadow-md text-[10px] font-medium">
+                  <Plus className="w-3 h-3" />
                   Add School
                 </button>
               </div>
@@ -451,7 +451,7 @@ const GovernmentDashboard = ({ onLogout }) => {
                     <div className="absolute -top-4 -right-4 w-16 h-16 bg-white/10 rounded-full"></div>
                     <div className="absolute -bottom-4 -left-4 w-12 h-12 bg-white/10 rounded-full"></div>
                     
-                    <h3 className="text-base font-bold text-white mb-5">Performance Distribution</h3>
+                    <h3 className="text-sm font-bold text-white mb-4">Performance Distribution</h3>
                     <div className="h-52 bg-white/20 rounded-lg p-4 backdrop-blur-sm border border-white/30">
                       <ResponsiveContainer width="100%" height="100%">
                         <RechartsPieChart>
@@ -489,7 +489,7 @@ const GovernmentDashboard = ({ onLogout }) => {
                               border: '1px solid rgba(255,255,255,0.4)',
                               boxShadow: '0 12px 30px rgba(0,0,0,0.15)',
                               backdropFilter: 'blur(12px)',
-                              fontSize: '12px',
+                              fontSize: '11px',
                               padding: '10px'
                             }}
                             formatter={(value) => [`${value} schools`, 'Count']}
@@ -533,13 +533,13 @@ const GovernmentDashboard = ({ onLogout }) => {
                             </td>
                             <td className="py-3 px-4">
                               <div className="flex items-center gap-1">
-                                <button className="p-1.5 text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-colors">
+                                <button className="p-1 text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-colors">
                                   <Eye className="w-3 h-3" />
                                 </button>
-                                <button className="p-1.5 text-gray-500 hover:text-orange-600 hover:bg-orange-50 rounded-md transition-colors">
+                                <button className="p-1 text-gray-500 hover:text-orange-600 hover:bg-orange-50 rounded-md transition-colors">
                                   <Edit className="w-3 h-3" />
                                 </button>
-                                <button className="p-1.5 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-md transition-colors">
+                                <button className="p-1 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-md transition-colors">
                                   <Trash2 className="w-3 h-3" />
                                 </button>
                               </div>
@@ -557,15 +557,15 @@ const GovernmentDashboard = ({ onLogout }) => {
           {/* Reports Tab */}
           {activeTab === 'reports' && (
             <div>
-              <div className="flex justify-between items-center mb-8">
-                <h2 className="text-2xl font-bold text-gray-900">Reports & Analytics</h2>
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-base font-bold text-gray-900">Reports & Analytics</h2>
                 <div className="flex gap-3">
-                  <button className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition-all">
-                    <Filter className="w-4 h-4" />
+                  <button className="flex items-center gap-1 px-3 py-1.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-all text-[10px] font-medium">
+                    <Filter className="w-3 h-3" />
                     Filter
                   </button>
-                  <button className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-xl hover:from-blue-600 hover:to-indigo-700 transition-all shadow-md hover:shadow-lg">
-                    <Download className="w-4 h-4" />
+                  <button className="flex items-center gap-1 px-3 py-1.5 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-lg hover:from-blue-600 hover:to-indigo-700 transition-all shadow-sm hover:shadow-md text-[10px] font-medium">
+                    <Download className="w-3 h-3" />
                     Export Report
                   </button>
                 </div>
@@ -577,7 +577,7 @@ const GovernmentDashboard = ({ onLogout }) => {
                   <div className="absolute -top-4 -right-4 w-16 h-16 bg-white/10 rounded-full"></div>
                   <div className="absolute -bottom-4 -left-4 w-12 h-12 bg-white/10 rounded-full"></div>
                   
-                  <h3 className="text-base font-bold text-white mb-5">Attendance Analytics</h3>
+                  <h3 className="text-sm font-bold text-white mb-4">Attendance Analytics</h3>
                   <div className="h-48 bg-white/20 rounded-lg p-4 backdrop-blur-sm border border-white/30">
                     <ResponsiveContainer width="100%" height="100%">
                       <RechartsBarChart data={attendanceTrendData}>
@@ -633,7 +633,7 @@ const GovernmentDashboard = ({ onLogout }) => {
                   <div className="absolute -top-4 -right-4 w-16 h-16 bg-white/10 rounded-full"></div>
                   <div className="absolute -bottom-4 -left-4 w-12 h-12 bg-white/10 rounded-full"></div>
                   
-                  <h3 className="text-base font-bold text-white mb-5">School Performance</h3>
+                  <h3 className="text-sm font-bold text-white mb-4">School Performance</h3>
                   <div className="h-48 bg-white/20 rounded-lg p-4 backdrop-blur-sm border border-white/30">
                     <ResponsiveContainer width="100%" height="100%">
                       <RechartsLineChart data={attendanceTrendData}>
@@ -702,7 +702,7 @@ const GovernmentDashboard = ({ onLogout }) => {
                           <h4 className="font-medium text-gray-900 text-[10px]">{report.title}</h4>
                         </div>
                         <p className="text-[9px] text-gray-500 mb-2">{report.description}</p>
-                        <button className="text-[9px] text-blue-600 font-medium hover:text-blue-700">
+                        <button className="text-[10px] text-blue-600 font-medium hover:text-blue-700">
                           Generate Report
                         </button>
                       </div>
@@ -716,17 +716,17 @@ const GovernmentDashboard = ({ onLogout }) => {
           {/* Alerts Tab */}
           {activeTab === 'alerts' && (
             <div>
-              <div className="flex justify-between items-center mb-8">
-                <h2 className="text-2xl font-bold text-gray-900">Alert Management</h2>
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-base font-bold text-gray-900">Alert Management</h2>
                 <div className="flex gap-3">
-                  <select className="px-4 py-2 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500">
+                  <select className="px-3 py-1.5 bg-white border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-[10px]">
                     <option>All Statuses</option>
                     <option>New</option>
                     <option>Acknowledged</option>
                     <option>Resolved</option>
                   </select>
-                  <button className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition-all">
-                    <RefreshCw className="w-4 h-4" />
+                  <button className="flex items-center gap-1 px-3 py-1.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-all text-[10px] font-medium">
+                    <RefreshCw className="w-3 h-3" />
                     Refresh
                   </button>
                 </div>
@@ -799,13 +799,13 @@ const GovernmentDashboard = ({ onLogout }) => {
                           </div>
                           <p className="text-[9px] text-gray-500 mb-2">{alert.time}</p>
                           <div className="flex gap-2">
-                            <button className="px-2 py-1 bg-blue-100 text-blue-700 rounded-md text-[9px] font-medium hover:bg-blue-200 transition-colors">
+                            <button className="px-2 py-1 bg-blue-100 text-blue-700 rounded-md text-[10px] font-medium hover:bg-blue-200 transition-colors">
                               Acknowledge
                             </button>
-                            <button className="px-2 py-1 bg-gray-100 text-gray-700 rounded-md text-[9px] font-medium hover:bg-gray-200 transition-colors">
+                            <button className="px-2 py-1 bg-gray-100 text-gray-700 rounded-md text-[10px] font-medium hover:bg-gray-200 transition-colors">
                               Snooze
                             </button>
-                            <button className="px-2 py-1 bg-gray-100 text-gray-700 rounded-md text-[9px] font-medium hover:bg-gray-200 transition-colors">
+                            <button className="px-2 py-1 bg-gray-100 text-gray-700 rounded-md text-[10px] font-medium hover:bg-gray-200 transition-colors">
                               Details
                             </button>
                           </div>
@@ -1033,11 +1033,11 @@ const GovernmentDashboard = ({ onLogout }) => {
                       </div>
                       
                       <div className="flex justify-end gap-2 pt-4 border-t border-gray-200 mt-4">
-                        <button className="px-4 py-2 bg-gradient-to-r from-gray-500 to-gray-600 text-white rounded-lg hover:from-gray-600 hover:to-gray-700 transition-all shadow-sm hover:shadow-md font-medium flex items-center gap-1.5 text-sm">
+                        <button className="px-4 py-2 bg-gradient-to-r from-gray-500 to-gray-600 text-white rounded-lg hover:from-gray-600 hover:to-gray-700 transition-all shadow-sm hover:shadow-md font-medium flex items-center gap-1.5 text-xs">
                           <X className="w-3 h-3" />
                           Cancel
                         </button>
-                        <button className="px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-lg hover:from-blue-600 hover:to-indigo-700 transition-all shadow-sm hover:shadow-md font-medium flex items-center gap-1.5 text-sm">
+                        <button className="px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-lg hover:from-blue-600 hover:to-indigo-700 transition-all shadow-sm hover:shadow-md font-medium flex items-center gap-1.5 text-xs">
                           <Save className="w-3 h-3" />
                           Save
                         </button>
@@ -1178,36 +1178,7 @@ const GovernmentDashboard = ({ onLogout }) => {
                   )}
                 </div>
                 
-                {/* Additional Settings Cards */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-4">
-                  <div className="bg-gradient-to-br from-purple-500 to-indigo-600 rounded-lg p-4 shadow-md border border-purple-200/30 backdrop-blur-sm text-white">
-                    <div className="flex items-center gap-2 mb-3">
-                      <div className="p-1.5 bg-white/20 rounded-md">
-                        <Shield className="w-4 h-4" />
-                      </div>
-                      <h3 className="font-bold text-xs">Security Settings</h3>
-                    </div>
-                    <p className="text-white/90 mb-3 text-xs">Manage your account security and authentication preferences</p>
-                    <button className="px-3 py-1.5 bg-white text-purple-600 rounded-md hover:bg-gray-100 transition-all font-medium text-xs flex items-center gap-1">
-                      <Shield className="w-3 h-3" />
-                      Configure
-                    </button>
-                  </div>
-                  
-                  <div className="bg-gradient-to-br from-amber-500 to-orange-600 rounded-lg p-4 shadow-md border border-amber-200/30 backdrop-blur-sm text-white">
-                    <div className="flex items-center gap-2 mb-3">
-                      <div className="p-1.5 bg-white/20 rounded-md">
-                        <Bell className="w-4 h-4" />
-                      </div>
-                      <h3 className="font-bold text-xs">Notifications</h3>
-                    </div>
-                    <p className="text-white/90 mb-3 text-xs">Customize how and when you receive alerts and updates</p>
-                    <button className="px-3 py-1.5 bg-white text-amber-600 rounded-md hover:bg-gray-100 transition-all font-medium text-xs flex items-center gap-1">
-                      <Bell className="w-3 h-3" />
-                      Manage
-                    </button>
-                  </div>
-                </div>
+
               </div>
             </div>
           )}
