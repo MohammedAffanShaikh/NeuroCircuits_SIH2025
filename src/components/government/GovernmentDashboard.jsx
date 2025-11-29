@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Users, School, Utensils, TrendingUp, AlertTriangle, FileText, Settings, LogOut, Home, Search, Filter, Download, Plus, Eye, Edit, Trash2, Printer, BarChart, PieChart, LineChart, Calendar, Clock, Shield, MapPin, CheckCircle, XCircle, RefreshCw, Bell, Menu, X, Building, Activity, User, Book, Target, Award, Camera, Mail, Save } from 'lucide-react';
+import { Users, School, Utensils, TrendingUp, AlertTriangle, FileText, Settings, LogOut, Home, Search, Filter, Download, Plus, Eye, Edit, Trash2, Printer, BarChart, PieChart, LineChart, Calendar, Clock, Shield, MapPin, CheckCircle, XCircle, RefreshCw, Bell, Menu, X, Building, Activity, User, Book, Target, Award, Camera, Mail, Save, GraduationCap } from 'lucide-react';
 import { BarChart as RechartsBarChart, Bar, LineChart as RechartsLineChart, Line, PieChart as RechartsPieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { motion, AnimatePresence } from 'framer-motion';
 import UltraModernHeader from '../UltraModernHeader';
@@ -13,14 +13,45 @@ const GovernmentDashboard = ({ onLogout }) => {
   // Sample data for the dashboard
   const districtData = {
     name: "Central District",
-    totalStudents: 12547,
-    totalSchools: 42,
+    totalStudents: 7420,
+    totalSchools: 6,
     mealsPerStudent: 1,
-    totalMeals: 12547,
+    totalMeals: 7420,
     attendanceRate: 92.5,
     schoolsNeedingSupport: 8,
     averageClassSize: 30
   };
+
+  // State for report generation
+  const [generatingReport, setGeneratingReport] = useState(null);
+  const [generatedReports, setGeneratedReports] = useState([]);
+  const [mealPeriod, setMealPeriod] = useState('daily'); // daily, weekly, monthly
+
+  // Sample meal attendance data
+  const mealAttendanceData = [
+    { id: 1, schoolId: 1, schoolName: 'Delhi Public School', totalStudents: 1250, presentToday: 1150, date: '2023-06-15' },
+    { id: 2, schoolId: 2, schoolName: 'St. Marys Convent School', totalStudents: 850, presentToday: 780, date: '2023-06-15' },
+    { id: 3, schoolId: 3, schoolName: 'Kendriya Vidyalaya', totalStudents: 920, presentToday: 840, date: '2023-06-15' },
+    { id: 4, schoolId: 4, schoolName: 'DAV Public School', totalStudents: 1100, presentToday: 1010, date: '2023-06-15' },
+    { id: 5, schoolId: 5, schoolName: 'Saboo Siddik Degree', totalStudents: 1500, presentToday: 1380, date: '2023-06-15' },
+    { id: 6, schoolId: 6, schoolName: 'Saboo Siddik Polytechnic', totalStudents: 1800, presentToday: 1650, date: '2023-06-15' }
+  ];
+
+  // Sample weekly and monthly meal data
+  const weeklyMealData = [
+    { week: 'Week 1', meals: 45200 },
+    { week: 'Week 2', meals: 47800 },
+    { week: 'Week 3', meals: 46200 },
+    { week: 'Week 4', meals: 48500 }
+  ];
+
+  const monthlyMealData = [
+    { month: 'January', meals: 198000 },
+    { month: 'February', meals: 182000 },
+    { month: 'March', meals: 205000 },
+    { month: 'April', meals: 192000 },
+    { month: 'May', meals: 210000 }
+  ];
 
   // Sample attendance trend data
   const attendanceTrendData = [
@@ -34,17 +65,19 @@ const GovernmentDashboard = ({ onLogout }) => {
 
   // Sample alerts data
   const alerts = [
-    { id: 1, type: 'safety', message: 'Unauthorized entry detected at Riverside High', time: '10 mins ago', severity: 'high', status: 'new' },
-    { id: 2, type: 'performance', message: 'Lincoln Elementary showing significant improvement', time: '25 mins ago', severity: 'positive', status: 'new' },
-    { id: 3, type: 'resource', message: 'Budget allocation for Jefferson Middle School', time: '1 hour ago', severity: 'medium', status: 'acknowledged' },
+    { id: 1, type: 'safety', message: 'Unauthorized entry detected at Delhi Public School', time: '10 mins ago', severity: 'high', status: 'new' },
+    { id: 2, type: 'performance', message: 'St. Marys Convent School showing significant improvement', time: '25 mins ago', severity: 'positive', status: 'new' },
+    { id: 3, type: 'resource', message: 'Budget allocation for Kendriya Vidyalaya', time: '1 hour ago', severity: 'medium', status: 'acknowledged' },
   ];
 
   // Sample schools data
   const schools = [
-    { id: 1, name: 'Riverside High School', students: 1250, attendance: 94.2, performance: 'A', alerts: 2 },
-    { id: 2, name: 'Lincoln Elementary', students: 850, attendance: 96.8, performance: 'A+', alerts: 0 },
-    { id: 3, name: 'Jefferson Middle School', students: 920, attendance: 89.5, performance: 'B', alerts: 3 },
-    { id: 4, name: 'Washington High School', students: 1100, attendance: 91.7, performance: 'B+', alerts: 1 },
+    { id: 1, name: 'Delhi Public School', students: 1250, attendance: 94.2, performance: 'A', alerts: alerts.filter(a => a.message.includes('Delhi Public')).length },
+    { id: 2, name: 'St. Marys Convent School', students: 850, attendance: 96.8, performance: 'A+', alerts: alerts.filter(a => a.message.includes('St. Mary')).length },
+    { id: 3, name: 'Kendriya Vidyalaya', students: 920, attendance: 89.5, performance: 'B', alerts: alerts.filter(a => a.message.includes('Kendriya')).length },
+    { id: 4, name: 'DAV Public School', students: 1100, attendance: 91.7, performance: 'B+', alerts: 0 },
+    { id: 5, name: 'Saboo Siddik Degree', students: 1500, attendance: 88.5, performance: 'B', alerts: 0 },
+    { id: 6, name: 'Saboo Siddik Polytechnic', students: 1800, attendance: 90.2, performance: 'B+', alerts: 0 },
   ];
 
   const getSeverityColor = (severity) => {
@@ -77,10 +110,129 @@ const GovernmentDashboard = ({ onLogout }) => {
   };
 
   const getBarColor = (value) => {
-    if (value >= 95) return '#10B981'; // green
-    if (value >= 90) return '#3B82F6'; // blue
-    if (value >= 85) return '#F59E0B'; // amber
-    return '#EF4444'; // red
+    return '#2563EB'; // slightly darker medium blue for all bars
+  };
+
+  // Handler functions for reports
+  const handleGenerateReport = (reportType) => {
+    console.log(`Generating ${reportType} report`);
+    setGeneratingReport(reportType);
+    
+    // Simulate report generation delay
+    setTimeout(() => {
+      const newReport = {
+        id: Date.now(),
+        type: reportType,
+        generatedAt: new Date().toLocaleString(),
+        status: 'completed'
+      };
+      
+      setGeneratedReports(prev => [...prev, newReport]);
+      setGeneratingReport(null);
+      
+      // Show success message
+      alert(`${reportType} generated successfully!`);
+    }, 1500);
+  };
+
+  const handleExportReport = () => {
+    console.log('Exporting report');
+    // Implement export logic here
+    alert('Report exported successfully!');
+  };
+
+  const handleFilterReports = () => {
+    console.log('Filtering reports');
+    // Implement filter logic here
+  };
+
+  // Handler function for meal analysis report
+  const handleGenerateMealAnalysisReport = () => {
+    console.log('Generating meal analysis report');
+    setGeneratingReport('Meal Analysis');
+    
+    // Simulate report generation delay
+    setTimeout(() => {
+      // Calculate analysis data
+      const totalStudents = mealAttendanceData.reduce((total, school) => total + school.totalStudents, 0);
+      const totalPresent = mealAttendanceData.reduce((total, school) => total + school.presentToday, 0);
+      const attendanceRate = ((totalPresent / totalStudents) * 100).toFixed(2);
+      
+      const analysisData = {
+        totalSchools: mealAttendanceData.length,
+        totalStudents,
+        totalPresent,
+        attendanceRate,
+        date: new Date().toLocaleDateString(),
+        period: mealPeriod
+      };
+      
+      const newReport = {
+        id: Date.now(),
+        type: 'Meal Analysis',
+        generatedAt: new Date().toLocaleString(),
+        status: 'completed',
+        data: analysisData
+      };
+      
+      setGeneratedReports(prev => [...prev, newReport]);
+      setGeneratingReport(null);
+      
+      // Show success message with analysis data
+      alert(`Meal Analysis Report Generated!
+
+Date: ${analysisData.date}
+Period: ${analysisData.period}
+Total Schools: ${analysisData.totalSchools}
+Total Students: ${analysisData.totalStudents.toLocaleString()}
+Students Present: ${analysisData.totalPresent.toLocaleString()}
+Attendance Rate: ${analysisData.attendanceRate}%`);
+    }, 1500);
+  };
+
+  const handleExportMealAnalysisReport = () => {
+    console.log('Exporting meal analysis report');
+    // Calculate analysis data for export
+    const totalStudents = mealAttendanceData.reduce((total, school) => total + school.totalStudents, 0);
+    const totalPresent = mealAttendanceData.reduce((total, school) => total + school.presentToday, 0);
+    const attendanceRate = ((totalPresent / totalStudents) * 100).toFixed(2);
+    
+    const analysisData = {
+      totalSchools: mealAttendanceData.length,
+      totalStudents,
+      totalPresent,
+      attendanceRate,
+      date: new Date().toLocaleDateString(),
+      period: mealPeriod
+    };
+    
+    // Create CSV content
+    let csvContent = "data:text/csv;charset=utf-8,";
+    csvContent += "Meal Analysis Report\n\n";
+    csvContent += `Date: ${analysisData.date}\n`;
+    csvContent += `Period: ${analysisData.period}\n`;
+    csvContent += `Total Schools: ${analysisData.totalSchools}\n`;
+    csvContent += `Total Students: ${analysisData.totalStudents}\n`;
+    csvContent += `Students Present: ${analysisData.totalPresent}\n`;
+    csvContent += `Attendance Rate: ${analysisData.attendanceRate}%\n\n`;
+    csvContent += "School Details\n";
+    csvContent += "School Name,Total Students,Present Today,Attendance Rate\n";
+    
+    mealAttendanceData.forEach(school => {
+      const schoolAttendanceRate = ((school.presentToday / school.totalStudents) * 100).toFixed(2);
+      csvContent += `${school.schoolName},${school.totalStudents},${school.presentToday},${schoolAttendanceRate}%\n`;
+    });
+    
+    // Create download link
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", `meal_analysis_report_${new Date().toISOString().slice(0, 10)}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    alert('Meal Analysis Report exported successfully!');
   };
 
   const summaryStats = [
@@ -131,6 +283,7 @@ const GovernmentDashboard = ({ onLogout }) => {
             { id: 'schools', icon: School, label: 'Schools' },
             { id: 'reports', icon: FileText, label: 'Reports' },
             { id: 'alerts', icon: Bell, label: 'Alerts' },
+            { id: 'middaymeal', icon: Utensils, label: 'Mid Day Meal' },
             { id: 'settings', icon: Settings, label: 'Settings' },
           ].map((tab) => (
             <button
@@ -146,7 +299,7 @@ const GovernmentDashboard = ({ onLogout }) => {
               <span className="font-medium text-[11px]">{tab.label}</span>
               {tab.id === 'alerts' && (
                 <span className="ml-auto bg-red-500 text-white text-[8px] font-bold rounded-full w-3 h-3 flex items-center justify-center">
-                  3
+                  {alerts.filter(a => a.status === 'new').length}
                 </span>
               )}
             </button>
@@ -174,6 +327,7 @@ const GovernmentDashboard = ({ onLogout }) => {
             userName="Government Official"
             userRole="Education Oversight"
             onLogout={onLogout}
+            onAlertsClick={() => setActiveTab('alerts')}
           />
         </div>
 
@@ -320,7 +474,7 @@ const GovernmentDashboard = ({ onLogout }) => {
                   <div className="absolute -bottom-2 -left-2 w-6 h-6 bg-blue-500/10 rounded-full"></div>
                   
                   <div className="flex items-center justify-between mb-4">
-                    <h2 className="text-sm font-bold text-gray-900">Recent Alerts</h2>
+                    <h2 className="text-sm font-bold text-blue-700">Recent Alerts</h2>
                     <button className="text-[10px] text-blue-600 hover:text-blue-700 font-medium">View All</button>
                   </div>
                   <div className="space-y-3">
@@ -345,82 +499,6 @@ const GovernmentDashboard = ({ onLogout }) => {
                       </motion.div>
                     ))}
                   </div>
-                </div>
-              </div>
-
-              {/* Schools Overview */}
-              <div className="bg-white rounded-md shadow-sm border border-gray-100 overflow-hidden">
-                <div className="p-4 border-b border-gray-100">
-                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
-                    <h3 className="text-sm font-bold text-gray-900">Schools Overview</h3>
-                    <div className="flex flex-wrap gap-2">
-                      <div className="relative">
-                        <input
-                          type="text"
-                          placeholder="Search schools..."
-                          className="pl-8 pr-3 py-1.5 bg-gray-50 border border-gray-200 rounded-md text-[10px] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all"
-                        />
-                        <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-                      </div>
-                      <select 
-                        value={selectedDistrict}
-                        onChange={(e) => setSelectedDistrict(e.target.value)}
-                        className="px-3 py-1.5 bg-gray-50 border border-gray-200 rounded-md text-[10px] focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      >
-                        <option value="All Districts">All Districts</option>
-                        <option value="Central">Central District</option>
-                        <option value="North">North District</option>
-                        <option value="South">South District</option>
-                      </select>
-                      <button className="flex items-center gap-1 px-3 py-1.5 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-md hover:from-blue-600 hover:to-indigo-700 transition-all text-[10px] shadow-sm hover:shadow-md font-medium">
-                        <Plus className="w-3 h-3" />
-                        Add School
-                      </button>
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="overflow-x-auto">
-                  <table className="w-full">
-                    <thead className="bg-gradient-to-r from-blue-50 to-indigo-50">
-                      <tr>
-                        <th className="px-3 py-2 text-left text-[10px] font-semibold text-indigo-700 uppercase tracking-wider">School Name</th>
-                        <th className="px-3 py-2 text-left text-[10px] font-semibold text-indigo-700 uppercase tracking-wider">Students</th>
-                        <th className="px-3 py-2 text-left text-[10px] font-semibold text-indigo-700 uppercase tracking-wider">Attendance</th>
-                        <th className="px-3 py-2 text-left text-[10px] font-semibold text-indigo-700 uppercase tracking-wider">Performance</th>
-                        <th className="px-3 py-2 text-left text-[10px] font-semibold text-indigo-700 uppercase tracking-wider">Alerts</th>
-                        <th className="px-3 py-2 text-left text-[10px] font-semibold text-indigo-700 uppercase tracking-wider">Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody className="bg-white divide-y divide-gray-50">
-                      {schools.map((school) => (
-                        <tr key={school.id} className="hover:bg-indigo-50/50 transition-colors duration-150">
-                          <td className="px-3 py-2 whitespace-nowrap text-[10px] font-medium text-gray-900">{school.name}</td>
-                          <td className="px-3 py-2 whitespace-nowrap text-[10px] text-gray-600">{school.students.toLocaleString()}</td>
-                          <td className="px-3 py-2 whitespace-nowrap text-[10px] font-medium text-gray-900">{school.attendance}%</td>
-                          <td className="px-3 py-2 whitespace-nowrap">
-                            <span className="px-2 py-1 text-[8px] font-semibold rounded-full bg-green-100 text-green-800">
-                              {school.performance}
-                            </span>
-                          </td>
-                          <td className="px-3 py-2 whitespace-nowrap text-[10px] font-medium text-gray-900">{school.alerts}</td>
-                          <td className="px-3 py-2 whitespace-nowrap text-[10px]">
-                            <div className="flex items-center gap-1">
-                              <button className="p-1 text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-colors">
-                                <Eye className="w-3 h-3" />
-                              </button>
-                              <button className="p-1 text-gray-500 hover:text-orange-600 hover:bg-orange-50 rounded-md transition-colors">
-                                <Edit className="w-3 h-3" />
-                              </button>
-                              <button className="p-1 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-md transition-colors">
-                                <Trash2 className="w-3 h-3" />
-                              </button>
-                            </div>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
                 </div>
               </div>
             </div>
@@ -459,33 +537,49 @@ const GovernmentDashboard = ({ onLogout }) => {
               </div>
 
               <div className="flex justify-between items-center mb-4">
-                <h2 className="text-base font-bold text-gray-900">School Management</h2>
+                <div></div>
                 <button className="flex items-center gap-1 px-3 py-1.5 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-lg hover:from-blue-600 hover:to-indigo-700 transition-all shadow-sm hover:shadow-md text-[10px] font-medium">
                   <Plus className="w-3 h-3" />
                   Add School
                 </button>
               </div>
 
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                 {/* School Statistics */}
                 <div className="space-y-6">
-                  <div className="bg-white rounded-md p-4 shadow-sm border border-gray-100">
-                    <h3 className="text-sm font-bold text-gray-900 mb-4">District Statistics</h3>
-                    <div className="space-y-3">
-                      <div className="flex justify-between items-center p-3 bg-gray-50 rounded-md">
-                        <span className="text-[10px] text-gray-600">Total Schools</span>
-                        <span className="font-bold text-gray-900 text-[10px]">{districtData.totalSchools}</span>
+                  <div className="bg-white rounded-md p-4 shadow-sm border border-gray-100 relative overflow-hidden">
+                    {/* Decorative elements for theme */}
+                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500"></div>
+                    <div className="absolute -top-2 -right-2 w-10 h-10 bg-indigo-500/10 rounded-full"></div>
+                    <div className="absolute -bottom-2 -left-2 w-8 h-8 bg-purple-500/10 rounded-full"></div>
+                    <h3 className="text-sm font-bold text-gray-900 mb-4 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent relative z-10">District Statistics</h3>
+                    <div className="space-y-3 relative z-10">
+                      <div className="flex justify-between items-center p-3 bg-gradient-to-r from-blue-50/50 via-indigo-50/50 to-purple-50/50 rounded-md border border-blue-100/50">
+                        <div className="flex items-center gap-2">
+                          <School className="w-4 h-4 text-blue-500" />
+                          <span className="text-[10px] text-gray-700 font-medium">Total Schools</span>
+                        </div>
+                        <span className="font-bold text-gray-900 text-[10px] bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">{districtData.totalSchools}</span>
                       </div>
-                      <div className="flex justify-between items-center p-3 bg-gray-50 rounded-md">
-                        <span className="text-[10px] text-gray-600">Total Students</span>
-                        <span className="font-bold text-gray-900 text-[10px]">{districtData.totalStudents.toLocaleString()}</span>
+                      <div className="flex justify-between items-center p-3 bg-gradient-to-r from-blue-50/50 via-indigo-50/50 to-purple-50/50 rounded-md border border-blue-100/50">
+                        <div className="flex items-center gap-2">
+                          <Users className="w-4 h-4 text-blue-500" />
+                          <span className="text-[10px] text-gray-700 font-medium">Total Students</span>
+                        </div>
+                        <span className="font-bold text-gray-900 text-[10px] bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">{districtData.totalStudents.toLocaleString()}</span>
                       </div>
-                      <div className="flex justify-between items-center p-3 bg-gray-50 rounded-md">
-                        <span className="text-[10px] text-gray-600">Average Class Size</span>
-                        <span className="font-bold text-gray-900 text-[10px]">{districtData.averageClassSize}</span>
+                      <div className="flex justify-between items-center p-3 bg-gradient-to-r from-blue-50/50 via-indigo-50/50 to-purple-50/50 rounded-md border border-blue-100/50">
+                        <div className="flex items-center gap-2">
+                          <User className="w-4 h-4 text-blue-500" />
+                          <span className="text-[10px] text-gray-700 font-medium">Average Class Size</span>
+                        </div>
+                        <span className="font-bold text-gray-900 text-[10px] bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">{districtData.averageClassSize}</span>
                       </div>
-                      <div className="flex justify-between items-center p-3 bg-gray-50 rounded-md">
-                        <span className="text-[10px] text-gray-600">Schools Needing Support</span>
+                      <div className="flex justify-between items-center p-3 bg-gradient-to-r from-blue-50/50 via-indigo-50/50 to-purple-50/50 rounded-md border border-red-100/50">
+                        <div className="flex items-center gap-2">
+                          <AlertTriangle className="w-4 h-4 text-red-500" />
+                          <span className="text-[10px] text-gray-700 font-medium">Schools Needing Support</span>
+                        </div>
                         <span className="font-bold text-red-600 text-[10px]">{districtData.schoolsNeedingSupport}</span>
                       </div>
                     </div>
@@ -493,45 +587,32 @@ const GovernmentDashboard = ({ onLogout }) => {
                 </div>
 
                 {/* Schools List */}
-                <div className="lg:col-span-2 bg-white rounded-md p-4 shadow-sm border border-gray-100">
-                  <h3 className="text-sm font-bold text-gray-900 mb-4">All Schools</h3>
-                  <div className="overflow-x-auto">
+                <div className="lg:col-span-2 bg-white rounded-md p-4 shadow-sm border border-gray-100 relative overflow-hidden mb-3">
+                  {/* Decorative elements for theme */}
+                  <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500"></div>
+                  <div className="absolute -top-2 -right-2 w-10 h-10 bg-indigo-500/10 rounded-full"></div>
+                  <div className="absolute -bottom-2 -left-2 w-8 h-8 bg-purple-500/10 rounded-full"></div>
+                  <h3 className="text-sm font-bold text-gray-900 mb-4 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent relative z-10">All Schools</h3>
+                  <div className="overflow-x-auto relative z-10">
                     <table className="w-full">
                       <thead>
                         <tr className="border-b border-gray-200">
-                          <th className="text-left py-3 px-4 font-medium text-gray-500 text-[10px]">School</th>
-                          <th className="text-left py-3 px-4 font-medium text-gray-500 text-[10px]">Students</th>
-                          <th className="text-left py-3 px-4 font-medium text-gray-500 text-[10px]">Attendance</th>
-                          <th className="text-left py-3 px-4 font-medium text-gray-500 text-[10px]">Performance</th>
-                          <th className="text-left py-3 px-4 font-medium text-gray-500 text-[10px]">Actions</th>
+                          <th className="text-left py-3 px-4 font-medium text-[10px] bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">School</th>
+                          <th className="text-left py-3 px-4 font-medium text-[10px] bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Students</th>
+                          <th className="text-left py-3 px-4 font-medium text-[10px] bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Attendance</th>
                         </tr>
                       </thead>
                       <tbody>
                         {schools.map((school) => (
-                          <tr key={school.id} className="border-b border-gray-100 hover:bg-gray-50">
+                          <tr key={school.id} className="border-b border-gray-100 hover:bg-gradient-to-r from-blue-50/50 via-indigo-50/50 to-purple-50/50 transition-all duration-300">
                             <td className="py-3 px-4">
-                              <div className="font-medium text-gray-900 text-[10px]">{school.name}</div>
+                              <div className="font-medium text-gray-900 text-[10px] flex items-center gap-1">
+                                <GraduationCap className="w-3 h-3 text-blue-500" />
+                                {school.name}
+                              </div>
                             </td>
                             <td className="py-3 px-4 text-gray-600 text-[10px]">{school.students.toLocaleString()}</td>
                             <td className="py-3 px-4 text-gray-600 text-[10px]">{school.attendance}%</td>
-                            <td className="py-3 px-4">
-                              <span className="px-2 py-1 text-[8px] font-semibold rounded-full bg-green-100 text-green-800">
-                                {school.performance}
-                              </span>
-                            </td>
-                            <td className="py-3 px-4">
-                              <div className="flex items-center gap-1">
-                                <button className="p-1 text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-colors">
-                                  <Eye className="w-3 h-3" />
-                                </button>
-                                <button className="p-1 text-gray-500 hover:text-orange-600 hover:bg-orange-50 rounded-md transition-colors">
-                                  <Edit className="w-3 h-3" />
-                                </button>
-                                <button className="p-1 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-md transition-colors">
-                                  <Trash2 className="w-3 h-3" />
-                                </button>
-                              </div>
-                            </td>
                           </tr>
                         ))}
                       </tbody>
@@ -575,13 +656,19 @@ const GovernmentDashboard = ({ onLogout }) => {
               </div>
 
               <div className="flex justify-between items-center mb-4">
-                <h2 className="text-base font-bold text-gray-900">Reports & Analytics</h2>
+                <h2 className="text-sm font-bold text-blue-700">Reports & Analytics</h2>
                 <div className="flex gap-3">
-                  <button className="flex items-center gap-1 px-3 py-1.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-all text-[10px] font-medium">
+                  <button 
+                    onClick={handleFilterReports}
+                    className="flex items-center gap-1 px-3 py-1.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-all text-[10px] font-medium"
+                  >
                     <Filter className="w-3 h-3" />
                     Filter
                   </button>
-                  <button className="flex items-center gap-1 px-3 py-1.5 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-lg hover:from-blue-600 hover:to-indigo-700 transition-all shadow-sm hover:shadow-md text-[10px] font-medium">
+                  <button 
+                    onClick={handleExportReport}
+                    className="flex items-center gap-1 px-3 py-1.5 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-lg hover:from-blue-600 hover:to-indigo-700 transition-all shadow-sm hover:shadow-md text-[10px] font-medium"
+                  >
                     <Download className="w-3 h-3" />
                     Export Report
                   </button>
@@ -666,8 +753,12 @@ const GovernmentDashboard = ({ onLogout }) => {
                           <h4 className="font-medium text-gray-900 text-[10px]">{report.title}</h4>
                         </div>
                         <p className="text-[9px] text-gray-500 mb-2">{report.description}</p>
-                        <button className="text-[10px] text-blue-600 font-medium hover:text-blue-700">
-                          Generate Report
+                        <button 
+                          onClick={() => handleGenerateReport(report.title)}
+                          disabled={generatingReport === report.title}
+                          className={`text-[10px] font-medium ${generatingReport === report.title ? 'text-gray-400 cursor-not-allowed' : 'text-blue-600 hover:text-blue-700'}`}
+                        >
+                          {generatingReport === report.title ? 'Generating...' : 'Generate Report'}
                         </button>
                       </div>
                     );
@@ -710,14 +801,8 @@ const GovernmentDashboard = ({ onLogout }) => {
               </div>
 
               <div className="flex justify-between items-center mb-4">
-                <h2 className="text-base font-bold text-gray-900">Alert Management</h2>
+                <h2 className="text-base font-bold text-blue-700">Alert Management</h2>
                 <div className="flex gap-3">
-                  <select className="px-3 py-1.5 bg-white border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-[10px]">
-                    <option>All Statuses</option>
-                    <option>New</option>
-                    <option>Acknowledged</option>
-                    <option>Resolved</option>
-                  </select>
                   <button className="flex items-center gap-1 px-3 py-1.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-all text-[10px] font-medium">
                     <RefreshCw className="w-3 h-3" />
                     Refresh
@@ -811,6 +896,288 @@ const GovernmentDashboard = ({ onLogout }) => {
             </div>
           )}
 
+          {/* Mid Day Meal Tab */}
+          {activeTab === 'middaymeal' && (
+            <div>
+              {/* Welcome Banner */}
+              <div className="bg-gradient-to-r from-blue-600 via-indigo-500 to-indigo-600 rounded-md p-4 mb-5 shadow-sm backdrop-blur-sm border border-white/20 relative overflow-hidden">
+                <div className="absolute -top-5 -right-5 w-20 h-20 bg-white/10 rounded-full"></div>
+                <div className="absolute -bottom-5 -left-5 w-16 h-16 bg-white/10 rounded-full"></div>
+                <div className="absolute top-4 right-4 w-7 h-7 bg-white/10 rotate-45"></div>
+                
+                <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-3">
+                  <div>
+                    <h2 className="text-base font-bold text-white mb-1.5">Mid Day Meal Program Dashboard</h2>
+                    <p className="text-[10px] text-blue-100 mb-2">Monitor and manage the mid day meal program across schools</p>
+                    <div className="flex flex-wrap gap-2 mt-2">
+                      <div className="flex items-center bg-white/10 rounded-full px-2.5 py-1">
+                        <div className="w-2 h-2 bg-green-400 rounded-full mr-1.5"></div>
+                        <span className="text-[10px] text-white font-medium">{districtData.totalSchools} schools enrolled</span>
+                      </div>
+                      <div className="flex items-center bg-white/10 rounded-full px-2.5 py-1">
+                        <div className="w-2 h-2 bg-blue-400 rounded-full mr-1.5"></div>
+                        <span className="text-[10px] text-white font-medium">{districtData.totalMeals.toLocaleString()} meals served</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="bg-white/20 rounded-md p-2">
+                      <Utensils className="w-5 h-5 text-white" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex justify-between items-center mb-4">
+                <div>
+                  <h2 className="text-sm font-bold text-blue-700">Meal Program Overview</h2>
+                  <p className="text-[10px] text-gray-600 mt-1">Total meals to be served today: {mealAttendanceData.reduce((total, school) => total + school.presentToday, 0).toLocaleString()}</p>
+                </div>
+                <div className="flex gap-3">
+                  <div className="flex gap-1">
+                    <button 
+                      onClick={() => setMealPeriod('daily')}
+                      className={`px-2 py-1 text-[10px] rounded-md ${mealPeriod === 'daily' ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+                    >
+                      Daily
+                    </button>
+                    <button 
+                      onClick={() => setMealPeriod('weekly')}
+                      className={`px-2 py-1 text-[10px] rounded-md ${mealPeriod === 'weekly' ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+                    >
+                      Weekly
+                    </button>
+                    <button 
+                      onClick={() => setMealPeriod('monthly')}
+                      className={`px-2 py-1 text-[10px] rounded-md ${mealPeriod === 'monthly' ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+                    >
+                      Monthly
+                    </button>
+                  </div>
+                  <button 
+                    onClick={handleGenerateMealAnalysisReport}
+                    className="flex items-center gap-1 px-3 py-1.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-all text-[10px] font-medium"
+                  >
+                    <FileText className="w-3 h-3" />
+                    Generate Analysis
+                  </button>
+                  <button 
+                    onClick={handleExportMealAnalysisReport}
+                    className="flex items-center gap-1 px-3 py-1.5 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-lg hover:from-blue-600 hover:to-indigo-700 transition-all shadow-sm hover:shadow-md text-[10px] font-medium"
+                  >
+                    <Download className="w-3 h-3" />
+                    Export Analysis
+                  </button>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+                {/* Meal Statistics */}
+                <div className="lg:col-span-1 space-y-4">
+                  <div className="bg-white rounded-md p-4 shadow-sm border border-gray-100 relative overflow-hidden">
+                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500"></div>
+                    <div className="absolute -top-2 -right-2 w-10 h-10 bg-indigo-500/10 rounded-full"></div>
+                    <div className="absolute -bottom-2 -left-2 w-8 h-8 bg-purple-500/10 rounded-full"></div>
+                    <h3 className="text-sm font-bold text-gray-900 mb-4 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent relative z-10">Program Statistics</h3>
+                    <div className="space-y-3 relative z-10">
+                      <div className="flex justify-between items-center p-3 bg-gradient-to-r from-blue-50/50 via-indigo-50/50 to-purple-50/50 rounded-md border border-blue-100/50">
+                        <div className="flex items-center gap-2">
+                          <Utensils className="w-4 h-4 text-blue-500" />
+                          <span className="text-[10px] text-gray-700 font-medium">Total Meals Served</span>
+                        </div>
+                        <span className="font-bold text-gray-900 text-[10px] bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">{districtData.totalMeals.toLocaleString()}</span>
+                      </div>
+                      <div className="flex justify-between items-center p-3 bg-gradient-to-r from-blue-50/50 via-indigo-50/50 to-purple-50/50 rounded-md border border-blue-100/50">
+                        <div className="flex items-center gap-2">
+                          <School className="w-4 h-4 text-blue-500" />
+                          <span className="text-[10px] text-gray-700 font-medium">Enrolled Schools</span>
+                        </div>
+                        <span className="font-bold text-gray-900 text-[10px] bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">{districtData.totalSchools}</span>
+                      </div>
+                      <div className="flex justify-between items-center p-3 bg-gradient-to-r from-blue-50/50 via-indigo-50/50 to-purple-50/50 rounded-md border border-blue-100/50">
+                        <div className="flex items-center gap-2">
+                          <Users className="w-4 h-4 text-blue-500" />
+                          <span className="text-[10px] text-gray-700 font-medium">Beneficiary Students</span>
+                        </div>
+                        <span className="font-bold text-gray-900 text-[10px] bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">{districtData.totalStudents.toLocaleString()}</span>
+                      </div>
+                      <div className="flex justify-between items-center p-3 bg-gradient-to-r from-blue-50/50 via-indigo-50/50 to-purple-50/50 rounded-md border border-green-100/50">
+                        <div className="flex items-center gap-2">
+                          <TrendingUp className="w-4 h-4 text-green-500" />
+                          <span className="text-[10px] text-gray-700 font-medium">Program Coverage</span>
+                        </div>
+                        <span className="font-bold text-green-600 text-[10px]">98.5%</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Nutrition Information and Meal Distribution Chart side by side */}
+                <div className="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {/* Nutrition Information */}
+                  <div className="bg-white rounded-md p-4 shadow-sm border border-gray-100 relative overflow-hidden">
+                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-green-500 via-teal-500 to-blue-500"></div>
+                    <div className="absolute -top-2 -right-2 w-10 h-10 bg-teal-500/10 rounded-full"></div>
+                    <h3 className="text-sm font-bold text-gray-900 mb-4 bg-gradient-to-r from-green-600 to-teal-600 bg-clip-text text-transparent relative z-10">Nutrition Information</h3>
+                    <div className="space-y-3 relative z-10">
+                      <div className="flex justify-between items-center p-3 bg-gradient-to-r from-green-50/50 via-teal-50/50 to-blue-50/50 rounded-md border border-green-100/50">
+                        <div className="flex items-center gap-2">
+                          <span className="text-[10px] text-gray-700 font-medium">Calories per Meal</span>
+                        </div>
+                        <span className="font-bold text-gray-900 text-[10px]">450-500 kcal</span>
+                      </div>
+                      <div className="flex justify-between items-center p-3 bg-gradient-to-r from-green-50/50 via-teal-50/50 to-blue-50/50 rounded-md border border-green-100/50">
+                        <div className="flex items-center gap-2">
+                          <span className="text-[10px] text-gray-700 font-medium">Protein Content</span>
+                        </div>
+                        <span className="font-bold text-gray-900 text-[10px]">12-15g</span>
+                      </div>
+                      <div className="flex justify-between items-center p-3 bg-gradient-to-r from-green-50/50 via-teal-50/50 to-blue-50/50 rounded-md border border-green-100/50">
+                        <div className="flex items-center gap-2">
+                          <span className="text-[10px] text-gray-700 font-medium">Iron Content</span>
+                        </div>
+                        <span className="font-bold text-gray-900 text-[10px]">3-5mg</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Meal Distribution Chart */}
+                  <div className="bg-white rounded-md p-4 shadow-sm border border-gray-100 relative overflow-hidden">
+                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-amber-500 via-orange-500 to-red-500"></div>
+                    <div className="absolute -top-2 -right-2 w-10 h-10 bg-orange-500/10 rounded-full"></div>
+                    <h3 className="text-sm font-bold text-gray-900 mb-4 bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent relative z-10">Meal Distribution Trends (Daily)</h3>
+                    <div className="h-48 bg-gradient-to-br from-amber-50 to-orange-50 rounded-md p-3 border border-amber-100 relative z-10">
+                      <div className="flex items-center justify-center h-full text-gray-500 text-[10px]">
+                        <div className="text-center">
+                          <Utensils className="w-8 h-8 mx-auto mb-2 text-amber-400" />
+                          <p>Meal distribution chart for {mealPeriod} period</p>
+                          <p className="mt-1 text-[9px]">Data visualization will be displayed here</p>
+                          <div className="flex justify-center gap-2 mt-3">
+                            <div className="w-16 h-16 bg-gradient-to-br from-amber-100 to-orange-100 rounded-md flex items-center justify-center border border-amber-200 overflow-hidden">
+                              <img 
+                                src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=120&h=120&q=80"
+                                alt="Rice and Curry Meal"
+                                className="w-full h-full object-cover"
+                              />
+                            </div>
+                            <div className="w-16 h-16 bg-gradient-to-br from-amber-100 to-orange-100 rounded-md flex items-center justify-center border border-amber-200 overflow-hidden">
+                              <img 
+                                src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=120&h=120&q=80"
+                                alt="Vegetable Thali"
+                                className="w-full h-full object-cover"
+                              />
+                            </div>
+                            <div className="w-16 h-16 bg-gradient-to-br from-amber-100 to-orange-100 rounded-md flex items-center justify-center border border-amber-200 overflow-hidden">
+                              <img 
+                                src="https://images.unsplash.com/photo-1563245372-f21724e3856d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=120&h=120&q=80"
+                                alt="Dal and Rice"
+                                className="w-full h-full object-cover"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* School Meal Participation */}
+              <div className="bg-white rounded-md p-4 shadow-sm border border-gray-100 relative overflow-hidden mb-6">
+                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-purple-500 via-indigo-500 to-blue-500"></div>
+                <div className="absolute -top-2 -right-2 w-10 h-10 bg-indigo-500/10 rounded-full"></div>
+                <div className="absolute -bottom-2 -left-2 w-8 h-8 bg-purple-500/10 rounded-full"></div>
+                <h3 className="text-sm font-bold text-gray-900 mb-4 bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent relative z-10">School Meal Participation</h3>
+                <div className="overflow-x-auto relative z-10">
+                  <table className="w-full">
+                    <thead>
+                      <tr className="border-b border-gray-200">
+                        <th className="text-left py-3 px-4 font-medium text-[10px] bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">School</th>
+                        <th className="text-left py-3 px-4 font-medium text-[10px] bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">Total Students</th>
+                        <th className="text-left py-3 px-4 font-medium text-[10px] bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">Present Today</th>
+                        <th className="text-left py-3 px-4 font-medium text-[10px] bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">Meals Served</th>
+                        <th className="text-left py-3 px-4 font-medium text-[10px] bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">Participation Rate</th>
+                        <th className="text-left py-3 px-4 font-medium text-[10px] bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {mealAttendanceData.map((school) => (
+                        <tr key={school.id} className="border-b border-gray-100 hover:bg-gradient-to-r from-purple-50/50 via-indigo-50/50 to-blue-50/50 transition-all duration-300">
+                          <td className="py-3 px-4">
+                            <div className="font-medium text-gray-900 text-[10px] flex items-center gap-1">
+                              <GraduationCap className="w-3 h-3 text-purple-500" />
+                              {school.schoolName}
+                            </div>
+                          </td>
+                          <td className="py-3 px-4 text-gray-600 text-[10px]">{school.totalStudents.toLocaleString()}</td>
+                          <td className="py-3 px-4 text-gray-600 text-[10px]">{school.presentToday.toLocaleString()}</td>
+                          <td className="py-3 px-4 text-gray-600 text-[10px]">{Math.round(school.presentToday * districtData.mealsPerStudent).toLocaleString()}</td>
+                          <td className="py-3 px-4 text-gray-600 text-[10px]">{((school.presentToday / school.totalStudents) * 100).toFixed(1)}%</td>
+                          <td className="py-3 px-4">
+                            <span className="px-2 py-1 bg-green-100 text-green-800 rounded-full text-[9px] font-medium">Active</span>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              {/* Weekly and Monthly Meal Reports */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                {/* Weekly Meal Report */}
+                <div className="bg-white rounded-md p-4 shadow-sm border border-gray-100 relative overflow-hidden">
+                  <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500"></div>
+                  <div className="absolute -top-2 -right-2 w-10 h-10 bg-indigo-500/10 rounded-full"></div>
+                  <h3 className="text-sm font-bold text-gray-900 mb-4 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent relative z-10">Weekly Meal Generation Report</h3>
+                  <div className="overflow-x-auto relative z-10">
+                    <table className="w-full">
+                      <thead>
+                        <tr className="border-b border-gray-200">
+                          <th className="text-left py-2 px-3 font-medium text-[10px] bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Week</th>
+                          <th className="text-left py-2 px-3 font-medium text-[10px] bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Meals Generated</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {weeklyMealData.map((week, index) => (
+                          <tr key={index} className="border-b border-gray-100 hover:bg-gradient-to-r from-blue-50/50 via-indigo-50/50 to-purple-50/50 transition-all duration-300">
+                            <td className="py-2 px-3 text-gray-900 text-[10px] font-medium">{week.week}</td>
+                            <td className="py-2 px-3 text-gray-600 text-[10px]">{week.meals.toLocaleString()}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                {/* Monthly Meal Report */}
+                <div className="bg-white rounded-md p-4 shadow-sm border border-gray-100 relative overflow-hidden">
+                  <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-green-500 via-teal-500 to-blue-500"></div>
+                  <div className="absolute -top-2 -right-2 w-10 h-10 bg-teal-500/10 rounded-full"></div>
+                  <h3 className="text-sm font-bold text-gray-900 mb-4 bg-gradient-to-r from-green-600 to-teal-600 bg-clip-text text-transparent relative z-10">Monthly Meal Generation Report</h3>
+                  <div className="overflow-x-auto relative z-10">
+                    <table className="w-full">
+                      <thead>
+                        <tr className="border-b border-gray-200">
+                          <th className="text-left py-2 px-3 font-medium text-[10px] bg-gradient-to-r from-green-600 to-teal-600 bg-clip-text text-transparent">Month</th>
+                          <th className="text-left py-2 px-3 font-medium text-[10px] bg-gradient-to-r from-green-600 to-teal-600 bg-clip-text text-transparent">Meals Generated</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {monthlyMealData.map((month, index) => (
+                          <tr key={index} className="border-b border-gray-100 hover:bg-gradient-to-r from-green-50/50 via-teal-50/50 to-blue-50/50 transition-all duration-300">
+                            <td className="py-2 px-3 text-gray-900 text-[10px] font-medium">{month.month}</td>
+                            <td className="py-2 px-3 text-gray-600 text-[10px]">{month.meals.toLocaleString()}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Settings Tab */}
           {activeTab === 'settings' && (
             <div>
@@ -845,7 +1212,7 @@ const GovernmentDashboard = ({ onLogout }) => {
 
               <div className="flex justify-between items-center mb-4">
                 <div>
-                  <h2 className="text-base font-bold text-gray-900 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">System Settings</h2>
+                  <h2 className="text-base font-bold text-blue-700">System Settings</h2>
                   <p className="text-[10px] text-gray-600 mt-1">Manage your account preferences and system settings</p>
                 </div>
                 <div className="flex gap-2">
@@ -901,7 +1268,7 @@ const GovernmentDashboard = ({ onLogout }) => {
                       <div className="mb-4 pb-3 border-b border-gray-200">
                         <div className="flex items-center justify-between">
                           <div>
-                            <h2 className="text-sm font-bold text-gray-900 flex items-center gap-1.5">
+                            <h2 className="text-sm font-bold text-blue-700 flex items-center gap-1.5">
                               <User className="w-4 h-4 text-blue-500" />
                               Profile Information
                             </h2>
@@ -998,7 +1365,7 @@ const GovernmentDashboard = ({ onLogout }) => {
                       <div className="mb-4 pb-3 border-b border-gray-200">
                         <div className="flex items-center justify-between">
                           <div>
-                            <h2 className="text-sm font-bold text-gray-900 flex items-center gap-1.5">
+                            <h2 className="text-sm font-bold text-blue-700 flex items-center gap-1.5">
                               <Bell className="w-4 h-4 text-blue-500" />
                               Notification Preferences
                             </h2>
@@ -1071,7 +1438,7 @@ const GovernmentDashboard = ({ onLogout }) => {
                       <div className="mb-4 pb-3 border-b border-gray-200">
                         <div className="flex items-center justify-between">
                           <div>
-                            <h2 className="text-base font-bold text-gray-900 flex items-center gap-1.5">
+                            <h2 className="text-base font-bold text-blue-700 flex items-center gap-1.5">
                               <Shield className="w-4 h-4 text-blue-500" />
                               Security Settings
                             </h2>
