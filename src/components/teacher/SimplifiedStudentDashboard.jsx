@@ -2,12 +2,27 @@ import React, { useState } from 'react';
 import { Home, FileText, Award, AlertCircle, Settings, User, LogOut, Users, CheckCircle, Clock, TrendingUp, X, BookOpen, Calculator, FlaskConical, PenTool, Globe, Music, Palette, Edit, RefreshCw, UserCheck, Calendar } from 'lucide-react';
 import UltraModernHeader from '../UltraModernHeader';
 
-
-
 const SimplifiedStudentDashboard = () => {
   const [activeTab, setActiveTab] = useState('home');
   const [showAvatarModal, setShowAvatarModal] = useState(false);
   const [selectedClass, setSelectedClass] = useState(null);
+  const [studentAvatar, setStudentAvatar] = useState('https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah&backgroundColor=ffffff&radius=50');
+
+  // Settings state
+  const [settings, setSettings] = useState({
+    privacy: {
+      profileVisibility: 'friends',
+      activityStatus: true
+    },
+    appearance: {
+      theme: 'light',
+      language: 'en'
+    },
+    security: {
+      twoFactorAuth: false,
+      loginAlerts: true
+    }
+  });
 
   // Sample data
   const initialStudentData = {
@@ -62,7 +77,60 @@ const SimplifiedStudentDashboard = () => {
     `https://api.dicebear.com/7.x/avataaars/svg?seed=Ava&backgroundColor=ffffff&radius=50`
   ];
 
-  const [studentAvatar, setStudentAvatar] = useState(sampleAvatars[0]);
+  // Handle settings changes
+  const handlePrivacyChange = (setting, value) => {
+    setSettings(prev => ({
+      ...prev,
+      privacy: {
+        ...prev.privacy,
+        [setting]: value
+      }
+    }));
+  };
+
+  const handleAppearanceChange = (setting, value) => {
+    setSettings(prev => ({
+      ...prev,
+      appearance: {
+        ...prev.appearance,
+        [setting]: value
+      }
+    }));
+  };
+
+  const handleSecurityChange = (setting) => {
+    setSettings(prev => ({
+      ...prev,
+      security: {
+        ...prev.security,
+        [setting]: !prev.security[setting]
+      }
+    }));
+  };
+
+  // Reset settings to default
+  const resetSettings = () => {
+    setSettings({
+      notifications: {
+        email: true,
+        push: true,
+        sms: false
+      },
+      privacy: {
+        profileVisibility: 'friends',
+        activityStatus: true
+      },
+      appearance: {
+        theme: 'light',
+        language: 'en'
+      },
+      security: {
+        twoFactorAuth: false,
+        loginAlerts: true
+      }
+    });
+    alert('Settings have been reset to default values!');
+  };
 
   return (
     <div className="flex min-h-screen max-h-screen overflow-hidden bg-gradient-to-br from-blue-50 to-indigo-50">
@@ -262,21 +330,26 @@ const SimplifiedStudentDashboard = () => {
                                 <div className="text-[9px] text-gray-900">{assignment.subject}</div>
                               </div>
                             </td>
-                            <td className="px-3 py-2 whitespace-nowrap text-[9px] text-gray-900">{assignment.dueDisplay}</td>
+                            <td className="px-3 py-2 whitespace-nowrap">
+                              <div className="flex items-center">
+                                <Calendar className="w-2.5 h-2.5 text-indigo-400 mr-1" />
+                                <div className="text-[9px] text-gray-900">{assignment.dueDisplay}</div>
+                              </div>
+                            </td>
                             <td className="px-3 py-2 whitespace-nowrap">
                               <span className={`px-1.5 py-0.5 text-[8px] font-medium rounded-full ${
-                                assignment.priority === 'high' ? 'bg-red-100 text-red-800' :
-                                assignment.priority === 'medium' ? 'bg-amber-100 text-amber-800' :
-                                'bg-green-100 text-green-800'
+                                assignment.priority === 'high' ? 'bg-red-100 text-red-800 border border-red-200' :
+                                assignment.priority === 'medium' ? 'bg-amber-100 text-amber-800 border border-amber-200' :
+                                'bg-green-100 text-green-800 border border-green-200'
                               }`}>
                                 {assignment.priority.charAt(0).toUpperCase() + assignment.priority.slice(1)}
                               </span>
                             </td>
                             <td className="px-3 py-2 whitespace-nowrap">
                               <span className={`px-1.5 py-0.5 text-[8px] font-medium rounded-full ${
-                                assignment.status === 'submitted' ? 'bg-indigo-100 text-indigo-800' :
-                                assignment.status === 'graded' ? 'bg-blue-100 text-blue-800' :
-                                'bg-amber-100 text-amber-800'
+                                assignment.status === 'submitted' ? 'bg-indigo-100 text-indigo-800 border border-indigo-200' :
+                                assignment.status === 'graded' ? 'bg-blue-100 text-blue-800 border border-blue-200' :
+                                'bg-amber-100 text-amber-800 border border-amber-200'
                               }`}>
                                 {assignment.status.charAt(0).toUpperCase() + assignment.status.slice(1)}
                               </span>
@@ -526,48 +599,68 @@ const SimplifiedStudentDashboard = () => {
                 </div>
               </div>
               
-              {/* Weekly Attendance Chart */}
+              {/* Weekly Attendance Chart - Enhanced Visualization */}
               <div className="bg-white rounded-md shadow-sm border border-gray-100 p-4 mb-6">
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="font-bold text-gray-900 text-[11px]">Weekly Attendance</h3>
                   <div className="flex gap-1">
-                    <span className="px-1.5 py-0.5 bg-blue-100 text-blue-800 text-[9px] font-medium rounded-full">Last 7 Days</span>
+                    <span className="px-1.5 py-0.5 bg-blue-100 text-blue-800 text-[9px] font-medium rounded-full">Last 5 Days</span>
                   </div>
                 </div>
-                <div className="flex items-end h-16 gap-1 mt-4">
+                <div className="flex items-end justify-between h-20 gap-2 mt-4">
                   {[
-                    { day: 'Mon', percentage: 100, present: true },
-                    { day: 'Tue', percentage: 80, present: false },
-                    { day: 'Wed', percentage: 100, present: true },
-                    { day: 'Thu', percentage: 100, present: true },
-                    { day: 'Fri', percentage: 100, present: true },
-                    { day: 'Sat', percentage: 60, present: false },
-                    { day: 'Sun', percentage: 100, present: true }
+                    { day: 'Mon', status: 'present' },
+                    { day: 'Tue', status: 'absent' },
+                    { day: 'Wed', status: 'present' },
+                    { day: 'Thu', status: 'present' },
+                    { day: 'Fri', status: 'present' }
                   ].map((day, index) => (
                     <div key={index} className="flex flex-col items-center flex-1">
                       <div className="text-[8px] text-gray-500 mb-1">{day.day}</div>
                       <div 
-                        className={`w-full rounded-t ${day.present ? 'bg-gradient-to-t from-blue-500 to-blue-400' : 'bg-gradient-to-t from-red-500 to-red-400'}`}
-                        style={{ height: `${day.percentage}%` }}
-                      ></div>
+                        className={`w-full rounded-t flex items-center justify-center ${
+                          day.status === 'present' 
+                            ? 'bg-gradient-to-t from-green-500 to-green-400 h-full' 
+                            : 'bg-gradient-to-t from-red-500 to-red-400 h-3/4'
+                        }`}
+                      >
+                        {day.status === 'present' ? (
+                          <CheckCircle className="w-3 h-3 text-white" />
+                        ) : (
+                          <X className="w-3 h-3 text-white" />
+                        )}
+                      </div>
                     </div>
                   ))}
                 </div>
-              </div>
-              
-              {/* 3-Month Attendance Graph */}
-              <div className="bg-white rounded-md shadow-sm border border-gray-100 p-4 mb-6">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="font-bold text-gray-900 text-[11px]">3-Month Attendance Trend</h3>
-                  <div className="flex gap-1">
-                    <span className="px-1.5 py-0.5 bg-indigo-100 text-indigo-800 text-[9px] font-medium rounded-full">Jan - Mar 2024</span>
+                <div className="flex justify-center gap-4 mt-3">
+                  <div className="flex items-center gap-1">
+                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                    <span className="text-[8px] text-gray-600">Present</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <div className="w-2 h-2 bg-red-500 rounded-full"></div>
+                    <span className="text-[8px] text-gray-600">Absent</span>
                   </div>
                 </div>
-                <div className="flex items-end h-24 gap-2 mt-4">
+              </div>
+              
+              {/* 6-Month Attendance Trend */}
+              <div className="bg-white rounded-md shadow-sm border border-gray-100 p-4 mb-6">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="font-bold text-gray-900 text-[11px]">6-Month Attendance Trend</h3>
+                  <div className="flex gap-1">
+                    <span className="px-1.5 py-0.5 bg-indigo-100 text-indigo-800 text-[9px] font-medium rounded-full">Jan - Jun 2024</span>
+                  </div>
+                </div>
+                <div className="flex items-end h-24 gap-1 mt-4">
                   {[
                     { month: 'Jan', present: 28, late: 2, absent: 1, total: 31 },
                     { month: 'Feb', present: 26, late: 1, absent: 1, total: 28 },
-                    { month: 'Mar', present: 29, late: 1, absent: 1, total: 31 }
+                    { month: 'Mar', present: 29, late: 1, absent: 1, total: 31 },
+                    { month: 'Apr', present: 27, late: 2, absent: 1, total: 30 },
+                    { month: 'May', present: 28, late: 1, absent: 1, total: 30 },
+                    { month: 'Jun', present: 29, late: 1, absent: 0, total: 30 }
                   ].map((month, index) => (
                     <div key={index} className="flex flex-col items-center flex-1">
                       <div className="text-[8px] text-gray-500 mb-1">{month.month}</div>
@@ -940,9 +1033,6 @@ const SimplifiedStudentDashboard = () => {
                     
                     <div className="flex items-center justify-between mb-3">
                       <div className="text-[10px] text-gray-600">
-                        <span className="font-medium">Students:</span> 32
-                      </div>
-                      <div className="text-[10px] text-gray-600">
                         <span className="font-medium">Room:</span> 204
                       </div>
                     </div>
@@ -994,9 +1084,6 @@ const SimplifiedStudentDashboard = () => {
                     </div>
                     
                     <div className="flex items-center justify-between mb-3">
-                      <div className="text-[10px] text-gray-600">
-                        <span className="font-medium">Students:</span> 30
-                      </div>
                       <div className="text-[10px] text-gray-600">
                         <span className="font-medium">Room:</span> 301
                       </div>
@@ -1050,9 +1137,6 @@ const SimplifiedStudentDashboard = () => {
                     
                     <div className="flex items-center justify-between mb-3">
                       <div className="text-[10px] text-gray-600">
-                        <span className="font-medium">Students:</span> 31
-                      </div>
-                      <div className="text-[10px] text-gray-600">
                         <span className="font-medium">Room:</span> 105
                       </div>
                     </div>
@@ -1104,9 +1188,6 @@ const SimplifiedStudentDashboard = () => {
                     </div>
                     
                     <div className="flex items-center justify-between mb-3">
-                      <div className="text-[10px] text-gray-600">
-                        <span className="font-medium">Students:</span> 29
-                      </div>
                       <div className="text-[10px] text-gray-600">
                         <span className="font-medium">Room:</span> 208
                       </div>
@@ -1160,9 +1241,6 @@ const SimplifiedStudentDashboard = () => {
                     
                     <div className="flex items-center justify-between mb-3">
                       <div className="text-[10px] text-gray-600">
-                        <span className="font-medium">Students:</span> 30
-                      </div>
-                      <div className="text-[10px] text-gray-600">
                         <span className="font-medium">Room:</span> 305
                       </div>
                     </div>
@@ -1215,9 +1293,6 @@ const SimplifiedStudentDashboard = () => {
                     
                     <div className="flex items-center justify-between mb-3">
                       <div className="text-[10px] text-gray-600">
-                        <span className="font-medium">Students:</span> 28
-                      </div>
-                      <div className="text-[10px] text-gray-600">
                         <span className="font-medium">Room:</span> Art Hall
                       </div>
                     </div>
@@ -1243,17 +1318,17 @@ const SimplifiedStudentDashboard = () => {
               
               {/* Class Schedule Summary */}
               <div className="bg-white rounded-md shadow-sm border border-gray-100 p-4">
-                <h3 className="font-bold text-gray-900 text-[11px] mb-3">Weekly Class Schedule</h3>
+                <h3 className="font-bold text-gray-900 text-[10px] mb-3">Weekly Class Schedule</h3>
                 <div className="overflow-x-auto">
                   <table className="min-w-full divide-y divide-gray-200">
                     <thead className="bg-gray-50">
                       <tr>
-                        <th className="px-3 py-2 text-left text-[10px] font-medium text-gray-500 uppercase">Period</th>
-                        <th className="px-3 py-2 text-left text-[10px] font-medium text-gray-500 uppercase">Monday</th>
-                        <th className="px-3 py-2 text-left text-[10px] font-medium text-gray-500 uppercase">Tuesday</th>
-                        <th className="px-3 py-2 text-left text-[10px] font-medium text-gray-500 uppercase">Wednesday</th>
-                        <th className="px-3 py-2 text-left text-[10px] font-medium text-gray-500 uppercase">Thursday</th>
-                        <th className="px-3 py-2 text-left text-[10px] font-medium text-gray-500 uppercase">Friday</th>
+                        <th className="px-3 py-2 text-left text-[9px] font-medium text-gray-500 uppercase">Period</th>
+                        <th className="px-3 py-2 text-left text-[9px] font-medium text-gray-500 uppercase">Monday</th>
+                        <th className="px-3 py-2 text-left text-[9px] font-medium text-gray-500 uppercase">Tuesday</th>
+                        <th className="px-3 py-2 text-left text-[9px] font-medium text-gray-500 uppercase">Wednesday</th>
+                        <th className="px-3 py-2 text-left text-[9px] font-medium text-gray-500 uppercase">Thursday</th>
+                        <th className="px-3 py-2 text-left text-[9px] font-medium text-gray-500 uppercase">Friday</th>
                       </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
@@ -1266,12 +1341,12 @@ const SimplifiedStudentDashboard = () => {
                         { period: '6th', mon: 'Art', tue: 'Art', wed: 'Geography', thu: 'Science', fri: 'Science' },
                       ].map((row, index) => (
                         <tr key={index} className="hover:bg-gray-50">
-                          <td className="px-3 py-2 whitespace-nowrap text-[10px] font-medium text-gray-900">{row.period}</td>
-                          <td className="px-3 py-2 whitespace-nowrap text-[10px] text-gray-700">{row.mon}</td>
-                          <td className="px-3 py-2 whitespace-nowrap text-[10px] text-gray-700">{row.tue}</td>
-                          <td className="px-3 py-2 whitespace-nowrap text-[10px] text-gray-700">{row.wed}</td>
-                          <td className="px-3 py-2 whitespace-nowrap text-[10px] text-gray-700">{row.thu}</td>
-                          <td className="px-3 py-2 whitespace-nowrap text-[10px] text-gray-700">{row.fri}</td>
+                          <td className="px-3 py-2 whitespace-nowrap text-[9px] font-medium text-gray-900">{row.period}</td>
+                          <td className="px-3 py-2 whitespace-nowrap text-[9px] text-gray-700">{row.mon}</td>
+                          <td className="px-3 py-2 whitespace-nowrap text-[9px] text-gray-700">{row.tue}</td>
+                          <td className="px-3 py-2 whitespace-nowrap text-[9px] text-gray-700">{row.wed}</td>
+                          <td className="px-3 py-2 whitespace-nowrap text-[9px] text-gray-700">{row.thu}</td>
+                          <td className="px-3 py-2 whitespace-nowrap text-[9px] text-gray-700">{row.fri}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -1283,22 +1358,22 @@ const SimplifiedStudentDashboard = () => {
 
           {activeTab === 'settings' && (
             <div>
-              <div className="flex justify-between items-center mb-4">
+              <div className="flex justify-between items-center mb-3">
                 <div>
-                  <h2 className="text-[10px] font-bold text-gray-900">Account Settings</h2>
-                  <p className="text-gray-600 text-[9px]">Manage your profile and account preferences</p>
+                  <h2 className="text-[9px] font-bold text-gray-900">Account Settings</h2>
+                  <p className="text-gray-600 text-[8px]">Manage your profile and account preferences</p>
                 </div>
               </div>
               
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-                {/* Profile Card - Reduced by 2 units */}
-                <div className="lg:col-span-2 bg-white rounded-md shadow-sm border border-gray-100 p-4">
-                  <div className="flex items-center gap-2.5 mb-4">
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
+                {/* Profile Card - More compact */}
+                <div className="lg:col-span-2 bg-white rounded-md shadow-sm border border-gray-100 p-3">
+                  <div className="flex items-center gap-2 mb-3">
                     <div className="relative">
                       <img 
                         src={studentAvatar} 
                         alt="Student Avatar" 
-                        className="w-12 h-12 rounded-lg object-cover shadow-md border-2 border-indigo-100"
+                        className="w-10 h-10 rounded-lg object-cover shadow-md border-2 border-indigo-100"
                       />
                       <button 
                         onClick={() => setShowAvatarModal(true)}
@@ -1308,59 +1383,59 @@ const SimplifiedStudentDashboard = () => {
                       </button>
                     </div>
                     <div>
-                      <h3 className="text-[10px] font-bold text-gray-900">{profileData.name}</h3>
-                      <p className="text-gray-600 text-[9px]">{profileData.class} • Roll #{profileData.rollNumber}</p>
+                      <h3 className="text-[9px] font-bold text-gray-900">{profileData.name}</h3>
+                      <p className="text-gray-600 text-[8px]">{profileData.class} • Roll #{profileData.rollNumber}</p>
                       <button 
                         onClick={() => setShowAvatarModal(true)}
-                        className="text-indigo-600 hover:text-indigo-700 text-[9px] font-medium mt-1"
+                        className="text-indigo-600 hover:text-indigo-700 text-[8px] font-medium mt-0.5"
                       >
                         Change Avatar
                       </button>
                     </div>
                   </div>
                   
-                  <div className="space-y-2.5">
+                  <div className="space-y-2">
                     <div>
-                      <label className="block text-[9px] font-medium text-gray-700 mb-1">Full Name</label>
+                      <label className="block text-[8px] font-medium text-gray-700 mb-0.5">Full Name</label>
                       <input 
                         type="text" 
                         value={profileData.name}
                         onChange={(e) => setProfileData({...profileData, name: e.target.value})}
-                        className="w-full px-2.5 py-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-300 text-[9px]"
+                        className="w-full px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-300 text-[8px]"
                       />
                     </div>
                     
                     <div>
-                      <label className="block text-[9px] font-medium text-gray-700 mb-1">Email Address</label>
+                      <label className="block text-[8px] font-medium text-gray-700 mb-0.5">Email Address</label>
                       <input 
                         type="email" 
                         value={profileData.email}
                         onChange={(e) => setProfileData({...profileData, email: e.target.value})}
-                        className="w-full px-2.5 py-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-300 text-[9px]"
+                        className="w-full px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-300 text-[8px]"
                       />
                     </div>
                     
                     <div>
-                      <label className="block text-[9px] font-medium text-gray-700 mb-1">Class</label>
+                      <label className="block text-[8px] font-medium text-gray-700 mb-0.5">Class</label>
                       <input 
                         type="text" 
                         value={profileData.class}
                         onChange={(e) => setProfileData({...profileData, class: e.target.value})}
-                        className="w-full px-2.5 py-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-300 text-[9px]"
+                        className="w-full px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-300 text-[8px]"
                       />
                     </div>
                     
                     <div>
-                      <label className="block text-[9px] font-medium text-gray-700 mb-1">Roll Number</label>
+                      <label className="block text-[8px] font-medium text-gray-700 mb-0.5">Roll Number</label>
                       <input 
                         type="text" 
                         value={profileData.rollNumber}
                         onChange={(e) => setProfileData({...profileData, rollNumber: e.target.value})}
-                        className="w-full px-2.5 py-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-300 text-[9px]"
+                        className="w-full px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-300 text-[8px]"
                       />
                     </div>
                     
-                    <div className="flex gap-1.5 pt-2.5">
+                    <div className="flex gap-1 pt-2">
                       <button 
                         onClick={() => {
                           setProfileData({
@@ -1370,7 +1445,7 @@ const SimplifiedStudentDashboard = () => {
                             rollNumber: studentData.rollNumber
                           });
                         }}
-                        className="px-1.5 py-0.5 border border-gray-300 text-gray-700 rounded hover:bg-gray-50 transition-all text-[9px]"
+                        className="px-1.5 py-0.5 border border-gray-300 text-gray-700 rounded hover:bg-gray-50 transition-all text-[8px]"
                       >
                         Cancel
                       </button>
@@ -1384,7 +1459,7 @@ const SimplifiedStudentDashboard = () => {
                           });
                           alert('Profile updated successfully!');
                         }}
-                        className="px-1.5 py-0.5 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded hover:from-indigo-600 hover:to-purple-700 transition-all shadow-sm hover:shadow text-[9px]"
+                        className="px-1.5 py-0.5 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded hover:from-indigo-600 hover:to-purple-700 transition-all shadow-sm hover:shadow text-[8px]"
                       >
                         Save Changes
                       </button>
@@ -1392,59 +1467,133 @@ const SimplifiedStudentDashboard = () => {
                   </div>
                 </div>
                 
-                {/* Settings Navigation - Reduced by 2 units */}
-                <div className="space-y-2.5">
-                  <div className="bg-white rounded-md shadow-sm border border-gray-100 p-4">
-                    <h3 className="text-[10px] font-bold text-gray-900 mb-2.5">Settings</h3>
-                    <div className="space-y-1">
-                      <button 
-                        className="w-full text-left px-1.5 py-0.5 bg-indigo-50 text-indigo-600 rounded font-medium text-[9px]"
-                      >
-                        Account
-                      </button>
-                      <button 
-                        className="w-full text-left px-1.5 py-0.5 text-gray-600 hover:bg-gray-50 rounded text-[9px]"
-                      >
-                        Security
-                      </button>
-                      <button 
-                        className="w-full text-left px-1.5 py-0.5 text-gray-600 hover:bg-gray-50 rounded text-[9px]"
-                      >
-                        Notifications
-                      </button>
-                      <button 
-                        className="w-full text-left px-1.5 py-0.5 text-gray-600 hover:bg-gray-50 rounded text-[9px]"
-                      >
-                        Appearance
-                      </button>
+                {/* Settings and Actions in a single row */}
+                <div className="flex gap-3">
+                  <div className="flex-1 bg-white rounded-md shadow-sm border border-gray-100 p-3">
+                    <h3 className="text-[9px] font-bold text-gray-900 mb-2">Settings</h3>
+                    <div className="space-y-2">
+                      {/* Privacy Settings */}
+                      <div>
+                        <h4 className="text-[8px] font-medium text-gray-700 mb-1">Privacy</h4>
+                        <div className="space-y-1">
+                          <div className="flex items-center justify-between">
+                            <span className="text-[8px] text-gray-600">Profile Visibility</span>
+                            <select 
+                              className="text-[8px] border border-gray-300 rounded px-1.5 py-0.5"
+                              value={settings.privacy.profileVisibility}
+                              onChange={(e) => handlePrivacyChange('profileVisibility', e.target.value)}
+                            >
+                              <option value="public">Public</option>
+                              <option value="friends">Friends</option>
+                              <option value="private">Private</option>
+                            </select>
+                          </div>
+                          <div className="flex items-center justify-between">
+                            <span className="text-[8px] text-gray-600">Show Activity Status</span>
+                            <label className="relative inline-flex items-center cursor-pointer">
+                              <input 
+                                type="checkbox" 
+                                className="sr-only peer" 
+                                checked={settings.privacy.activityStatus}
+                                onChange={() => handlePrivacyChange('activityStatus', !settings.privacy.activityStatus)}
+                              />
+                              <div className="w-6 h-3 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-2 after:w-2 after:transition-all peer-checked:bg-indigo-600"></div>
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      {/* Appearance Settings */}
+                      <div>
+                        <h4 className="text-[8px] font-medium text-gray-700 mb-1">Appearance</h4>
+                        <div className="space-y-1">
+                          <div className="flex items-center justify-between">
+                            <span className="text-[8px] text-gray-600">Theme</span>
+                            <select 
+                              className="text-[8px] border border-gray-300 rounded px-1.5 py-0.5"
+                              value={settings.appearance.theme}
+                              onChange={(e) => handleAppearanceChange('theme', e.target.value)}
+                            >
+                              <option value="light">Light</option>
+                              <option value="dark">Dark</option>
+                            </select>
+                          </div>
+                          <div className="flex items-center justify-between">
+                            <span className="text-[8px] text-gray-600">Language</span>
+                            <select 
+                              className="text-[8px] border border-gray-300 rounded px-1.5 py-0.5"
+                              value={settings.appearance.language}
+                              onChange={(e) => handleAppearanceChange('language', e.target.value)}
+                            >
+                              <option value="en">English</option>
+                              <option value="pa">Punjabi</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                   
-                  <div className="bg-white rounded-md shadow-sm border border-gray-100 p-4">
-                    <h3 className="text-[10px] font-bold text-gray-900 mb-2.5">Actions</h3>
-                    <div className="space-y-1.5">
-                      <button 
-                        onClick={() => window.location.reload()}
-                        className="w-full flex items-center gap-1 px-1.5 py-0.5 text-gray-600 hover:bg-gray-50 rounded text-[9px]"
-                      >
-                        <RefreshCw className="w-2 h-2" />
-                        Refresh Settings
-                      </button>
-                      <button 
-                        onClick={() => {
-                          setProfileData({
-                            name: 'Sarah Johnson',
-                            email: 'sarah.johnson@example.com',
-                            class: 'Class 10-A',
-                            rollNumber: '24'
-                          });
-                          setStudentData(initialStudentData);
-                        }}
-                        className="w-full flex items-center gap-1 px-1.5 py-0.5 text-gray-600 hover:bg-gray-50 rounded text-[9px]"
-                      >
-                        <Settings className="w-2 h-2" />
-                        Reset Settings
-                      </button>
+                  <div className="flex-1 bg-white rounded-md shadow-sm border border-gray-100 p-3">
+                    <h3 className="text-[9px] font-bold text-gray-900 mb-2">Security</h3>
+                    <div className="space-y-2">
+                      {/* Security Settings */}
+                      <div>
+                        <div className="space-y-1">
+                          <div className="flex items-center justify-between">
+                            <span className="text-[8px] text-gray-600">Two-Factor Authentication</span>
+                            <label className="relative inline-flex items-center cursor-pointer">
+                              <input 
+                                type="checkbox" 
+                                className="sr-only peer" 
+                                checked={settings.security.twoFactorAuth}
+                                onChange={() => handleSecurityChange('twoFactorAuth')}
+                              />
+                              <div className="w-6 h-3 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-2 after:w-2 after:transition-all peer-checked:bg-indigo-600"></div>
+                            </label>
+                          </div>
+                          <div className="flex items-center justify-between">
+                            <span className="text-[8px] text-gray-600">Login Alerts</span>
+                            <label className="relative inline-flex items-center cursor-pointer">
+                              <input 
+                                type="checkbox" 
+                                className="sr-only peer" 
+                                checked={settings.security.loginAlerts}
+                                onChange={() => handleSecurityChange('loginAlerts')}
+                              />
+                              <div className="w-6 h-3 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-2 after:w-2 after:transition-all peer-checked:bg-indigo-600"></div>
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      {/* Actions */}
+                      <div>
+                        <h4 className="text-[9px] font-bold text-gray-900 mb-2">Actions</h4>
+                        <div className="space-y-1">
+                          <button 
+                            onClick={() => window.location.reload()}
+                            className="w-full flex items-center gap-1 px-1.5 py-0.5 text-gray-600 hover:bg-gray-50 rounded text-[8px]"
+                          >
+                            <RefreshCw className="w-2 h-2" />
+                            Refresh Settings
+                          </button>
+                          <button 
+                            onClick={resetSettings}
+                            className="w-full flex items-center gap-1 px-1.5 py-0.5 text-gray-600 hover:bg-gray-50 rounded text-[8px]"
+                          >
+                            <Settings className="w-2 h-2" />
+                            Reset Settings
+                          </button>
+                          <button 
+                            onClick={() => alert('Changes saved successfully!')}
+                            className="w-full flex items-center gap-1 px-1.5 py-0.5 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded hover:from-indigo-600 hover:to-purple-700 transition-all shadow-sm hover:shadow text-[8px]"
+                          >
+                            <CheckCircle className="w-2 h-2" />
+                            Save Changes
+                          </button>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -1483,7 +1632,7 @@ const SimplifiedStudentDashboard = () => {
                           <span className="font-medium">Period:</span> {selectedClass.period}
                         </div>
                         <div className="text-xs text-blue-100">
-                          <span className="font-medium">Students:</span> {selectedClass.students}
+                          <span className="font-medium">Period:</span> {selectedClass.period}
                         </div>
                         <div className="text-xs text-blue-100">
                           <span className="font-medium">Room:</span> {selectedClass.room}
