@@ -200,72 +200,94 @@ const SimplifiedStudentDashboard = () => {
                 ))}
               </div>
 
-              {/* Upcoming Assignments - Reduced size by 5 units total (3 + 2 more) and modernized design */}
-              <div className="bg-white rounded-md p-2.5 shadow-sm border border-gray-100 mb-4 relative overflow-hidden">
+              {/* Assignments Table - With new colors and geometric designs */}
+              <div className="bg-white rounded-md shadow-sm border border-gray-100 overflow-hidden relative mt-5">
                 {/* Geometric background elements */}
-                <div className="absolute -top-3 -right-3 w-12 h-12 bg-blue-500/5 rounded-full"></div>
-                <div className="absolute -bottom-3 -left-3 w-10 h-10 bg-indigo-500/5 rounded-full"></div>
-                <div className="absolute top-2 right-2 w-4 h-4 bg-indigo-500/10 rotate-45"></div>
+                <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-blue-600 to-indigo-500"></div>
+                <div className="absolute -top-4 -right-4 w-20 h-20 bg-indigo-500/10 rounded-full"></div>
+                <div className="absolute -bottom-4 -left-4 w-16 h-16 bg-purple-500/10 rounded-full"></div>
+                <div className="absolute top-6 right-6 w-6 h-6 bg-indigo-500/20 rotate-45"></div>
                 
-                <div className="relative z-10">
-                  <div className="flex justify-between items-center mb-2.5">
-                    <div className="flex items-center gap-1">
-                      <div className="p-1 bg-gradient-to-br from-blue-600 to-indigo-500 rounded">
-                        <FileText className="w-3.5 h-3.5 text-white" />
-                      </div>
-                      <div>
-                        <h3 className="text-xs font-bold text-gray-900">Upcoming Assignments</h3>
-                        <p className="text-[9px] text-gray-500">Tasks due in the next 7 days</p>
-                      </div>
-                    </div>
-                    <button 
-                      onClick={() => setActiveTab('assignments')}
-                      className="text-[9px] text-indigo-600 hover:text-indigo-700 font-medium bg-indigo-50 hover:bg-indigo-100 px-1.5 py-0.5 rounded transition-all"
-                    >
-                      View All
-                    </button>
-                  </div>
-                  
-                  <div className="space-y-1.5">
-                    {assignments.map((assignment) => (
-                      <div key={assignment.id} className="flex items-center gap-1.5 p-1.5 rounded-md hover:bg-indigo-50/50 transition-all border border-gray-100 hover:border-indigo-200 group">
-                        <div className="flex-shrink-0 w-1.5 h-1.5 rounded-full bg-red-500 group-hover:animate-pulse"></div>
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-start justify-between">
-                            <h4 className="text-[10px] font-semibold text-gray-900 truncate">{assignment.title}</h4>
-                            <span className="text-[8px] px-1 py-0.5 bg-gradient-to-r from-amber-100 to-orange-100 text-amber-800 rounded-full font-medium">
-                              {assignment.dueDisplay}
-                            </span>
-                          </div>
-                          <div className="flex items-center justify-between mt-0.5">
-                            <p className="text-[9px] text-gray-600">{assignment.subject}</p>
-                            <div className="flex items-center gap-0.5">
-                              <span className="text-[7px] px-0.5 py-0.5 bg-indigo-100 text-indigo-800 rounded-full font-medium">
-                                {assignment.priority}
+                <div className="overflow-x-auto relative z-10">
+                  <table className="min-w-full divide-y divide-gray-200">
+                    <thead className="bg-gray-50">
+                      <tr>
+                        <th scope="col" className="px-2.5 py-1.5 text-left text-[9px] font-medium text-gray-500 uppercase tracking-wider">Assignment</th>
+                        <th scope="col" className="px-2.5 py-1.5 text-left text-[9px] font-medium text-gray-500 uppercase tracking-wider">Subject</th>
+                        <th scope="col" className="px-2.5 py-1.5 text-left text-[9px] font-medium text-gray-500 uppercase tracking-wider">Due Date</th>
+                        <th scope="col" className="px-2.5 py-1.5 text-left text-[9px] font-medium text-gray-500 uppercase tracking-wider">Priority</th>
+                        <th scope="col" className="px-2.5 py-1.5 text-left text-[9px] font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                      </tr>
+                    </thead>
+                    <tbody className="bg-white divide-y divide-gray-200">
+                      {assignments.map((assignment) => {
+                        // Map subjects to icons
+                        const subjectIcons = {
+                          'Mathematics': Calculator,
+                          'Science': FlaskConical,
+                          'English': PenTool,
+                          'Geography': Globe,
+                          'Music': Music,
+                          'Art': Palette
+                        };
+                        
+                        const SubjectIcon = subjectIcons[assignment.subject] || BookOpen;
+                        
+                        // Map assignment types to icons
+                        const assignmentTypeIcons = {
+                          'Exercises': FileText,
+                          'Report': FileText,
+                          'Essay': PenTool,
+                          'Paper': FileText,
+                          'Project': Palette,
+                          'Patterns': Globe
+                        };
+                        
+                        // Extract assignment type from title for icon mapping
+                        const assignmentType = assignment.title.split(' - ')[0] || assignment.title.split(' ')[0];
+                        const AssignmentIcon = assignmentTypeIcons[assignmentType] || FileText;
+                        
+                        return (
+                          <tr key={assignment.id} className="hover:bg-indigo-50/50 transition-colors duration-150">
+                            <td className="px-3 py-2 whitespace-nowrap">
+                              <div className="flex items-center">
+                                <AssignmentIcon className="w-2.5 h-2.5 text-indigo-400 mr-1" />
+                                <div className="text-[9px] font-medium text-gray-900">{assignment.title}</div>
+                              </div>
+                            </td>
+                            <td className="px-3 py-2 whitespace-nowrap">
+                              <div className="flex items-center">
+                                <SubjectIcon className="w-2.5 h-2.5 text-indigo-400 mr-1" />
+                                <div className="text-[9px] text-gray-900">{assignment.subject}</div>
+                              </div>
+                            </td>
+                            <td className="px-3 py-2 whitespace-nowrap text-[9px] text-gray-900">{assignment.dueDisplay}</td>
+                            <td className="px-3 py-2 whitespace-nowrap">
+                              <span className={`px-1.5 py-0.5 text-[8px] font-medium rounded-full ${
+                                assignment.priority === 'high' ? 'bg-red-100 text-red-800' :
+                                assignment.priority === 'medium' ? 'bg-amber-100 text-amber-800' :
+                                'bg-green-100 text-green-800'
+                              }`}>
+                                {assignment.priority.charAt(0).toUpperCase() + assignment.priority.slice(1)}
                               </span>
-                              <span className="text-[7px] px-0.5 py-0.5 bg-amber-100 text-amber-800 rounded-full font-medium">
-                                Pending
+                            </td>
+                            <td className="px-3 py-2 whitespace-nowrap">
+                              <span className={`px-1.5 py-0.5 text-[8px] font-medium rounded-full ${
+                                assignment.status === 'submitted' ? 'bg-indigo-100 text-indigo-800' :
+                                assignment.status === 'graded' ? 'bg-blue-100 text-blue-800' :
+                                'bg-amber-100 text-amber-800'
+                              }`}>
+                                {assignment.status.charAt(0).toUpperCase() + assignment.status.slice(1)}
                               </span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                  
-                  <div className="mt-2 pt-1.5 border-t border-gray-100">
-                    <div className="flex items-center justify-between text-[9px]">
-                      <span className="text-gray-500">You have {assignments.filter(a => a.status === 'pending').length} pending assignments</span>
-                      <div className="flex items-center gap-0.5 text-indigo-600">
-                        <span>See details</span>
-                        <svg className="w-2 h-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                        </svg>
-                      </div>
-                    </div>
-                  </div>
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
                 </div>
               </div>
+
             </div>
           )}
 
