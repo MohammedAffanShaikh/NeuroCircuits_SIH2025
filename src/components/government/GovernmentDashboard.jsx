@@ -189,17 +189,26 @@ const GovernmentDashboard = ({ onLogout }) => {
                 <div className="absolute top-4 right-4 w-7 h-7 bg-white/10 rotate-45"></div>
                 
                 <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-3">
-                  <div>
-                    <h2 className="text-base font-bold text-white mb-1.5">Good Morning, Official! 👋</h2>
-                    <p className="text-[10px] text-blue-100 mb-2">Monitor educational statistics and policy implementation across districts</p>
-                    <div className="flex flex-wrap gap-2 mt-2">
-                      <div className="flex items-center bg-white/10 rounded-full px-2.5 py-1">
-                        <div className="w-2 h-2 bg-green-400 rounded-full mr-1.5"></div>
-                        <span className="text-[10px] text-white font-medium">{districtData.totalSchools} active schools</span>
-                      </div>
-                      <div className="flex items-center bg-white/10 rounded-full px-2.5 py-1">
-                        <div className="w-2 h-2 bg-blue-400 rounded-full mr-1.5"></div>
-                        <span className="text-[10px] text-white font-medium">{alerts.filter(a => a.status === 'new').length} new alerts</span>
+                  <div className="flex items-center gap-2.5">
+                    <div className="relative">
+                      <img 
+                        src="https://api.dicebear.com/7.x/avataaars/svg?seed=Official&backgroundColor=00897b,00acc1,039be5,1e88e5,3949ab,43a047,5e35b1,7cb342,8e24aa,c0ca33,f4511e,fb8c00,fdd835,ffb300"
+                        alt="Government Official Avatar"
+                        className="w-12 h-12 rounded-full object-cover shadow-md border-2 border-white/30"
+                      />
+                    </div>
+                    <div>
+                      <h2 className="text-base font-bold text-white mb-1.5">Good Morning, Official! 👋</h2>
+                      <p className="text-[10px] text-blue-100 mb-2">Monitor educational statistics and policy implementation across districts</p>
+                      <div className="flex flex-wrap gap-2 mt-2">
+                        <div className="flex items-center bg-white/10 rounded-full px-2.5 py-1">
+                          <div className="w-2 h-2 bg-green-400 rounded-full mr-1.5"></div>
+                          <span className="text-[10px] text-white font-medium">{districtData.totalSchools} active schools</span>
+                        </div>
+                        <div className="flex items-center bg-white/10 rounded-full px-2.5 py-1">
+                          <div className="w-2 h-2 bg-blue-400 rounded-full mr-1.5"></div>
+                          <span className="text-[10px] text-white font-medium">{alerts.filter(a => a.status === 'new').length} new alerts</span>
+                        </div>
                       </div>
                     </div>
                   </div>
