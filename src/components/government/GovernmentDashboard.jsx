@@ -379,13 +379,13 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
   ];
 
   return (
-    <div className="flex min-h-screen max-h-screen overflow-hidden bg-gradient-to-br from-blue-50 to-indigo-50">
+    <div className="flex min-h-screen h-screen overflow-hidden bg-gradient-to-br from-blue-50 to-indigo-50">
       {/* Sidebar */}
       <motion.div 
         initial={{ x: -100, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
         transition={{ duration: 0.5 }}
-        className="w-52 bg-white shadow-lg flex flex-col h-screen"
+        className="w-52 bg-white shadow-lg flex flex-col h-full"
       >
         <div className="p-2.5 border-b border-gray-100">
           <div className="flex items-center gap-1.5">
@@ -454,7 +454,7 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
       </motion.div>
 
       {/* Main Content */}
-      <div className="flex-1 overflow-y-auto overscroll-contain flex flex-col h-screen">
+      <div className="flex-1 overflow-y-auto overscroll-contain flex flex-col h-full">
         {/* Ultra Modern Header */}
         <div className="flex-shrink-0">
           <UltraModernHeader 
