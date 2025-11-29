@@ -513,13 +513,13 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
   ];
 
   return (
-    <div className="flex min-h-screen max-h-screen overflow-hidden bg-gradient-to-br from-blue-50 to-indigo-50">
+    <div className="flex min-h-screen h-screen overflow-hidden bg-gradient-to-br from-blue-50 to-indigo-50">
       {/* Sidebar */}
       <motion.div 
         initial={{ x: -100, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
         transition={{ duration: 0.5 }}
-        className="w-52 bg-white shadow-lg flex flex-col h-screen"
+        className="w-52 bg-white shadow-lg flex flex-col h-full"
       >
         <div className="p-2.5 border-b border-gray-100">
           <div className="flex items-center gap-1.5">
@@ -590,7 +590,7 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
       </motion.div>
 
       {/* Main Content */}
-      <div className="flex-1 overflow-y-auto overscroll-contain flex flex-col h-screen">
+      <div className="flex-1 overflow-y-auto overscroll-contain flex flex-col h-full">
         {/* Ultra Modern Header */}
         <div className="flex-shrink-0">
           <UltraModernHeader 
@@ -603,7 +603,7 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
         </div>
 
         {/* Dashboard Content */}
-        <div className="p-4 flex-grow overflow-y-auto overscroll-contain">
+        <div className="p-4 flex-grow overflow-y-auto">
           {/* Home Tab */}
           {activeTab === 'home' && (
             <div>
@@ -813,35 +813,6 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
           {/* Teachers Tab */}
           {activeTab === 'teachers' && (
             <div>
-              {/* Welcome Banner */}
-              <div className="bg-gradient-to-r from-blue-600 via-indigo-500 to-indigo-600 rounded-md p-4 mb-5 shadow-sm backdrop-blur-sm border border-white/20 relative overflow-hidden">
-                <div className="absolute -top-5 -right-5 w-20 h-20 bg-white/10 rounded-full"></div>
-                <div className="absolute -bottom-5 -left-5 w-16 h-16 bg-white/10 rounded-full"></div>
-                <div className="absolute top-4 right-4 w-7 h-7 bg-white/10 rotate-45"></div>
-                
-                <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-3">
-                  <div>
-                    <h2 className="text-base font-bold text-white mb-1.5">Teacher Management Dashboard</h2>
-                    <p className="text-[10px] text-blue-100 mb-2">Manage and organize all teachers in your institution</p>
-                    <div className="flex flex-wrap gap-2 mt-2">
-                      <div className="flex items-center bg-white/10 rounded-full px-2.5 py-1">
-                        <div className="w-2 h-2 bg-green-400 rounded-full mr-1.5"></div>
-                        <span className="text-[10px] text-white font-medium">{teachers.length} active teachers</span>
-                      </div>
-                      <div className="flex items-center bg-white/10 rounded-full px-2.5 py-1">
-                        <div className="w-2 h-2 bg-blue-400 rounded-full mr-1.5"></div>
-                        <span className="text-[10px] text-white font-medium">{classes.length} classes taught</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="bg-white/20 rounded-md p-2">
-                      <User className="w-5 h-5 text-white" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-              
               <div className="flex justify-between items-center mb-5">
                 <h2 className="text-sm font-bold text-gray-900">Teacher Management</h2>
                 <button 
@@ -914,29 +885,23 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
               </div>
 
               {/* Teachers Table */}
-              <div className="bg-white rounded-md shadow-sm border border-gray-100 overflow-hidden relative">
-                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500"></div>
-                <div className="absolute -top-2 -right-2 w-10 h-10 bg-indigo-500/10 rounded-full"></div>
-                <div className="absolute -bottom-2 -left-2 w-8 h-8 bg-purple-500/10 rounded-full"></div>
-                <div className="p-4 border-b border-gray-100">
-                  <h3 className="text-sm font-bold text-gray-900 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Teachers List</h3>
-                </div>
-                <div className="overflow-x-auto relative z-10">
+              <div className="bg-white rounded-md shadow-sm border border-gray-100 overflow-hidden">
+                <div className="overflow-x-auto">
                   <table className="w-full">
-                    <thead>
-                      <tr className="border-b border-gray-200">
-                        <th className="text-left py-3 px-4 font-medium text-[10px] bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Avatar</th>
-                        <th className="text-left py-3 px-4 font-medium text-[10px] bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Teacher</th>
-                        <th className="text-left py-3 px-4 font-medium text-[10px] bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Email</th>
-                        <th className="text-left py-3 px-4 font-medium text-[10px] bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Subject</th>
-                        <th className="text-left py-3 px-4 font-medium text-[10px] bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Classes</th>
-                        <th className="text-left py-3 px-4 font-medium text-[10px] bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Actions</th>
+                    <thead className="bg-gradient-to-r from-blue-50 to-indigo-50">
+                      <tr>
+                        <th className="px-3 py-2 text-left text-[9px] font-semibold text-indigo-700 uppercase tracking-wider">Avatar</th>
+                        <th className="px-3 py-2 text-left text-[9px] font-semibold text-indigo-700 uppercase tracking-wider">Teacher</th>
+                        <th className="px-3 py-2 text-left text-[9px] font-semibold text-indigo-700 uppercase tracking-wider">Email</th>
+                        <th className="px-3 py-2 text-left text-[9px] font-semibold text-indigo-700 uppercase tracking-wider">Subject</th>
+                        <th className="px-3 py-2 text-left text-[9px] font-semibold text-indigo-700 uppercase tracking-wider">Classes</th>
+                        <th className="px-3 py-2 text-left text-[9px] font-semibold text-indigo-700 uppercase tracking-wider">Actions</th>
                       </tr>
                     </thead>
-                    <tbody>
+                    <tbody className="bg-white divide-y divide-gray-50">
                       {getFilteredTeachers().map((teacher) => (
-                        <tr key={teacher.id} className="border-b border-gray-100 hover:bg-gradient-to-r from-blue-50/50 via-indigo-50/50 to-purple-50/50 transition-all duration-300">
-                          <td className="py-3 px-4">
+                        <tr key={teacher.id} className="hover:bg-indigo-50/50 transition-colors duration-150">
+                          <td className="px-3 py-2">
                             {teacher.avatar ? (
                               <img 
                                 src={teacher.avatar} 
@@ -949,19 +914,19 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
                               </div>
                             )}
                           </td>
-                          <td className="py-3 px-4 font-medium text-gray-900 text-[10px]">{teacher.name}</td>
-                          <td className="py-3 px-4 text-gray-600 text-[10px]">{teacher.email}</td>
-                          <td className="py-3 px-4 text-gray-600 text-[10px]">{teacher.subject}</td>
-                          <td className="py-3 px-4 text-gray-600 text-[10px]">{teacher.classes.join(', ')}</td>
-                          <td className="py-3 px-4">
+                          <td className="px-3 py-2 whitespace-nowrap text-[10px] font-medium text-gray-900">{teacher.name}</td>
+                          <td className="px-3 py-2 whitespace-nowrap text-[10px] text-gray-600">{teacher.email}</td>
+                          <td className="px-3 py-2 whitespace-nowrap text-[10px] text-gray-600">{teacher.subject}</td>
+                          <td className="px-3 py-2 whitespace-nowrap text-[10px] text-gray-600">{teacher.classes.join(', ')}</td>
+                          <td className="px-3 py-2 whitespace-nowrap text-[10px]">
                             <div className="flex items-center gap-1">
-                              <button className="p-1.5 text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-all">
+                              <button className="p-1.5 text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-colors">
                                 <Eye className="w-3 h-3" />
                               </button>
-                              <button className="p-1.5 text-gray-500 hover:text-orange-600 hover:bg-orange-50 rounded-md transition-all">
+                              <button className="p-1.5 text-gray-500 hover:text-orange-600 hover:bg-orange-50 rounded-md transition-colors">
                                 <Edit className="w-3 h-3" />
                               </button>
-                              <button className="p-1.5 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-md transition-all">
+                              <button className="p-1.5 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-md transition-colors">
                                 <Trash2 className="w-3 h-3" />
                               </button>
                             </div>
@@ -978,35 +943,6 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
           {/* Students Tab */}
           {activeTab === 'students' && (
             <div>
-              {/* Welcome Banner */}
-              <div className="bg-gradient-to-r from-green-600 via-teal-500 to-blue-600 rounded-md p-4 mb-5 shadow-sm backdrop-blur-sm border border-white/20 relative overflow-hidden">
-                <div className="absolute -top-5 -right-5 w-20 h-20 bg-white/10 rounded-full"></div>
-                <div className="absolute -bottom-5 -left-5 w-16 h-16 bg-white/10 rounded-full"></div>
-                <div className="absolute top-4 right-4 w-7 h-7 bg-white/10 rotate-45"></div>
-                
-                <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-3">
-                  <div>
-                    <h2 className="text-base font-bold text-white mb-1.5">Student Management Dashboard</h2>
-                    <p className="text-[10px] text-blue-100 mb-2">Track and manage all students in your institution</p>
-                    <div className="flex flex-wrap gap-2 mt-2">
-                      <div className="flex items-center bg-white/10 rounded-full px-2.5 py-1">
-                        <div className="w-2 h-2 bg-green-400 rounded-full mr-1.5"></div>
-                        <span className="text-[10px] text-white font-medium">{students.length} enrolled students</span>
-                      </div>
-                      <div className="flex items-center bg-white/10 rounded-full px-2.5 py-1">
-                        <div className="w-2 h-2 bg-blue-400 rounded-full mr-1.5"></div>
-                        <span className="text-[10px] text-white font-medium">{classes.length} active classes</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="bg-white/20 rounded-md p-2">
-                      <Users className="w-5 h-5 text-white" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-              
               <div className="flex justify-between items-center mb-5">
                 <h2 className="text-sm font-bold text-gray-900">Student Management</h2>
                 <button 
@@ -1082,30 +1018,24 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
               </div>
 
               {/* Students Table */}
-              <div className="bg-white rounded-md shadow-sm border border-gray-100 overflow-hidden relative">
-                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-green-500 via-teal-500 to-blue-500"></div>
-                <div className="absolute -top-2 -right-2 w-10 h-10 bg-teal-500/10 rounded-full"></div>
-                <div className="absolute -bottom-2 -left-2 w-8 h-8 bg-green-500/10 rounded-full"></div>
-                <div className="p-4 border-b border-gray-100">
-                  <h3 className="text-sm font-bold text-gray-900 bg-gradient-to-r from-green-600 to-teal-600 bg-clip-text text-transparent">Students List</h3>
-                </div>
-                <div className="overflow-x-auto relative z-10">
+              <div className="bg-white rounded-md shadow-sm border border-gray-100 overflow-hidden">
+                <div className="overflow-x-auto">
                   <table className="w-full">
-                    <thead>
-                      <tr className="border-b border-gray-200">
-                        <th className="text-left py-3 px-4 font-medium text-[10px] bg-gradient-to-r from-green-600 to-teal-600 bg-clip-text text-transparent">Avatar</th>
-                        <th className="text-left py-3 px-4 font-medium text-[10px] bg-gradient-to-r from-green-600 to-teal-600 bg-clip-text text-transparent">Student</th>
-                        <th className="text-left py-3 px-4 font-medium text-[10px] bg-gradient-to-r from-green-600 to-teal-600 bg-clip-text text-transparent">Roll Number</th>
-                        <th className="text-left py-3 px-4 font-medium text-[10px] bg-gradient-to-r from-green-600 to-teal-600 bg-clip-text text-transparent">Class</th>
-                        <th className="text-left py-3 px-4 font-medium text-[10px] bg-gradient-to-r from-green-600 to-teal-600 bg-clip-text text-transparent">Attendance</th>
-                        <th className="text-left py-3 px-4 font-medium text-[10px] bg-gradient-to-r from-green-600 to-teal-600 bg-clip-text text-transparent">Grade</th>
-                        <th className="text-left py-3 px-4 font-medium text-[10px] bg-gradient-to-r from-green-600 to-teal-600 bg-clip-text text-transparent">Actions</th>
+                    <thead className="bg-gradient-to-r from-blue-50 to-indigo-50">
+                      <tr>
+                        <th className="px-3 py-2 text-left text-[9px] font-semibold text-indigo-700 uppercase tracking-wider">Avatar</th>
+                        <th className="px-3 py-2 text-left text-[9px] font-semibold text-indigo-700 uppercase tracking-wider">Student</th>
+                        <th className="px-3 py-2 text-left text-[9px] font-semibold text-indigo-700 uppercase tracking-wider">Roll Number</th>
+                        <th className="px-3 py-2 text-left text-[9px] font-semibold text-indigo-700 uppercase tracking-wider">Class</th>
+                        <th className="px-3 py-2 text-left text-[9px] font-semibold text-indigo-700 uppercase tracking-wider">Attendance</th>
+                        <th className="px-3 py-2 text-left text-[9px] font-semibold text-indigo-700 uppercase tracking-wider">Grade</th>
+                        <th className="px-3 py-2 text-left text-[9px] font-semibold text-indigo-700 uppercase tracking-wider">Actions</th>
                       </tr>
                     </thead>
-                    <tbody>
+                    <tbody className="bg-white divide-y divide-gray-50">
                       {getFilteredStudents().map((student) => (
-                        <tr key={student.id} className="border-b border-gray-100 hover:bg-gradient-to-r from-green-50/50 via-teal-50/50 to-blue-50/50 transition-all duration-300">
-                          <td className="py-3 px-4">
+                        <tr key={student.id} className="hover:bg-indigo-50/50 transition-colors duration-150">
+                          <td className="px-3 py-2">
                             {student.avatar ? (
                               <img 
                                 src={student.avatar} 
@@ -1118,24 +1048,24 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
                               </div>
                             )}
                           </td>
-                          <td className="py-3 px-4 font-medium text-gray-900 text-[10px]">{student.name}</td>
-                          <td className="py-3 px-4 text-gray-600 text-[10px]">{student.roll}</td>
-                          <td className="py-3 px-4 text-gray-600 text-[10px]">{student.class}</td>
-                          <td className="py-3 px-4 text-gray-600 text-[10px]">{student.attendance}%</td>
-                          <td className="py-3 px-4">
-                            <span className="px-2 py-1 text-[9px] font-semibold rounded-full bg-green-100 text-green-800">
+                          <td className="px-3 py-2 whitespace-nowrap text-[10px] font-medium text-gray-900">{student.name}</td>
+                          <td className="px-3 py-2 whitespace-nowrap text-[10px] text-gray-600">{student.roll}</td>
+                          <td className="px-3 py-2 whitespace-nowrap text-[10px] text-gray-600">{student.class}</td>
+                          <td className="px-3 py-2 whitespace-nowrap text-[10px] font-medium text-gray-900">{student.attendance}%</td>
+                          <td className="px-3 py-2 whitespace-nowrap">
+                            <span className="px-2 py-1 text-[8px] font-semibold rounded-full bg-green-100 text-green-800">
                               {student.grade}
                             </span>
                           </td>
-                          <td className="py-3 px-4">
+                          <td className="px-3 py-2 whitespace-nowrap text-[10px]">
                             <div className="flex items-center gap-1">
-                              <button className="p-1.5 text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-all">
+                              <button className="p-1.5 text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-colors">
                                 <Eye className="w-3 h-3" />
                               </button>
-                              <button className="p-1.5 text-gray-500 hover:text-orange-600 hover:bg-orange-50 rounded-md transition-all">
+                              <button className="p-1.5 text-gray-500 hover:text-orange-600 hover:bg-orange-50 rounded-md transition-colors">
                                 <Edit className="w-3 h-3" />
                               </button>
-                              <button className="p-1.5 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-md transition-all">
+                              <button className="p-1.5 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-md transition-colors">
                                 <Trash2 className="w-3 h-3" />
                               </button>
                             </div>
@@ -1152,35 +1082,6 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
           {/* Classes Tab */}
           {activeTab === 'classes' && (
             <div>
-              {/* Welcome Banner */}
-              <div className="bg-gradient-to-r from-purple-600 via-indigo-500 to-blue-600 rounded-md p-4 mb-5 shadow-sm backdrop-blur-sm border border-white/20 relative overflow-hidden">
-                <div className="absolute -top-5 -right-5 w-20 h-20 bg-white/10 rounded-full"></div>
-                <div className="absolute -bottom-5 -left-5 w-16 h-16 bg-white/10 rounded-full"></div>
-                <div className="absolute top-4 right-4 w-7 h-7 bg-white/10 rotate-45"></div>
-                
-                <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-3">
-                  <div>
-                    <h2 className="text-base font-bold text-white mb-1.5">Class Management Dashboard</h2>
-                    <p className="text-[10px] text-blue-100 mb-2">Organize and manage all classes in your institution</p>
-                    <div className="flex flex-wrap gap-2 mt-2">
-                      <div className="flex items-center bg-white/10 rounded-full px-2.5 py-1">
-                        <div className="w-2 h-2 bg-green-400 rounded-full mr-1.5"></div>
-                        <span className="text-[10px] text-white font-medium">{classes.length} active classes</span>
-                      </div>
-                      <div className="flex items-center bg-white/10 rounded-full px-2.5 py-1">
-                        <div className="w-2 h-2 bg-blue-400 rounded-full mr-1.5"></div>
-                        <span className="text-[10px] text-white font-medium">{students.length} total students</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="bg-white/20 rounded-md p-2">
-                      <BookOpen className="w-5 h-5 text-white" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-              
               <div className="flex justify-between items-center mb-5">
                 <h2 className="text-sm font-bold text-gray-900">Class Management</h2>
                 <button className="flex items-center gap-1 px-3 py-1.5 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-md hover:from-blue-600 hover:to-indigo-700 transition-all text-[10px] shadow-sm hover:shadow-md">
@@ -1252,40 +1153,34 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
               </div>
 
               {/* Classes Table */}
-              <div className="bg-white rounded-md shadow-sm border border-gray-100 overflow-hidden relative">
-                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-purple-500 via-indigo-500 to-blue-500"></div>
-                <div className="absolute -top-2 -right-2 w-10 h-10 bg-indigo-500/10 rounded-full"></div>
-                <div className="absolute -bottom-2 -left-2 w-8 h-8 bg-purple-500/10 rounded-full"></div>
-                <div className="p-4 border-b border-gray-100">
-                  <h3 className="text-sm font-bold text-gray-900 bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">Classes List</h3>
-                </div>
-                <div className="overflow-x-auto relative z-10">
+              <div className="bg-white rounded-md shadow-sm border border-gray-100 overflow-hidden">
+                <div className="overflow-x-auto">
                   <table className="w-full">
-                    <thead>
-                      <tr className="border-b border-gray-200">
-                        <th className="text-left py-3 px-4 font-medium text-[10px] bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">Class</th>
-                        <th className="text-left py-3 px-4 font-medium text-[10px] bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">Subject</th>
-                        <th className="text-left py-3 px-4 font-medium text-[10px] bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">Teacher</th>
-                        <th className="text-left py-3 px-4 font-medium text-[10px] bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">Students</th>
-                        <th className="text-left py-3 px-4 font-medium text-[10px] bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">Actions</th>
+                    <thead className="bg-gradient-to-r from-blue-50 to-indigo-50">
+                      <tr>
+                        <th className="px-3 py-2 text-left text-[9px] font-semibold text-indigo-700 uppercase tracking-wider">Class</th>
+                        <th className="px-3 py-2 text-left text-[9px] font-semibold text-indigo-700 uppercase tracking-wider">Subject</th>
+                        <th className="px-3 py-2 text-left text-[9px] font-semibold text-indigo-700 uppercase tracking-wider">Teacher</th>
+                        <th className="px-3 py-2 text-left text-[9px] font-semibold text-indigo-700 uppercase tracking-wider">Students</th>
+                        <th className="px-3 py-2 text-left text-[9px] font-semibold text-indigo-700 uppercase tracking-wider">Actions</th>
                       </tr>
                     </thead>
-                    <tbody>
+                    <tbody className="bg-white divide-y divide-gray-50">
                       {getFilteredClasses().map((classItem) => (
-                        <tr key={classItem.id} className="border-b border-gray-100 hover:bg-gradient-to-r from-purple-50/50 via-indigo-50/50 to-blue-50/50 transition-all duration-300">
-                          <td className="py-3 px-4 font-medium text-gray-900 text-[10px]">{classItem.name}</td>
-                          <td className="py-3 px-4 text-gray-600 text-[10px]">{classItem.subject}</td>
-                          <td className="py-3 px-4 text-gray-600 text-[10px]">{classItem.teacher}</td>
-                          <td className="py-3 px-4 text-gray-600 text-[10px]">{classItem.students}</td>
-                          <td className="py-3 px-4">
+                        <tr key={classItem.id} className="hover:bg-indigo-50/50 transition-colors duration-150">
+                          <td className="px-3 py-2 whitespace-nowrap text-[10px] font-medium text-gray-900">{classItem.name}</td>
+                          <td className="px-3 py-2 whitespace-nowrap text-[10px] text-gray-600">{classItem.subject}</td>
+                          <td className="px-3 py-2 whitespace-nowrap text-[10px] text-gray-600">{classItem.teacher}</td>
+                          <td className="px-3 py-2 whitespace-nowrap text-[10px] text-gray-600">{classItem.students}</td>
+                          <td className="px-3 py-2 whitespace-nowrap text-[10px]">
                             <div className="flex items-center gap-1">
-                              <button className="p-1.5 text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-all">
+                              <button className="p-1.5 text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-colors">
                                 <Eye className="w-3 h-3" />
                               </button>
-                              <button className="p-1.5 text-gray-500 hover:text-orange-600 hover:bg-orange-50 rounded-md transition-all">
+                              <button className="p-1.5 text-gray-500 hover:text-orange-600 hover:bg-orange-50 rounded-md transition-colors">
                                 <Edit className="w-3 h-3" />
                               </button>
-                              <button className="p-1.5 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-md transition-all">
+                              <button className="p-1.5 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-md transition-colors">
                                 <Trash2 className="w-3 h-3" />
                               </button>
                             </div>
@@ -1302,35 +1197,6 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
           {/* Reports Tab */}
           {activeTab === 'reports' && (
             <div>
-              {/* Welcome Banner */}
-              <div className="bg-gradient-to-r from-blue-600 via-indigo-500 to-indigo-600 rounded-md p-4 mb-5 shadow-sm backdrop-blur-sm border border-white/20 relative overflow-hidden">
-                <div className="absolute -top-5 -right-5 w-20 h-20 bg-white/10 rounded-full"></div>
-                <div className="absolute -bottom-5 -left-5 w-16 h-16 bg-white/10 rounded-full"></div>
-                <div className="absolute top-4 right-4 w-7 h-7 bg-white/10 rotate-45"></div>
-                
-                <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-3">
-                  <div>
-                    <h2 className="text-base font-bold text-white mb-1.5">Reports & Analytics Dashboard</h2>
-                    <p className="text-[10px] text-blue-100 mb-2">Comprehensive insights and analytics for data-driven decisions</p>
-                    <div className="flex flex-wrap gap-2 mt-2">
-                      <div className="flex items-center bg-white/10 rounded-full px-2.5 py-1">
-                        <div className="w-2 h-2 bg-green-400 rounded-full mr-1.5"></div>
-                        <span className="text-[10px] text-white font-medium">{classes.length} classes analyzed</span>
-                      </div>
-                      <div className="flex items-center bg-white/10 rounded-full px-2.5 py-1">
-                        <div className="w-2 h-2 bg-blue-400 rounded-full mr-1.5"></div>
-                        <span className="text-[10px] text-white font-medium">Real-time analytics</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="bg-white/20 rounded-md p-2">
-                      <BarChart className="w-5 h-5 text-white" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-              
               <div className="flex justify-between items-center mb-5">
                 <h2 className="text-sm font-bold text-gray-900">Reports & Analytics</h2>
                 <div className="flex gap-2">
@@ -1407,35 +1273,6 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
           {/* Alerts Tab */}
           {activeTab === 'alerts' && (
             <div>
-              {/* Welcome Banner */}
-              <div className="bg-gradient-to-r from-blue-600 via-indigo-500 to-indigo-600 rounded-md p-4 mb-5 shadow-sm backdrop-blur-sm border border-white/20 relative overflow-hidden">
-                <div className="absolute -top-5 -right-5 w-20 h-20 bg-white/10 rounded-full"></div>
-                <div className="absolute -bottom-5 -left-5 w-16 h-16 bg-white/10 rounded-full"></div>
-                <div className="absolute top-4 right-4 w-7 h-7 bg-white/10 rotate-45"></div>
-                
-                <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-3">
-                  <div>
-                    <h2 className="text-base font-bold text-white mb-1.5">Alert Management Dashboard</h2>
-                    <p className="text-[10px] text-blue-100 mb-2">Monitor and respond to critical system alerts and notifications</p>
-                    <div className="flex flex-wrap gap-2 mt-2">
-                      <div className="flex items-center bg-white/10 rounded-full px-2.5 py-1">
-                        <div className="w-2 h-2 bg-red-400 rounded-full mr-1.5"></div>
-                        <span className="text-[10px] text-white font-medium">{alerts.length} active alerts</span>
-                      </div>
-                      <div className="flex items-center bg-white/10 rounded-full px-2.5 py-1">
-                        <div className="w-2 h-2 bg-blue-400 rounded-full mr-1.5"></div>
-                        <span className="text-[10px] text-white font-medium">Real-time monitoring</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="bg-white/20 rounded-md p-2">
-                      <Bell className="w-5 h-5 text-white" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-              
               <div className="flex justify-between items-center mb-5">
                 <h2 className="text-sm font-bold text-gray-900">Alert Management</h2>
                 <div className="flex gap-2">
