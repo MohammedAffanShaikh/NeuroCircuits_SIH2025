@@ -865,7 +865,6 @@ const GovernmentDashboard = ({ onLogout }) => {
                       { id: 'profile', icon: User, label: 'Profile' },
                       { id: 'notifications', icon: Bell, label: 'Notifications' },
                       { id: 'security', icon: Shield, label: 'Security' },
-                      { id: 'appearance', icon: Settings, label: 'Appearance' },
                     ].map((tab) => {
                       const IconComponent = tab.icon;
                       return (
@@ -1097,83 +1096,6 @@ const GovernmentDashboard = ({ onLogout }) => {
                           <button className="px-3 py-1.5 bg-gradient-to-r from-gray-500 to-gray-600 text-white rounded-md hover:from-gray-600 hover:to-gray-700 transition-all text-[10px] font-medium">
                             View History
                           </button>
-                        </div>
-                      </div>
-                      
-                      <div className="flex justify-end gap-2 pt-4 border-t border-gray-200 mt-4">
-                        <button className="px-4 py-2 bg-gradient-to-r from-gray-500 to-gray-600 text-white rounded-lg hover:from-gray-600 hover:to-gray-700 transition-all shadow-sm hover:shadow-md font-medium flex items-center gap-1.5 text-[10px]">
-                          <X className="w-3 h-3" />
-                          Cancel
-                        </button>
-                        <button className="px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-lg hover:from-blue-600 hover:to-indigo-700 transition-all shadow-sm hover:shadow-md font-medium flex items-center gap-1.5 text-[10px]">
-                          <Save className="w-3 h-3" />
-                          Save
-                        </button>
-                      </div>
-                    </div>
-                  )}
-                  
-                  {activeSettingsTab === 'appearance' && (
-                    <div className="bg-gradient-to-br from-white to-gray-50 rounded-xl shadow-md border border-gray-200/30 backdrop-blur-sm p-4">
-                      <div className="mb-4 pb-3 border-b border-gray-200">
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <h2 className="text-sm font-bold text-gray-900 flex items-center gap-1.5">
-                              <Settings className="w-4 h-4 text-blue-500" />
-                              Appearance Settings
-                            </h2>
-                            <p className="text-[10px] text-gray-600 mt-1">Customize the look and feel of your dashboard</p>
-                          </div>
-                        </div>
-                      </div>
-                      
-                      <div className="space-y-4">
-                        <div className="p-3 bg-gray-50 rounded-lg">
-                          <h3 className="font-medium text-gray-900 text-[10px] mb-2">Theme</h3>
-                          <div className="grid grid-cols-3 gap-2">
-                            <button className="p-3 bg-white border-2 border-blue-500 rounded-lg flex flex-col items-center">
-                              <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-md mb-1"></div>
-                              <span className="text-[10px] font-medium">Default</span>
-                            </button>
-                            <button className="p-3 bg-white border border-gray-200 rounded-lg flex flex-col items-center hover:border-blue-300">
-                              <div className="w-8 h-8 bg-gradient-to-br from-gray-700 to-gray-900 rounded-md mb-1"></div>
-                              <span className="text-[10px] font-medium">Dark</span>
-                            </button>
-                            <button className="p-3 bg-white border border-gray-200 rounded-lg flex flex-col items-center hover:border-blue-300">
-                              <div className="w-8 h-8 bg-gradient-to-br from-amber-500 to-orange-600 rounded-md mb-1"></div>
-                              <span className="text-[10px] font-medium">Sunset</span>
-                            </button>
-                          </div>
-                        </div>
-                        
-                        <div className="p-3 bg-gray-50 rounded-lg">
-                          <h3 className="font-medium text-gray-900 text-[10px] mb-2">Language</h3>
-                          <select className="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-[10px]">
-                            <option>English</option>
-                            <option>Spanish</option>
-                            <option>French</option>
-                            <option>German</option>
-                          </select>
-                        </div>
-                        
-                        <div className="p-3 bg-gray-50 rounded-lg">
-                          <h3 className="font-medium text-gray-900 text-[10px] mb-2">Layout Preferences</h3>
-                          <div className="space-y-2">
-                            <div className="flex items-center justify-between">
-                              <span className="text-[10px] text-gray-600">Compact View</span>
-                              <div className="relative inline-block w-10 h-5 rounded-full bg-gray-300">
-                                <input type="checkbox" className="absolute opacity-0 w-0 h-0" />
-                                <span className="absolute cursor-pointer top-0 left-0 right-0 bottom-0 bg-gray-300 rounded-full transition-all duration-300 before:absolute before:h-4 before:w-4 before:left-0.5 before:bottom-0.5 before:bg-white before:rounded-full before:transition-all before:duration-300 checked:bg-blue-500 checked:before:transform checked:before:translate-x-5"></span>
-                              </div>
-                            </div>
-                            <div className="flex items-center justify-between">
-                              <span className="text-[10px] text-gray-600">Auto-refresh Data</span>
-                              <div className="relative inline-block w-10 h-5 rounded-full bg-gray-300">
-                                <input type="checkbox" className="absolute opacity-0 w-0 h-0" defaultChecked />
-                                <span className="absolute cursor-pointer top-0 left-0 right-0 bottom-0 bg-gray-300 rounded-full transition-all duration-300 before:absolute before:h-4 before:w-4 before:left-0.5 before:bottom-0.5 before:bg-white before:rounded-full before:transition-all before:duration-300 checked:bg-blue-500 checked:before:transform checked:before:translate-x-5"></span>
-                              </div>
-                            </div>
-                          </div>
                         </div>
                       </div>
                       
