@@ -26,6 +26,14 @@ const GovernmentDashboard = ({ onLogout }) => {
   const [generatingReport, setGeneratingReport] = useState(null);
   const [generatedReports, setGeneratedReports] = useState([]);
   const [mealPeriod, setMealPeriod] = useState('daily'); // daily, weekly, monthly
+  
+  // State for meal filtering
+  const [selectedSchool, setSelectedSchool] = useState('All Schools');
+  const [selectedDuration, setSelectedDuration] = useState('weekly'); // weekly, monthly
+  
+  // State for applied filters
+  const [appliedSchool, setAppliedSchool] = useState('All Schools');
+  const [appliedDuration, setAppliedDuration] = useState('weekly');
 
   // Sample meal attendance data
   const mealAttendanceData = [
@@ -52,6 +60,127 @@ const GovernmentDashboard = ({ onLogout }) => {
     { month: 'April', meals: 192000 },
     { month: 'May', meals: 210000 }
   ];
+
+  // Sample school-specific meal data (in a real app, this would come from an API)
+  const getSchoolSpecificMealData = (schoolName) => {
+    // This is sample data - in a real application, this would be fetched from a database
+    const schoolDataMap = {
+      'Delhi Public School': {
+        weekly: [
+          { week: 'Week 1', meals: 7500 },
+          { week: 'Week 2', meals: 7800 },
+          { week: 'Week 3', meals: 7600 },
+          { week: 'Week 4', meals: 8100 }
+        ],
+        monthly: [
+          { month: 'January', meals: 32000 },
+          { month: 'February', meals: 29000 },
+          { month: 'March', meals: 33000 },
+          { month: 'April', meals: 31000 },
+          { month: 'May', meals: 35000 }
+        ]
+      },
+      'St. Marys Convent School': {
+        weekly: [
+          { week: 'Week 1', meals: 5200 },
+          { week: 'Week 2', meals: 5400 },
+          { week: 'Week 3', meals: 5100 },
+          { week: 'Week 4', meals: 5600 }
+        ],
+        monthly: [
+          { month: 'January', meals: 22000 },
+          { month: 'February', meals: 20000 },
+          { month: 'March', meals: 23000 },
+          { month: 'April', meals: 21000 },
+          { month: 'May', meals: 24000 }
+        ]
+      },
+      'Kendriya Vidyalaya': {
+        weekly: [
+          { week: 'Week 1', meals: 5800 },
+          { week: 'Week 2', meals: 6100 },
+          { week: 'Week 3', meals: 5900 },
+          { week: 'Week 4', meals: 6300 }
+        ],
+        monthly: [
+          { month: 'January', meals: 25000 },
+          { month: 'February', meals: 23000 },
+          { month: 'March', meals: 26000 },
+          { month: 'April', meals: 24000 },
+          { month: 'May', meals: 27000 }
+        ]
+      },
+      'DAV Public School': {
+        weekly: [
+          { week: 'Week 1', meals: 6700 },
+          { week: 'Week 2', meals: 7100 },
+          { week: 'Week 3', meals: 6900 },
+          { week: 'Week 4', meals: 7300 }
+        ],
+        monthly: [
+          { month: 'January', meals: 29000 },
+          { month: 'February', meals: 27000 },
+          { month: 'March', meals: 30000 },
+          { month: 'April', meals: 28000 },
+          { month: 'May', meals: 31000 }
+        ]
+      },
+      'Saboo Siddik Degree': {
+        weekly: [
+          { week: 'Week 1', meals: 9200 },
+          { week: 'Week 2', meals: 9500 },
+          { week: 'Week 3', meals: 9300 },
+          { week: 'Week 4', meals: 9800 }
+        ],
+        monthly: [
+          { month: 'January', meals: 40000 },
+          { month: 'February', meals: 37000 },
+          { month: 'March', meals: 41000 },
+          { month: 'April', meals: 39000 },
+          { month: 'May', meals: 43000 }
+        ]
+      },
+      'Saboo Siddik Polytechnic': {
+        weekly: [
+          { week: 'Week 1', meals: 11000 },
+          { week: 'Week 2', meals: 11500 },
+          { week: 'Week 3', meals: 11200 },
+          { week: 'Week 4', meals: 12000 }
+        ],
+        monthly: [
+          { month: 'January', meals: 47000 },
+          { month: 'February', meals: 44000 },
+          { month: 'March', meals: 48000 },
+          { month: 'April', meals: 46000 },
+          { month: 'May', meals: 50000 }
+        ]
+      }
+    };
+    
+    return schoolDataMap[schoolName] || { weekly: [], monthly: [] };
+  };
+
+  // Filtered data based on applied selections
+  const filteredMealAttendanceData = appliedSchool === 'All Schools' 
+    ? mealAttendanceData 
+    : mealAttendanceData.filter(school => school.schoolName === appliedSchool);
+
+  // Get filtered data for the applied school
+  const getFilteredSchoolData = () => {
+    if (appliedSchool === 'All Schools') {
+      return filteredMealAttendanceData;
+    }
+    return mealAttendanceData.filter(school => school.schoolName === appliedSchool);
+  };
+
+  const selectedSchoolData = getFilteredSchoolData();
+
+  // Get school-specific meal data
+  const schoolSpecificMealData = appliedSchool !== 'All Schools' ? getSchoolSpecificMealData(appliedSchool) : null;
+  
+  // Use school-specific data if available, otherwise use general data
+  const weeklyMealReportData = schoolSpecificMealData ? schoolSpecificMealData.weekly : weeklyMealData;
+  const monthlyMealReportData = schoolSpecificMealData ? schoolSpecificMealData.monthly : monthlyMealData;
 
   // Sample attendance trend data
   const attendanceTrendData = [
@@ -233,6 +362,13 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
     document.body.removeChild(link);
     
     alert('Meal Analysis Report exported successfully!');
+  };
+
+  // Function to apply filters
+  const applyFilters = () => {
+    console.log('Applying filters:', selectedSchool, selectedDuration);
+    setAppliedSchool(selectedSchool);
+    setAppliedDuration(selectedDuration);
   };
 
   const summaryStats = [
@@ -928,10 +1064,42 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
                 </div>
               </div>
 
+              <div className="mb-4">
+                <h2 className="text-sm font-bold text-blue-700">Meal Program Overview</h2>
+                <p className="text-[10px] text-gray-600 mt-1">Total meals to be served today: {selectedSchoolData.reduce((total, school) => total + school.presentToday, 0).toLocaleString()}</p>
+              </div>
+              
               <div className="flex justify-between items-center mb-4">
                 <div>
-                  <h2 className="text-sm font-bold text-blue-700">Meal Program Overview</h2>
-                  <p className="text-[10px] text-gray-600 mt-1">Total meals to be served today: {mealAttendanceData.reduce((total, school) => total + school.presentToday, 0).toLocaleString()}</p>
+                  {/* Filter Controls */}
+                  <div className="flex gap-2 items-center bg-white rounded-lg border border-gray-200 p-1.5">
+                    <select 
+                      value={selectedSchool}
+                      onChange={(e) => setSelectedSchool(e.target.value)}
+                      className="px-2 py-1 text-[10px] rounded-md bg-gray-50 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    >
+                      <option value="All Schools">All Schools</option>
+                      {mealAttendanceData.map((school) => (
+                        <option key={school.id} value={school.schoolName}>
+                          {school.schoolName}
+                        </option>
+                      ))}
+                    </select>
+                    <select 
+                      value={selectedDuration}
+                      onChange={(e) => setSelectedDuration(e.target.value)}
+                      className="px-2 py-1 text-[10px] rounded-md bg-gray-50 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    >
+                      <option value="weekly">Weekly</option>
+                      <option value="monthly">Monthly</option>
+                    </select>
+                    <button 
+                      onClick={applyFilters}
+                      className="px-2 py-1 text-[10px] rounded-md bg-blue-500 text-white hover:bg-blue-600 transition-colors"
+                    >
+                      Apply Filter
+                    </button>
+                  </div>
                 </div>
                 <div className="flex gap-3">
                   <div className="flex gap-1">
@@ -985,21 +1153,21 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
                           <Utensils className="w-4 h-4 text-blue-500" />
                           <span className="text-[10px] text-gray-700 font-medium">Total Meals Served</span>
                         </div>
-                        <span className="font-bold text-gray-900 text-[10px] bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">{districtData.totalMeals.toLocaleString()}</span>
+                        <span className="font-bold text-gray-900 text-[10px] bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">{selectedSchoolData.reduce((total, school) => total + Math.round(school.presentToday * districtData.mealsPerStudent), 0).toLocaleString()}</span>
                       </div>
                       <div className="flex justify-between items-center p-3 bg-gradient-to-r from-blue-50/50 via-indigo-50/50 to-purple-50/50 rounded-md border border-blue-100/50">
                         <div className="flex items-center gap-2">
                           <School className="w-4 h-4 text-blue-500" />
                           <span className="text-[10px] text-gray-700 font-medium">Enrolled Schools</span>
                         </div>
-                        <span className="font-bold text-gray-900 text-[10px] bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">{districtData.totalSchools}</span>
+                        <span className="font-bold text-gray-900 text-[10px] bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">{selectedSchoolData.length}</span>
                       </div>
                       <div className="flex justify-between items-center p-3 bg-gradient-to-r from-blue-50/50 via-indigo-50/50 to-purple-50/50 rounded-md border border-blue-100/50">
                         <div className="flex items-center gap-2">
                           <Users className="w-4 h-4 text-blue-500" />
                           <span className="text-[10px] text-gray-700 font-medium">Beneficiary Students</span>
                         </div>
-                        <span className="font-bold text-gray-900 text-[10px] bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">{districtData.totalStudents.toLocaleString()}</span>
+                        <span className="font-bold text-gray-900 text-[10px] bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">{selectedSchoolData.reduce((total, school) => total + school.totalStudents, 0).toLocaleString()}</span>
                       </div>
                       <div className="flex justify-between items-center p-3 bg-gradient-to-r from-blue-50/50 via-indigo-50/50 to-purple-50/50 rounded-md border border-green-100/50">
                         <div className="flex items-center gap-2">
@@ -1101,20 +1269,20 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
                       </tr>
                     </thead>
                     <tbody>
-                      {mealAttendanceData.map((school) => (
+                      {selectedSchoolData.map((school) => (
                         <tr key={school.id} className="border-b border-gray-100 hover:bg-gradient-to-r from-purple-50/50 via-indigo-50/50 to-blue-50/50 transition-all duration-300">
-                          <td className="py-3 px-4">
+                          <td className="py-1.5 px-4">
                             <div className="font-medium text-gray-900 text-[10px] flex items-center gap-1">
                               <GraduationCap className="w-3 h-3 text-purple-500" />
                               {school.schoolName}
                             </div>
                           </td>
-                          <td className="py-3 px-4 text-gray-600 text-[10px]">{school.totalStudents.toLocaleString()}</td>
-                          <td className="py-3 px-4 text-gray-600 text-[10px]">{school.presentToday.toLocaleString()}</td>
-                          <td className="py-3 px-4 text-gray-600 text-[10px]">{Math.round(school.presentToday * districtData.mealsPerStudent).toLocaleString()}</td>
-                          <td className="py-3 px-4 text-gray-600 text-[10px]">{((school.presentToday / school.totalStudents) * 100).toFixed(1)}%</td>
-                          <td className="py-3 px-4">
-                            <span className="px-2 py-1 bg-green-100 text-green-800 rounded-full text-[9px] font-medium">Active</span>
+                          <td className="py-1.5 px-4 text-gray-600 text-[10px]">{school.totalStudents.toLocaleString()}</td>
+                          <td className="py-1.5 px-4 text-gray-600 text-[10px]">{school.presentToday.toLocaleString()}</td>
+                          <td className="py-1.5 px-4 text-gray-600 text-[10px]">{Math.round(school.presentToday * districtData.mealsPerStudent).toLocaleString()}</td>
+                          <td className="py-1.5 px-4 text-gray-600 text-[10px]">{((school.presentToday / school.totalStudents) * 100).toFixed(1)}%</td>
+                          <td className="py-1.5 px-4">
+                            <span className="px-2 py-0.5 bg-green-100 text-green-800 rounded-full text-[9px] font-medium">Active</span>
                           </td>
                         </tr>
                       ))}
@@ -1126,7 +1294,7 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
               {/* Weekly and Monthly Meal Reports */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                 {/* Weekly Meal Report */}
-                <div className="bg-white rounded-md p-4 shadow-sm border border-gray-100 relative overflow-hidden">
+                <div className={`bg-white rounded-md p-4 shadow-sm border ${appliedDuration === 'weekly' ? 'border-blue-300 ring-2 ring-blue-100' : 'border-gray-100'} relative overflow-hidden`}>
                   <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500"></div>
                   <div className="absolute -top-2 -right-2 w-10 h-10 bg-indigo-500/10 rounded-full"></div>
                   <h3 className="text-sm font-bold text-gray-900 mb-4 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent relative z-10">Weekly Meal Generation Report</h3>
@@ -1139,7 +1307,7 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
                         </tr>
                       </thead>
                       <tbody>
-                        {weeklyMealData.map((week, index) => (
+                        {weeklyMealReportData.map((week, index) => (
                           <tr key={index} className="border-b border-gray-100 hover:bg-gradient-to-r from-blue-50/50 via-indigo-50/50 to-purple-50/50 transition-all duration-300">
                             <td className="py-2 px-3 text-gray-900 text-[10px] font-medium">{week.week}</td>
                             <td className="py-2 px-3 text-gray-600 text-[10px]">{week.meals.toLocaleString()}</td>
@@ -1151,7 +1319,7 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
                 </div>
 
                 {/* Monthly Meal Report */}
-                <div className="bg-white rounded-md p-4 shadow-sm border border-gray-100 relative overflow-hidden">
+                <div className={`bg-white rounded-md p-4 shadow-sm border ${appliedDuration === 'monthly' ? 'border-green-300 ring-2 ring-green-100' : 'border-gray-100'} relative overflow-hidden`}>
                   <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-green-500 via-teal-500 to-blue-500"></div>
                   <div className="absolute -top-2 -right-2 w-10 h-10 bg-teal-500/10 rounded-full"></div>
                   <h3 className="text-sm font-bold text-gray-900 mb-4 bg-gradient-to-r from-green-600 to-teal-600 bg-clip-text text-transparent relative z-10">Monthly Meal Generation Report</h3>
@@ -1164,7 +1332,7 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
                         </tr>
                       </thead>
                       <tbody>
-                        {monthlyMealData.map((month, index) => (
+                        {monthlyMealReportData.map((month, index) => (
                           <tr key={index} className="border-b border-gray-100 hover:bg-gradient-to-r from-green-50/50 via-teal-50/50 to-blue-50/50 transition-all duration-300">
                             <td className="py-2 px-3 text-gray-900 text-[10px] font-medium">{month.month}</td>
                             <td className="py-2 px-3 text-gray-600 text-[10px]">{month.meals.toLocaleString()}</td>
