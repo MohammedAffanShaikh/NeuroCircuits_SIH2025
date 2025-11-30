@@ -21,7 +21,7 @@ const AdminDashboard = ({ onLogout }) => {
   // Close sidebar on window resize to desktop size
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth >= 768) { // MD breakpoint
+      if (window.innerWidth >= 800) { // LG breakpoint
         setSidebarOpen(false);
       }
     };
@@ -806,7 +806,7 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
         initial={{ x: -100, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
         transition={{ duration: 0.5 }}
-        className={`w-52 bg-white shadow-lg flex flex-col h-full fixed inset-y-0 left-0 z-50 transform transition-transform duration-300 ease-in-out ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 md:static md:z-0`}
+        className={`w-52 bg-white shadow-lg flex flex-col h-full fixed inset-y-0 left-0 z-50 transform transition-transform duration-300 ease-in-out ${sidebarOpen ? 'translate-x-0 block' : '-translate-x-full hidden'} lg:translate-x-0 lg:static lg:z-0 lg:block`}
       >
         <div className="p-2.5 border-b border-gray-100">
           <div className="flex items-center gap-1.5">
@@ -850,7 +850,7 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
               key={tab.id}
               onClick={() => {
                 setActiveTab(tab.id);
-                if (window.innerWidth < 768) { // MD breakpoint
+                if (window.innerWidth < 800) { // LG breakpoint
                   setSidebarOpen(false);
                 }
               }}
@@ -875,7 +875,7 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
           <button 
             onClick={() => {
               onLogout();
-              if (window.innerWidth < 768) { // MD breakpoint
+              if (window.innerWidth < 800) { // LG breakpoint
                 setSidebarOpen(false);
               }
             }}
@@ -890,13 +890,13 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
       {/* Mobile overlay */}
       {sidebarOpen && (
         <div 
-          className="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden"
+          className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
           onClick={() => setSidebarOpen(false)}
         ></div>
       )}
 
       {/* Main Content */}
-      <div className="flex-1 overflow-y-auto overscroll-contain flex flex-col h-full md:ml-0 ml-0" style={{ marginLeft: sidebarOpen ? '13rem' : '0' }}>
+      <div className="flex-1 overflow-y-auto overscroll-contain flex flex-col h-full lg:ml-0">
         {/* Ultra Modern Header */}
         <div className="flex-shrink-0">
           <UltraModernHeader 
