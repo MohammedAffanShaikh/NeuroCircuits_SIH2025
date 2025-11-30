@@ -106,6 +106,7 @@ const AdminDashboard = ({ onLogout }) => {
   const [showAvatarOptions, setShowAvatarOptions] = useState(false);
   const [avatarType, setAvatarType] = useState(''); // 'teacher' or 'student'
   const [sidebarOpen, setSidebarOpen] = useState(false); // For mobile responsiveness
+  const [isLargeScreen, setIsLargeScreen] = useState(typeof window !== 'undefined' ? window.innerWidth >= 800 : true); // For 800px breakpoint
   const [mealPeriod, setMealPeriod] = useState('daily'); // daily, weekly, monthly
   const [mealFilter, setMealFilter] = useState('daily'); // daily, weekly, monthly
   
@@ -120,6 +121,23 @@ const AdminDashboard = ({ onLogout }) => {
   // State for applied filters
   const [appliedSchool, setAppliedSchool] = useState('All Schools');
   const [appliedDuration, setAppliedDuration] = useState('weekly');
+  
+  // Handle window resize to detect screen size changes
+  useEffect(() => {
+    const handleResize = () => {
+      setIsLargeScreen(window.innerWidth >= 800);
+      // Close sidebar on small screens
+      if (window.innerWidth < 800) {
+        setSidebarOpen(false);
+      }
+    };
+
+    // Set initial state
+    handleResize();
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // Filter states for Teachers tab
   const [teacherSubjectFilter, setTeacherSubjectFilter] = useState('All Subjects');
@@ -806,7 +824,7 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
         initial={{ x: -100, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
         transition={{ duration: 0.5 }}
-        className={`w-52 bg-white shadow-lg flex flex-col h-full fixed inset-y-0 left-0 z-50 transform transition-transform duration-300 ease-in-out ${sidebarOpen ? 'translate-x-0 block' : '-translate-x-full hidden'} lg:translate-x-0 lg:static lg:z-0 lg:block`}
+        className={`w-52 bg-white shadow-lg flex flex-col h-full fixed inset-y-0 left-0 z-50 transform transition-transform duration-300 ease-in-out ${sidebarOpen || isLargeScreen ? 'translate-x-0 block' : '-translate-x-full hidden'}`}
       >
         <div className="p-2.5 border-b border-gray-100">
           <div className="flex items-center gap-1.5">
@@ -850,7 +868,7 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
               key={tab.id}
               onClick={() => {
                 setActiveTab(tab.id);
-                if (window.innerWidth < 800) { // LG breakpoint
+                if (window.innerWidth < 800) { // Custom 800px breakpoint
                   setSidebarOpen(false);
                 }
               }}
@@ -875,7 +893,7 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
           <button 
             onClick={() => {
               onLogout();
-              if (window.innerWidth < 800) { // LG breakpoint
+              if (window.innerWidth < 800) { // Custom 800px breakpoint
                 setSidebarOpen(false);
               }
             }}
@@ -888,15 +906,15 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
       </motion.div>
 
       {/* Mobile overlay */}
-      {sidebarOpen && (
+      {sidebarOpen && !isLargeScreen && (
         <div 
-          className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
+          className="fixed inset-0 bg-black bg-opacity-50 z-40"
           onClick={() => setSidebarOpen(false)}
         ></div>
       )}
 
       {/* Main Content */}
-      <div className="flex-1 overflow-y-auto overscroll-contain flex flex-col h-full lg:ml-0">
+      <div className={`flex-1 overflow-y-auto overscroll-contain flex flex-col h-full ${isLargeScreen ? 'ml-52' : ''}`}>
         {/* Ultra Modern Header */}
         <div className="flex-shrink-0">
           <UltraModernHeader 
