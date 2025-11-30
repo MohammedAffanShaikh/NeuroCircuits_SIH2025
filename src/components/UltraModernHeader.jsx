@@ -16,7 +16,7 @@ const UltraModernHeader = ({
 }) => {
   const { t, i18n } = useTranslation();
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
-  const [selectedClass, setSelectedClass] = useState('Class 10-A');
+  const [selectedClass, setSelectedClass] = useState('');
   const [particles, setParticles] = useState([]);
   const headerRef = useRef(null);
   const [currentDate] = useState(new Date().toLocaleDateString('en-US', { 
@@ -59,7 +59,7 @@ const UltraModernHeader = ({
   }, []);
 
   // Sample classes for dropdown
-  const classes = ['Class 10-A', 'Class 11-B', 'Class 12-C', 'All Classes'];
+  const classes = ['Class 11-B', 'Class 12-C', 'All Classes'];
 
   const toggleProfileMenu = () => {
     setIsProfileMenuOpen(!isProfileMenuOpen);

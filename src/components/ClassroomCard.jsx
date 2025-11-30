@@ -274,6 +274,11 @@ const ClassroomCard = ({
           <div className="w-8 h-8 rounded-full bg-white"></div>
         </div>
         
+        {/* Additional scattered decorative elements */}
+        <div className="absolute top-1/3 left-1/4 w-3 h-3 rounded-full bg-white/10"></div>
+        <div className="absolute bottom-1/3 right-1/3 w-2 h-2 rounded-full bg-white/15"></div>
+        <div className="absolute top-1/4 right-1/4 w-2.5 h-2.5 rotate-45 bg-white/10"></div>
+        
         {/* Menu button */}
         <button 
           className="absolute top-3 right-3 p-1.5 rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/30 transition-colors z-10"

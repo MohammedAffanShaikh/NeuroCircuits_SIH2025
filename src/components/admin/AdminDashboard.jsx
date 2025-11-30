@@ -439,23 +439,6 @@ const AdminDashboard = ({ onLogout }) => {
     setAvatarType('');
   };
 
-  // Helper function to get initials from a string
-  const getInitials = (name) => {
-    if (!name) return '';
-    const words = name.split(' ');
-    if (words.length === 1) {
-      return words[0].substring(0, 2).toUpperCase();
-    } else {
-      return (words[0].charAt(0) + words[1].charAt(0)).toUpperCase();
-    }
-  };
-
-  // Test the getInitials function
-  console.log('Testing getInitials function:');
-  console.log('Grade 1:', getInitials('Grade 1'));
-  console.log('Grade 10:', getInitials('Grade 10'));
-  console.log('Test:', getInitials('Test'));
-
   // Function to apply filters
   const applyFilters = () => {
     console.log('Applying filters:', selectedSchool, selectedDuration);
@@ -1403,45 +1386,78 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
                 </div>
               </div>
 
-              {/* Classes Table */}
+              {/* Enhanced Classes Table */}
               <div className="bg-white rounded-md shadow-sm border border-gray-100 overflow-hidden">
                 <div className="overflow-x-auto">
                   <table className="w-full">
-                    <thead className="bg-gradient-to-r from-blue-50 to-indigo-50">
+                    <thead className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white">
                       <tr>
-                        <th className="px-3 py-2 text-left text-[9px] font-semibold text-indigo-700 uppercase tracking-wider">Class</th>
-                        <th className="px-3 py-2 text-left text-[9px] font-semibold text-indigo-700 uppercase tracking-wider">Subject</th>
-                        <th className="px-3 py-2 text-left text-[9px] font-semibold text-indigo-700 uppercase tracking-wider">Teacher</th>
-                        <th className="px-3 py-2 text-left text-[9px] font-semibold text-indigo-700 uppercase tracking-wider">Students</th>
+                        <th className="px-4 py-3 text-left text-[10px] font-bold uppercase tracking-wider">Class</th>
+                        <th className="px-4 py-3 text-left text-[10px] font-bold uppercase tracking-wider">Subject</th>
+                        <th className="px-4 py-3 text-left text-[10px] font-bold uppercase tracking-wider">Teacher</th>
+                        <th className="px-4 py-3 text-left text-[10px] font-bold uppercase tracking-wider">Students</th>
+                        <th className="px-4 py-3 text-left text-[10px] font-bold uppercase tracking-wider">Status</th>
+                        <th className="px-4 py-3 text-left text-[10px] font-bold uppercase tracking-wider">Actions</th>
                       </tr>
                     </thead>
-                    <tbody className="bg-white divide-y divide-gray-50">
+                    <tbody className="bg-white divide-y divide-gray-100">
                       {getFilteredClasses().map((classItem) => (
-                        <tr key={classItem.id} className="hover:bg-indigo-50/50 transition-colors duration-150">
-                          <td className="px-3 py-2 whitespace-nowrap text-[10px] font-medium text-gray-900">
-                            <div className="flex items-center gap-2">
-                              <div className="w-6 h-6 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-md flex items-center justify-center text-white font-bold text-[9px] shadow-sm">
-                                {getInitials(classItem.name)}
+                        <tr key={classItem.id} className="hover:bg-blue-50/50 transition-all duration-200 group">
+                          <td className="px-4 py-3 whitespace-nowrap">
+                            <div className="flex items-center gap-3">
+                              <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white text-[11px] font-bold shadow-sm">
+                                {classItem.name.charAt(0)}
                               </div>
-                              <span>{classItem.name}</span>
+                              <div>
+                                <div className="text-[12px] font-bold text-gray-900">{classItem.name}</div>
+                                <div className="text-[10px] text-gray-500 flex items-center gap-1">
+                                  <span>ID: {classItem.id}</span>
+                                </div>
+                              </div>
                             </div>
                           </td>
-                          <td className="px-3 py-2 whitespace-nowrap text-[10px] text-gray-600">
-                            <div className="flex items-center gap-1">
-                              <Book className="w-3 h-3 text-blue-500" />
-                              {classItem.subject}
+                          <td className="px-4 py-3 whitespace-nowrap">
+                            <div className="text-[11px] font-medium text-gray-900">{classItem.subject}</div>
+                          </td>
+                          <td className="px-4 py-3 whitespace-nowrap">
+                            <div className="text-[11px] text-gray-700">{classItem.teacher}</div>
+                          </td>
+                          <td className="px-4 py-3 whitespace-nowrap">
+                            <div className="flex items-center gap-2">
+                              <div className="flex items-center justify-center w-6 h-6 rounded-full bg-blue-100 text-blue-600">
+                                <Users className="w-3 h-3" />
+                              </div>
+                              <span className="text-[11px] font-semibold text-gray-900">{classItem.students}</span>
                             </div>
                           </td>
-                          <td className="px-3 py-2 whitespace-nowrap text-[10px] text-gray-600">
-                            <div className="flex items-center gap-1">
-                              <User className="w-3 h-3 text-indigo-500" />
-                              {classItem.teacher}
-                            </div>
+                          <td className="px-4 py-3 whitespace-nowrap">
+                            <span className="inline-flex px-2.5 py-1 text-[10px] font-semibold leading-tight rounded-full bg-green-100 text-green-800 shadow-sm">
+                              Active
+                            </span>
                           </td>
-                          <td className="px-3 py-2 whitespace-nowrap text-[10px] text-gray-600">
+                          <td className="px-4 py-3 whitespace-nowrap">
                             <div className="flex items-center gap-1">
-                              <Users className="w-3 h-3 text-purple-500" />
-                              {classItem.students}
+                              <button 
+                                onClick={() => handleViewClass(classItem.id)}
+                                className="p-2 text-blue-500 hover:text-blue-700 hover:bg-blue-50 rounded-md transition-all duration-200 shadow-sm hover:shadow"
+                                title="View Class"
+                              >
+                                <Eye className="w-3.5 h-3.5" />
+                              </button>
+                              <button 
+                                onClick={() => handleEditClass(classItem.id)}
+                                className="p-2 text-amber-500 hover:text-amber-700 hover:bg-amber-50 rounded-md transition-all duration-200 shadow-sm hover:shadow"
+                                title="Edit Class"
+                              >
+                                <Edit className="w-3.5 h-3.5" />
+                              </button>
+                              <button 
+                                onClick={() => handleDeleteClass(classItem.id)}
+                                className="p-2 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-md transition-all duration-200 shadow-sm hover:shadow"
+                                title="Delete Class"
+                              >
+                                <Trash2 className="w-3.5 h-3.5" />
+                              </button>
                             </div>
                           </td>
                         </tr>

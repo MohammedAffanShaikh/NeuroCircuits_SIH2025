@@ -823,7 +823,7 @@ const CleanStudentDashboard = () => {
                           email: "sarah.johnson@student.school.edu",
                           class: studentData.class,
                           rollNumber: studentData.rollNumber,
-                          school: "Greenwood High School"
+                          school: "Saboo Siddik Degree"
                         })}
                         className="px-3 py-1.5 bg-gradient-to-r from-gray-100 to-gray-200 border border-gray-200 text-gray-700 rounded-md hover:from-gray-200 hover:to-gray-300 transition-all text-xs font-medium"
                       >

@@ -416,6 +416,12 @@ const EnhancedClassroomCard = ({
           <div className="w-8 h-8 rounded-full bg-white"></div>
         </div>
         
+        {/* Additional scattered decorative elements */}
+        <div className="absolute top-1/3 left-1/3 w-2.5 h-2.5 rounded-full bg-white/15"></div>
+        <div className="absolute bottom-1/4 right-1/4 w-3 h-3 rotate-12 bg-white/10"></div>
+        <div className="absolute top-1/4 right-1/3 w-2 h-2 rounded-full bg-white/20"></div>
+        <div className="absolute bottom-1/3 left-1/4 w-3.5 h-3.5 rotate-6 bg-white/10"></div>
+        
         {/* Prominent stationery item display */}
         <div className="absolute top-3 left-3 z-10">
           <div className={`p-1.5 rounded-lg bg-white/20 backdrop-blur-sm ${stationeryItem.color}`}>

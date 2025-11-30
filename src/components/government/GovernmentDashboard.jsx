@@ -732,23 +732,63 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
                   <div className="overflow-x-auto relative z-10">
                     <table className="w-full">
                       <thead>
-                        <tr className="border-b border-gray-200">
-                          <th className="text-left py-3 px-4 font-medium text-[10px] bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">School</th>
-                          <th className="text-left py-3 px-4 font-medium text-[10px] bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Students</th>
-                          <th className="text-left py-3 px-4 font-medium text-[10px] bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Attendance</th>
+                        <tr className="border-b border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50">
+                          <th className="text-left py-3 px-4 font-bold text-[11px] bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent uppercase tracking-wider">School</th>
+                          <th className="text-left py-3 px-4 font-bold text-[11px] bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent uppercase tracking-wider">Students</th>
+                          <th className="text-left py-3 px-4 font-bold text-[11px] bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent uppercase tracking-wider">Attendance</th>
+                          <th className="text-left py-3 px-4 font-bold text-[11px] bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent uppercase tracking-wider">Performance</th>
+                          <th className="text-left py-3 px-4 font-bold text-[11px] bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent uppercase tracking-wider">Alerts</th>
                         </tr>
                       </thead>
                       <tbody>
                         {schools.map((school) => (
-                          <tr key={school.id} className="border-b border-gray-100 hover:bg-gradient-to-r from-blue-50/50 via-indigo-50/50 to-purple-50/50 transition-all duration-300">
+                          <tr key={school.id} className="border-b border-gray-100 hover:bg-gradient-to-r from-blue-50/50 via-indigo-50/50 to-purple-50/50 transition-all duration-300 group">
                             <td className="py-3 px-4">
-                              <div className="font-medium text-gray-900 text-[10px] flex items-center gap-1">
-                                <GraduationCap className="w-3 h-3 text-blue-500" />
-                                {school.name}
+                              <div className="font-medium text-gray-900 text-[10px] flex items-center gap-2">
+                                <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-md flex items-center justify-center text-white font-bold text-[10px] shadow-sm">
+                                  {school.name.charAt(0)}
+                                </div>
+                                <div>
+                                  <div className="font-semibold">{school.name}</div>
+                                  <div className="text-[9px] text-gray-500">ID: {school.id}</div>
+                                </div>
                               </div>
                             </td>
-                            <td className="py-3 px-4 text-gray-600 text-[10px]">{school.students.toLocaleString()}</td>
-                            <td className="py-3 px-4 text-gray-600 text-[10px]">{school.attendance}%</td>
+                            <td className="py-3 px-4 text-gray-700 text-[10px] font-medium">
+                              <div className="flex items-center gap-1">
+                                <Users className="w-3 h-3 text-blue-500" />
+                                {school.students.toLocaleString()}
+                              </div>
+                            </td>
+                            <td className="py-3 px-4">
+                              <div className="flex items-center gap-2">
+                                <div className="w-10 h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                                  <div 
+                                    className={`h-full rounded-full ${school.attendance >= 95 ? 'bg-green-500' : school.attendance >= 90 ? 'bg-blue-500' : 'bg-yellow-500'}`}
+                                    style={{ width: `${school.attendance}%` }}
+                                  ></div>
+                                </div>
+                                <span className="text-[10px] font-medium text-gray-700">{school.attendance}%</span>
+                              </div>
+                            </td>
+                            <td className="py-3 px-4">
+                              <span className={`px-2 py-1 rounded-full text-[9px] font-bold ${{
+                                'A+': 'bg-green-100 text-green-800',
+                                'A': 'bg-blue-100 text-blue-800',
+                                'B': 'bg-yellow-100 text-yellow-800',
+                                'C': 'bg-orange-100 text-orange-800',
+                                'D': 'bg-red-100 text-red-800'
+                              }[school.performance] || 'bg-gray-100 text-gray-800'}`}>
+                                {school.performance}
+                              </span>
+                            </td>
+                            <td className="py-3 px-4">
+                              <div className="flex items-center gap-1">
+                                <Bell className="w-3 h-3 text-gray-500" />
+                                <span className="text-[10px] font-medium text-gray-700">{school.alerts}</span>
+                              </div>
+                            </td>
+
                           </tr>
                         ))}
                       </tbody>
@@ -1259,31 +1299,62 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
                 <div className="overflow-x-auto relative z-10">
                   <table className="w-full">
                     <thead>
-                      <tr className="border-b border-gray-200">
-                        <th className="text-left py-3 px-4 font-medium text-[10px] bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">School</th>
-                        <th className="text-left py-3 px-4 font-medium text-[10px] bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">Total Students</th>
-                        <th className="text-left py-3 px-4 font-medium text-[10px] bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">Present Today</th>
-                        <th className="text-left py-3 px-4 font-medium text-[10px] bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">Meals Served</th>
-                        <th className="text-left py-3 px-4 font-medium text-[10px] bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">Participation Rate</th>
-                        <th className="text-left py-3 px-4 font-medium text-[10px] bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">Status</th>
+                      <tr className="border-b border-gray-200 bg-gradient-to-r from-purple-50 to-indigo-50">
+                        <th className="text-left py-3 px-4 font-bold text-[11px] bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent uppercase tracking-wider">School</th>
+                        <th className="text-left py-3 px-4 font-bold text-[11px] bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent uppercase tracking-wider">Total Students</th>
+                        <th className="text-left py-3 px-4 font-bold text-[11px] bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent uppercase tracking-wider">Present Today</th>
+                        <th className="text-left py-3 px-4 font-bold text-[11px] bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent uppercase tracking-wider">Meals Served</th>
+                        <th className="text-left py-3 px-4 font-bold text-[11px] bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent uppercase tracking-wider">Participation Rate</th>
+                        <th className="text-left py-3 px-4 font-bold text-[11px] bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent uppercase tracking-wider">Status</th>
                       </tr>
                     </thead>
                     <tbody>
                       {selectedSchoolData.map((school) => (
-                        <tr key={school.id} className="border-b border-gray-100 hover:bg-gradient-to-r from-purple-50/50 via-indigo-50/50 to-blue-50/50 transition-all duration-300">
-                          <td className="py-1.5 px-4">
-                            <div className="font-medium text-gray-900 text-[10px] flex items-center gap-1">
-                              <GraduationCap className="w-3 h-3 text-purple-500" />
-                              {school.schoolName}
+                        <tr key={school.id} className="border-b border-gray-100 hover:bg-gradient-to-r from-purple-50/50 via-indigo-50/50 to-blue-50/50 transition-all duration-300 group">
+                          <td className="py-2 px-4">
+                            <div className="font-medium text-gray-900 text-[10px] flex items-center gap-2">
+                              <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-indigo-600 rounded-md flex items-center justify-center text-white font-bold text-[10px] shadow-sm">
+                                {school.schoolName.charAt(0)}
+                              </div>
+                              <div>
+                                <div className="font-semibold">{school.schoolName}</div>
+                                <div className="text-[9px] text-gray-500">ID: {school.id}</div>
+                              </div>
                             </div>
                           </td>
-                          <td className="py-1.5 px-4 text-gray-600 text-[10px]">{school.totalStudents.toLocaleString()}</td>
-                          <td className="py-1.5 px-4 text-gray-600 text-[10px]">{school.presentToday.toLocaleString()}</td>
-                          <td className="py-1.5 px-4 text-gray-600 text-[10px]">{Math.round(school.presentToday * districtData.mealsPerStudent).toLocaleString()}</td>
-                          <td className="py-1.5 px-4 text-gray-600 text-[10px]">{((school.presentToday / school.totalStudents) * 100).toFixed(1)}%</td>
-                          <td className="py-1.5 px-4">
-                            <span className="px-2 py-0.5 bg-green-100 text-green-800 rounded-full text-[9px] font-medium">Active</span>
+                          <td className="py-2 px-4 text-gray-700 text-[10px] font-medium">
+                            <div className="flex items-center gap-1">
+                              <Users className="w-3 h-3 text-purple-500" />
+                              {school.totalStudents.toLocaleString()}
+                            </div>
                           </td>
+                          <td className="py-2 px-4 text-gray-700 text-[10px] font-medium">
+                            <div className="flex items-center gap-1">
+                              <User className="w-3 h-3 text-blue-500" />
+                              {school.presentToday.toLocaleString()}
+                            </div>
+                          </td>
+                          <td className="py-2 px-4 text-gray-700 text-[10px] font-medium">
+                            <div className="flex items-center gap-1">
+                              <Utensils className="w-3 h-3 text-amber-500" />
+                              {Math.round(school.presentToday * districtData.mealsPerStudent).toLocaleString()}
+                            </div>
+                          </td>
+                          <td className="py-2 px-4">
+                            <div className="flex items-center gap-2">
+                              <div className="w-12 h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                                <div 
+                                  className={`h-full rounded-full ${((school.presentToday / school.totalStudents) * 100) >= 95 ? 'bg-green-500' : ((school.presentToday / school.totalStudents) * 100) >= 90 ? 'bg-blue-500' : 'bg-yellow-500'}`}
+                                  style={{ width: `${(school.presentToday / school.totalStudents) * 100}%` }}
+                                ></div>
+                              </div>
+                              <span className="text-[10px] font-bold text-gray-700">{((school.presentToday / school.totalStudents) * 100).toFixed(1)}%</span>
+                            </div>
+                          </td>
+                          <td className="py-2 px-4">
+                            <span className="px-2 py-1 rounded-full text-[9px] font-bold bg-green-100 text-green-800">Active</span>
+                          </td>
+                          
                         </tr>
                       ))}
                     </tbody>
@@ -1301,18 +1372,53 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
                   <div className="overflow-x-auto relative z-10">
                     <table className="w-full">
                       <thead>
-                        <tr className="border-b border-gray-200">
-                          <th className="text-left py-2 px-3 font-medium text-[10px] bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Week</th>
-                          <th className="text-left py-2 px-3 font-medium text-[10px] bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Meals Generated</th>
+                        <tr className="border-b border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50">
+                          <th className="text-left py-2 px-3 font-bold text-[11px] bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent uppercase tracking-wider">Week</th>
+                          <th className="text-left py-2 px-3 font-bold text-[11px] bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent uppercase tracking-wider">Meals Generated</th>
+                          <th className="text-left py-2 px-3 font-bold text-[11px] bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent uppercase tracking-wider">Trend</th>
                         </tr>
                       </thead>
                       <tbody>
-                        {weeklyMealReportData.map((week, index) => (
-                          <tr key={index} className="border-b border-gray-100 hover:bg-gradient-to-r from-blue-50/50 via-indigo-50/50 to-purple-50/50 transition-all duration-300">
-                            <td className="py-2 px-3 text-gray-900 text-[10px] font-medium">{week.week}</td>
-                            <td className="py-2 px-3 text-gray-600 text-[10px]">{week.meals.toLocaleString()}</td>
-                          </tr>
-                        ))}
+                        {weeklyMealReportData.map((week, index) => {
+                          // Calculate trend compared to previous week
+                          let trend = 0;
+                          let trendType = 'neutral';
+                          if (index > 0) {
+                            const prevWeek = weeklyMealReportData[index - 1];
+                            trend = ((week.meals - prevWeek.meals) / prevWeek.meals) * 100;
+                            trendType = trend > 0 ? 'up' : trend < 0 ? 'down' : 'neutral';
+                          }
+                          
+                          return (
+                            <tr key={index} className="border-b border-gray-100 hover:bg-gradient-to-r from-blue-50/50 via-indigo-50/50 to-purple-50/50 transition-all duration-300 group">
+                              <td className="py-2 px-3 text-gray-900 text-[10px] font-bold">{week.week}</td>
+                              <td className="py-2 px-3 text-gray-700 text-[10px] font-medium">
+                                <div className="flex items-center gap-1">
+                                  <Utensils className="w-3 h-3 text-blue-500" />
+                                  {week.meals.toLocaleString()}
+                                </div>
+                              </td>
+                              <td className="py-2 px-3">
+                                {index > 0 ? (
+                                  <div className="flex items-center gap-1">
+                                    {trendType === 'up' ? (
+                                      <TrendingUp className="w-3 h-3 text-green-500" />
+                                    ) : trendType === 'down' ? (
+                                      <TrendingUp className="w-3 h-3 text-red-500 rotate-180" />
+                                    ) : (
+                                      <Minus className="w-3 h-3 text-gray-500" />
+                                    )}
+                                    <span className={`text-[10px] font-medium ${trendType === 'up' ? 'text-green-600' : trendType === 'down' ? 'text-red-600' : 'text-gray-600'}`}>
+                                      {trendType === 'neutral' ? '0%' : `${Math.abs(trend).toFixed(1)}%`}
+                                    </span>
+                                  </div>
+                                ) : (
+                                  <span className="text-[10px] text-gray-500">-</span>
+                                )}
+                              </td>
+                            </tr>
+                          );
+                        })}
                       </tbody>
                     </table>
                   </div>
@@ -1326,18 +1432,53 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
                   <div className="overflow-x-auto relative z-10">
                     <table className="w-full">
                       <thead>
-                        <tr className="border-b border-gray-200">
-                          <th className="text-left py-2 px-3 font-medium text-[10px] bg-gradient-to-r from-green-600 to-teal-600 bg-clip-text text-transparent">Month</th>
-                          <th className="text-left py-2 px-3 font-medium text-[10px] bg-gradient-to-r from-green-600 to-teal-600 bg-clip-text text-transparent">Meals Generated</th>
+                        <tr className="border-b border-gray-200 bg-gradient-to-r from-green-50 to-teal-50">
+                          <th className="text-left py-2 px-3 font-bold text-[11px] bg-gradient-to-r from-green-600 to-teal-600 bg-clip-text text-transparent uppercase tracking-wider">Month</th>
+                          <th className="text-left py-2 px-3 font-bold text-[11px] bg-gradient-to-r from-green-600 to-teal-600 bg-clip-text text-transparent uppercase tracking-wider">Meals Generated</th>
+                          <th className="text-left py-2 px-3 font-bold text-[11px] bg-gradient-to-r from-green-600 to-teal-600 bg-clip-text text-transparent uppercase tracking-wider">Trend</th>
                         </tr>
                       </thead>
                       <tbody>
-                        {monthlyMealReportData.map((month, index) => (
-                          <tr key={index} className="border-b border-gray-100 hover:bg-gradient-to-r from-green-50/50 via-teal-50/50 to-blue-50/50 transition-all duration-300">
-                            <td className="py-2 px-3 text-gray-900 text-[10px] font-medium">{month.month}</td>
-                            <td className="py-2 px-3 text-gray-600 text-[10px]">{month.meals.toLocaleString()}</td>
-                          </tr>
-                        ))}
+                        {monthlyMealReportData.map((month, index) => {
+                          // Calculate trend compared to previous month
+                          let trend = 0;
+                          let trendType = 'neutral';
+                          if (index > 0) {
+                            const prevMonth = monthlyMealReportData[index - 1];
+                            trend = ((month.meals - prevMonth.meals) / prevMonth.meals) * 100;
+                            trendType = trend > 0 ? 'up' : trend < 0 ? 'down' : 'neutral';
+                          }
+                          
+                          return (
+                            <tr key={index} className="border-b border-gray-100 hover:bg-gradient-to-r from-green-50/50 via-teal-50/50 to-blue-50/50 transition-all duration-300 group">
+                              <td className="py-2 px-3 text-gray-900 text-[10px] font-bold">{month.month}</td>
+                              <td className="py-2 px-3 text-gray-700 text-[10px] font-medium">
+                                <div className="flex items-center gap-1">
+                                  <Utensils className="w-3 h-3 text-green-500" />
+                                  {month.meals.toLocaleString()}
+                                </div>
+                              </td>
+                              <td className="py-2 px-3">
+                                {index > 0 ? (
+                                  <div className="flex items-center gap-1">
+                                    {trendType === 'up' ? (
+                                      <TrendingUp className="w-3 h-3 text-green-500" />
+                                    ) : trendType === 'down' ? (
+                                      <TrendingUp className="w-3 h-3 text-red-500 rotate-180" />
+                                    ) : (
+                                      <Minus className="w-3 h-3 text-gray-500" />
+                                    )}
+                                    <span className={`text-[10px] font-medium ${trendType === 'up' ? 'text-green-600' : trendType === 'down' ? 'text-red-600' : 'text-gray-600'}`}>
+                                      {trendType === 'neutral' ? '0%' : `${Math.abs(trend).toFixed(1)}%`}
+                                    </span>
+                                  </div>
+                                ) : (
+                                  <span className="text-[10px] text-gray-500">-</span>
+                                )}
+                              </td>
+                            </tr>
+                          );
+                        })}
                       </tbody>
                     </table>
                   </div>

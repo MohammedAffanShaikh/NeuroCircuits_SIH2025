@@ -11,6 +11,242 @@ import LanguageSelector from '../LanguageSelector';
 import ParticleBackground from '../ParticleBackground';
 
 const TeacherDashboard = ({ onLogout }) => {
+  // Educational SVG components
+  const EducationIllustration = () => (
+    <svg 
+      viewBox="0 0 200 200" 
+      className="absolute inset-0 w-full h-full opacity-10"
+      preserveAspectRatio="xMidYMid meet"
+    >
+      {/* Books */}
+      <g transform="translate(30, 30)">
+        <path d="M10 0 L50 0 L55 5 L55 40 L50 45 L10 45 L5 40 L5 5 Z" fill="white" />
+        <path d="M15 5 L45 5 L48 8 L48 37 L45 40 L15 40 L12 37 L12 8 Z" fill="none" stroke="#3b82f6" strokeWidth="0.5" />
+        <line x1="15" y1="10" x2="45" y2="10" stroke="#3b82f6" strokeWidth="0.5" />
+        <line x1="15" y1="15" x2="45" y2="15" stroke="#3b82f6" strokeWidth="0.5" />
+        <line x1="15" y1="20" x2="45" y2="20" stroke="#3b82f6" strokeWidth="0.5" />
+        <line x1="15" y1="25" x2="45" y2="25" stroke="#3b82f6" strokeWidth="0.5" />
+        <line x1="15" y1="30" x2="45" y2="30" stroke="#3b82f6" strokeWidth="0.5" />
+        <line x1="15" y1="35" x2="45" y2="35" stroke="#3b82f6" strokeWidth="0.5" />
+      </g>
+      
+      {/* Graduation Cap */}
+      <g transform="translate(120, 20)">
+        <path d="M0 15 L25 0 L50 15 L25 30 Z" fill="white" />
+        <rect x="20" y="30" width="10" height="15" fill="white" />
+        <circle cx="25" cy="5" r="2" fill="#3b82f6" />
+      </g>
+      
+      {/* Pencil */}
+      <g transform="translate(40, 100)">
+        <path d="M0 10 L20 0 L30 10 L10 20 Z" fill="white" />
+        <path d="M10 20 L30 10 L35 15 L15 25 Z" fill="#3b82f6" />
+        <path d="M0 10 L5 5 L20 0" fill="none" stroke="#3b82f6" strokeWidth="1" />
+      </g>
+      
+      {/* Notebook */}
+      <g transform="translate(100, 90)">
+        <rect x="0" y="0" width="40" height="50" rx="2" fill="white" />
+        <line x1="5" y1="10" x2="35" y2="10" stroke="#3b82f6" strokeWidth="0.5" />
+        <line x1="5" y1="20" x2="35" y2="20" stroke="#3b82f6" strokeWidth="0.5" />
+        <line x1="5" y1="30" x2="35" y2="30" stroke="#3b82f6" strokeWidth="0.5" />
+        <line x1="5" y1="40" x2="35" y2="40" stroke="#3b82f6" strokeWidth="0.5" />
+        <circle cx="35" cy="5" r="2" fill="#3b82f6" />
+      </g>
+      
+      {/* Ruler */}
+      <g transform="translate(20, 160)">
+        <rect x="0" y="0" width="50" height="10" rx="2" fill="white" />
+        <line x1="5" y1="2" x2="5" y2="8" stroke="#3b82f6" strokeWidth="0.5" />
+        <line x1="10" y1="2" x2="10" y2="8" stroke="#3b82f6" strokeWidth="0.5" />
+        <line x1="15" y1="2" x2="15" y2="8" stroke="#3b82f6" strokeWidth="0.5" />
+        <line x1="20" y1="2" x2="20" y2="8" stroke="#3b82f6" strokeWidth="0.5" />
+        <line x1="25" y1="2" x2="25" y2="8" stroke="#3b82f6" strokeWidth="0.5" />
+        <line x1="30" y1="2" x2="30" y2="8" stroke="#3b82f6" strokeWidth="0.5" />
+        <line x1="35" y1="2" x2="35" y2="8" stroke="#3b82f6" strokeWidth="0.5" />
+        <line x1="40" y1="2" x2="40" y2="8" stroke="#3b82f6" strokeWidth="0.5" />
+        <line x1="45" y1="2" x2="45" y2="8" stroke="#3b82f6" strokeWidth="0.5" />
+      </g>
+      
+      {/* Palette */}
+      <g transform="translate(80, 160)">
+        <path d="M0 10 Q 10 0 20 10 Q 30 0 40 10 L 40 25 Q 30 35 20 25 Q 10 35 0 25 Z" fill="white" />
+        <circle cx="10" cy="15" r="4" fill="#93c5fd" />
+        <circle cx="20" cy="18" r="4" fill="#dbeafe" />
+        <circle cx="30" cy="15" r="4" fill="#3b82f6" />
+        <rect x="15" y="25" width="10" height="8" rx="2" fill="white" />
+        <rect x="18" y="22" width="4" height="6" fill="#3b82f6" />
+      </g>
+      
+      {/* Additional scattered elements */}
+      <g transform="translate(150, 70)">
+        <circle cx="5" cy="5" r="3" fill="white" />
+        <circle cx="15" cy="2" r="2" fill="white" />
+        <circle cx="10" cy="12" r="2.5" fill="white" />
+      </g>
+      
+      <g transform="translate(60, 50)">
+        <rect x="0" y="0" width="8" height="8" rx="1" fill="white" />
+        <rect x="12" y="3" width="6" height="6" rx="1" fill="white" />
+      </g>
+      
+      <g transform="translate(170, 140)">
+        <path d="M0 0 L6 0 L6 6 L0 6 Z" fill="white" />
+        <path d="M8 2 L14 2 L14 8 L8 8 Z" fill="white" />
+      </g>
+    </svg>
+  );
+  
+  // Enhanced educational SVG with even more scattered elements
+  const EnhancedEducationIllustration = () => (
+    <svg 
+      viewBox="0 0 200 200" 
+      className="absolute inset-0 w-full h-full opacity-10"
+      preserveAspectRatio="xMidYMid meet"
+    >
+      {/* Existing elements from EducationIllustration */}
+      {/* Books */}
+      <g transform="translate(30, 30)">
+        <path d="M10 0 L50 0 L55 5 L55 40 L50 45 L10 45 L5 40 L5 5 Z" fill="white" />
+        <path d="M15 5 L45 5 L48 8 L48 37 L45 40 L15 40 L12 37 L12 8 Z" fill="none" stroke="#3b82f6" strokeWidth="0.5" />
+        <line x1="15" y1="10" x2="45" y2="10" stroke="#3b82f6" strokeWidth="0.5" />
+        <line x1="15" y1="15" x2="45" y2="15" stroke="#3b82f6" strokeWidth="0.5" />
+        <line x1="15" y1="20" x2="45" y2="20" stroke="#3b82f6" strokeWidth="0.5" />
+        <line x1="15" y1="25" x2="45" y2="25" stroke="#3b82f6" strokeWidth="0.5" />
+        <line x1="15" y1="30" x2="45" y2="30" stroke="#3b82f6" strokeWidth="0.5" />
+        <line x1="15" y1="35" x2="45" y2="35" stroke="#3b82f6" strokeWidth="0.5" />
+      </g>
+      
+      {/* Graduation Cap */}
+      <g transform="translate(120, 20)">
+        <path d="M0 15 L25 0 L50 15 L25 30 Z" fill="white" />
+        <rect x="20" y="30" width="10" height="15" fill="white" />
+        <circle cx="25" cy="5" r="2" fill="#3b82f6" />
+      </g>
+      
+      {/* Pencil */}
+      <g transform="translate(40, 100)">
+        <path d="M0 10 L20 0 L30 10 L10 20 Z" fill="white" />
+        <path d="M10 20 L30 10 L35 15 L15 25 Z" fill="#3b82f6" />
+        <path d="M0 10 L5 5 L20 0" fill="none" stroke="#3b82f6" strokeWidth="1" />
+      </g>
+      
+      {/* Notebook */}
+      <g transform="translate(100, 90)">
+        <rect x="0" y="0" width="40" height="50" rx="2" fill="white" />
+        <line x1="5" y1="10" x2="35" y2="10" stroke="#3b82f6" strokeWidth="0.5" />
+        <line x1="5" y1="20" x2="35" y2="20" stroke="#3b82f6" strokeWidth="0.5" />
+        <line x1="5" y1="30" x2="35" y2="30" stroke="#3b82f6" strokeWidth="0.5" />
+        <line x1="5" y1="40" x2="35" y2="40" stroke="#3b82f6" strokeWidth="0.5" />
+        <circle cx="35" cy="5" r="2" fill="#3b82f6" />
+      </g>
+      
+      {/* Ruler */}
+      <g transform="translate(20, 160)">
+        <rect x="0" y="0" width="50" height="10" rx="2" fill="white" />
+        <line x1="5" y1="2" x2="5" y2="8" stroke="#3b82f6" strokeWidth="0.5" />
+        <line x1="10" y1="2" x2="10" y2="8" stroke="#3b82f6" strokeWidth="0.5" />
+        <line x1="15" y1="2" x2="15" y2="8" stroke="#3b82f6" strokeWidth="0.5" />
+        <line x1="20" y1="2" x2="20" y2="8" stroke="#3b82f6" strokeWidth="0.5" />
+        <line x1="25" y1="2" x2="25" y2="8" stroke="#3b82f6" strokeWidth="0.5" />
+        <line x1="30" y1="2" x2="30" y2="8" stroke="#3b82f6" strokeWidth="0.5" />
+        <line x1="35" y1="2" x2="35" y2="8" stroke="#3b82f6" strokeWidth="0.5" />
+        <line x1="40" y1="2" x2="40" y2="8" stroke="#3b82f6" strokeWidth="0.5" />
+        <line x1="45" y1="2" x2="45" y2="8" stroke="#3b82f6" strokeWidth="0.5" />
+      </g>
+      
+      {/* Palette */}
+      <g transform="translate(80, 160)">
+        <path d="M0 10 Q 10 0 20 10 Q 30 0 40 10 L 40 25 Q 30 35 20 25 Q 10 35 0 25 Z" fill="white" />
+        <circle cx="10" cy="15" r="4" fill="#93c5fd" />
+        <circle cx="20" cy="18" r="4" fill="#dbeafe" />
+        <circle cx="30" cy="15" r="4" fill="#3b82f6" />
+        <rect x="15" y="25" width="10" height="8" rx="2" fill="white" />
+        <rect x="18" y="22" width="4" height="6" fill="#3b82f6" />
+      </g>
+      
+      {/* Additional scattered elements */}
+      <g transform="translate(150, 70)">
+        <circle cx="5" cy="5" r="3" fill="white" />
+        <circle cx="15" cy="2" r="2" fill="white" />
+        <circle cx="10" cy="12" r="2.5" fill="white" />
+      </g>
+      
+      <g transform="translate(60, 50)">
+        <rect x="0" y="0" width="8" height="8" rx="1" fill="white" />
+        <rect x="12" y="3" width="6" height="6" rx="1" fill="white" />
+      </g>
+      
+      <g transform="translate(170, 140)">
+        <path d="M0 0 L6 0 L6 6 L0 6 Z" fill="white" />
+        <path d="M8 2 L14 2 L14 8 L8 8 Z" fill="white" />
+      </g>
+      
+      {/* Even more scattered elements for enhanced visual effect */}
+      <g transform="translate(5, 5)">
+        <circle cx="2" cy="2" r="1" fill="white" />
+        <circle cx="6" cy="4" r="1.5" fill="white" />
+      </g>
+      
+      <g transform="translate(180, 10)">
+        <rect x="0" y="0" width="4" height="4" rx="1" fill="white" />
+      </g>
+      
+      <g transform="translate(100, 10)">
+        <path d="M0 0 L3 0 L1.5 3 Z" fill="white" />
+      </g>
+      
+      <g transform="translate(20, 70)">
+        <circle cx="3" cy="3" r="2" fill="white" />
+      </g>
+      
+      <g transform="translate(160, 110)">
+        <rect x="0" y="0" width="5" height="5" rx="1" fill="white" />
+        <rect x="7" y="2" width="4" height="4" rx="1" fill="white" />
+      </g>
+      
+      <g transform="translate(75, 140)">
+        <circle cx="2" cy="2" r="1.5" fill="white" />
+        <circle cx="7" cy="1" r="1" fill="white" />
+        <circle cx="5" cy="6" r="1.2" fill="white" />
+      </g>
+    </svg>
+  );
+  
+  // Educational card illustrations
+  const EducationCardIllustration = () => (
+    <svg 
+      viewBox="0 0 100 100" 
+      className="absolute inset-0 w-full h-full opacity-5"
+      preserveAspectRatio="xMidYMid meet"
+    >
+      {/* Simplified book */}
+      <path d="M20 20 L60 20 L65 25 L65 60 L60 65 L20 65 L15 60 L15 25 Z" fill="white" />
+      <path d="M25 25 L55 25 L58 28 L58 57 L55 60 L25 60 L22 57 L22 28 Z" fill="none" stroke="#3b82f6" strokeWidth="0.5" />
+      
+      {/* Simplified graduation cap */}
+      <g transform="translate(50, 10)">
+        <path d="M-15 10 L0 0 L15 10 L0 20 Z" fill="white" />
+        <rect x="-5" y="20" width="10" height="8" fill="white" />
+        <circle cx="0" cy="3" r="1" fill="#3b82f6" />
+      </g>
+      
+      {/* Simplified pencil */}
+      <g transform="translate(30, 50)">
+        <path d="M-10 5 L5 -5 L10 0 L-5 10 Z" fill="white" />
+        <path d="M-5 10 L10 0 L12 2 L-3 12 Z" fill="#3b82f6" />
+      </g>
+      
+      {/* Simplified notebook */}
+      <g transform="translate(60, 50)">
+        <rect x="-10" y="-15" width="20" height="25" rx="1" fill="white" />
+        <line x1="-8" y1="-10" x2="8" y2="-10" stroke="#3b82f6" strokeWidth="0.5" />
+        <line x1="-8" y1="-5" x2="8" y2="-5" stroke="#3b82f6" strokeWidth="0.5" />
+        <line x1="-8" y1="0" x2="8" y2="0" stroke="#3b82f6" strokeWidth="0.5" />
+        <circle cx="8" cy="-13" r="1" fill="#3b82f6" />
+      </g>
+    </svg>
+  );
   const { t, i18n } = useTranslation();
   const [activeTab, setActiveTab] = useState('home');
   const [selectedClass, setSelectedClass] = useState('Class 10-A');
@@ -27,7 +263,7 @@ const TeacherDashboard = ({ onLogout }) => {
       { name: 'Class 8-E', subject: 'Art', color: 'cyan' },
       { name: 'Class 7-F', subject: 'Music', color: 'amber' }
     ],
-    school: 'Greenwood High School'
+    school: 'Saboo Siddik Degree'
   });
   
 
@@ -39,7 +275,7 @@ const TeacherDashboard = ({ onLogout }) => {
     name: 'Dr. James Wilson',
     email: 'james.wilson@school.edu',
     subject: 'Mathematics',
-    school: 'Greenwood High School'
+    school: 'Saboo Siddik Degree'
   });
   
   // State for managing attendance data
@@ -624,17 +860,20 @@ const TeacherDashboard = ({ onLogout }) => {
         </div>
 
         {/* Dashboard Content */}
-        <div className="p-6 flex-grow overflow-y-auto overscroll-contain min-h-[500px]">
+        <div className="p-6 flex-grow min-h-[500px]">
           {/* Home Tab */}
           {activeTab === 'home' && (
             <div>
               {/* Welcome Banner - Matching student dashboard style */}
-              <div className="bg-gradient-to-r from-blue-600 via-indigo-500 to-indigo-600 rounded-md p-4 mb-2 shadow-sm backdrop-blur-sm border border-white/20 relative overflow-hidden drop-shadow-sm">
-                {/* Geometric background elements */}
+              <div className="bg-gradient-to-r from-blue-600 via-indigo-500 to-indigo-600 rounded-md p-4 mb-1 shadow-sm backdrop-blur-sm border border-white/20 relative overflow-hidden drop-shadow-sm">
+                {/* Educational background elements */}
+                <EnhancedEducationIllustration />
                 <div className="absolute -top-5 -right-5 w-20 h-20 bg-white/10 rounded-full"></div>
                 <div className="absolute -bottom-5 -left-5 w-16 h-16 bg-white/10 rounded-full"></div>
                 <div className="absolute top-3 right-3 w-6 h-6 bg-white/10 rotate-45"></div>
                 <div className="absolute bottom-3 left-3 w-5 h-5 bg-white/20 rounded-full"></div>
+                <div className="absolute top-1/3 left-1/4 w-8 h-8 bg-white/5 rounded-full"></div>
+                <div className="absolute bottom-1/3 right-1/3 w-6 h-6 bg-white/10 rotate-12"></div>
                 
                 <div className="relative z-10 flex items-center gap-2.5">
                   <div className="relative">
@@ -662,7 +901,8 @@ const TeacherDashboard = ({ onLogout }) => {
               {/* Summary Stats */}
               <div className="flex gap-2 mb-3">
                 <div className="flex-grow bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg p-3 shadow-sm border border-white/30 backdrop-blur-sm text-white relative overflow-hidden">
-                  {/* Geometric design elements */}
+                  {/* Educational design elements */}
+                  <EducationCardIllustration />
                   <div className="absolute -top-4 -right-4 w-16 h-16 bg-white/10 rounded-full"></div>
                   <div className="absolute -bottom-4 -left-4 w-14 h-14 bg-white/10 rounded-full"></div>
                   <div className="absolute top-2 right-2 w-6 h-6 bg-white/10 rotate-45"></div>
@@ -677,7 +917,8 @@ const TeacherDashboard = ({ onLogout }) => {
                 </div>
                 
                 <div className="flex-grow bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg p-3 shadow-sm border border-white/30 backdrop-blur-sm text-white relative overflow-hidden">
-                  {/* Geometric design elements */}
+                  {/* Educational design elements */}
+                  <EducationCardIllustration />
                   <div className="absolute -top-4 -right-4 w-16 h-16 bg-white/10 rounded-full"></div>
                   <div className="absolute -bottom-4 -left-4 w-14 h-14 bg-white/10 rounded-full"></div>
                   <div className="absolute top-2 right-2 w-6 h-6 bg-white/10 rotate-45"></div>
@@ -692,7 +933,8 @@ const TeacherDashboard = ({ onLogout }) => {
                 </div>
                 
                 <div className="flex-grow bg-gradient-to-br from-purple-500 to-indigo-600 rounded-lg p-3 shadow-sm border border-white/30 backdrop-blur-sm text-white relative overflow-hidden">
-                  {/* Geometric design elements */}
+                  {/* Educational design elements */}
+                  <EducationCardIllustration />
                   <div className="absolute -top-4 -right-4 w-16 h-16 bg-white/10 rounded-full"></div>
                   <div className="absolute -bottom-4 -left-4 w-14 h-14 bg-white/10 rounded-full"></div>
                   <div className="absolute top-2 right-2 w-6 h-6 bg-white/10 rotate-45"></div>
@@ -707,7 +949,8 @@ const TeacherDashboard = ({ onLogout }) => {
                 </div>
                 
                 <div className="flex-grow bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg p-3 shadow-sm border border-white/30 backdrop-blur-sm text-white relative overflow-hidden">
-                  {/* Geometric design elements */}
+                  {/* Educational design elements */}
+                  <EducationCardIllustration />
                   <div className="absolute -top-4 -right-4 w-16 h-16 bg-white/10 rounded-full"></div>
                   <div className="absolute -bottom-4 -left-4 w-14 h-14 bg-white/10 rounded-full"></div>
                   <div className="absolute top-2 right-2 w-6 h-6 bg-white/10 rotate-45"></div>
@@ -807,10 +1050,13 @@ const TeacherDashboard = ({ onLogout }) => {
           {activeTab === 'classes' && (
             <div>
               {/* Welcome Banner */}
-              <div className="bg-gradient-to-r from-blue-600 via-indigo-500 to-indigo-600 rounded-md p-4 mb-5 shadow-sm backdrop-blur-sm border border-white/20 relative overflow-hidden">
+              <div className="bg-gradient-to-r from-blue-600 via-indigo-500 to-indigo-600 rounded-md p-4 mb-4 shadow-sm backdrop-blur-sm border border-white/20 relative overflow-hidden">
+                <EnhancedEducationIllustration />
                 <div className="absolute -top-5 -right-5 w-20 h-20 bg-white/10 rounded-full"></div>
                 <div className="absolute -bottom-5 -left-5 w-16 h-16 bg-white/10 rounded-full"></div>
                 <div className="absolute top-4 right-4 w-7 h-7 bg-white/10 rotate-45"></div>
+                <div className="absolute top-1/4 left-1/3 w-6 h-6 bg-white/5 rounded-full"></div>
+                <div className="absolute bottom-1/4 right-1/4 w-8 h-8 bg-white/10 rotate-6"></div>
                 
                 <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-3">
                   <div>
@@ -883,10 +1129,13 @@ const TeacherDashboard = ({ onLogout }) => {
           {activeTab === 'attendance' && (
             <div>
               {/* Welcome Banner */}
-              <div className="bg-gradient-to-r from-blue-600 via-indigo-500 to-indigo-600 rounded-md p-4 mb-5 shadow-sm backdrop-blur-sm border border-white/20 relative overflow-hidden">
+              <div className="bg-gradient-to-r from-blue-600 via-indigo-500 to-indigo-600 rounded-md p-4 mb-4 shadow-sm backdrop-blur-sm border border-white/20 relative overflow-hidden">
+                <EnhancedEducationIllustration />
                 <div className="absolute -top-5 -right-5 w-20 h-20 bg-white/10 rounded-full"></div>
                 <div className="absolute -bottom-5 -left-5 w-16 h-16 bg-white/10 rounded-full"></div>
                 <div className="absolute top-4 right-4 w-7 h-7 bg-white/10 rotate-45"></div>
+                <div className="absolute top-1/3 left-1/4 w-7 h-7 bg-white/5 rounded-full"></div>
+                <div className="absolute bottom-1/3 right-1/3 w-6 h-6 bg-white/10 rotate-12"></div>
                 
                 <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-3">
                   <div>
@@ -1030,7 +1279,8 @@ const TeacherDashboard = ({ onLogout }) => {
           {activeTab === 'assignments' && (
             <div>
               {/* Welcome Banner */}
-              <div className="bg-gradient-to-r from-blue-600 via-indigo-500 to-indigo-600 rounded-md p-4 mb-5 shadow-sm backdrop-blur-sm border border-white/20 relative overflow-hidden">
+              <div className="bg-gradient-to-r from-blue-600 via-indigo-500 to-indigo-600 rounded-md p-4 mb-4 shadow-sm backdrop-blur-sm border border-white/20 relative overflow-hidden">
+                <EducationIllustration />
                 <div className="absolute -top-5 -right-5 w-20 h-20 bg-white/10 rounded-full"></div>
                 <div className="absolute -bottom-5 -left-5 w-16 h-16 bg-white/10 rounded-full"></div>
                 <div className="absolute top-4 right-4 w-7 h-7 bg-white/10 rotate-45"></div>
@@ -1081,7 +1331,7 @@ const TeacherDashboard = ({ onLogout }) => {
               {/* Assignments List */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
                 {filteredAssignments.map((assignment) => (
-                  <div key={assignment.id} className="bg-white rounded-md p-3 shadow-sm border border-gray-200">
+                  <div key={assignment.id} className="bg-blue-50 rounded-md p-3 shadow-sm border border-blue-100">
                     <div className="flex justify-between items-start mb-2">
                       <h3 className="font-bold text-gray-900 text-sm">{assignment.title}</h3>
                       <span className="text-[10px] bg-blue-100 text-blue-800 px-1.5 py-0.5 rounded-full">
@@ -1112,7 +1362,7 @@ const TeacherDashboard = ({ onLogout }) => {
               </div>
 
               {/* Assignment Submission Tracking */}
-              <div className="bg-white rounded-md p-2.5 shadow-sm">
+              <div className="bg-blue-50 rounded-md p-2.5 shadow-sm border border-blue-100">
                 <h3 className="font-bold text-gray-900 text-sm mb-3">Track Student Submissions</h3>
                 <div className="overflow-hidden rounded-sm border border-gray-200">
                   <table className="w-full text-[9px]">
@@ -1190,10 +1440,13 @@ const TeacherDashboard = ({ onLogout }) => {
           {activeTab === 'reports' && (
             <div className="pt-2">
               {/* Welcome Banner */}
-              <div className="bg-gradient-to-r from-blue-600 via-indigo-500 to-indigo-600 rounded-md p-4 mb-5 shadow-sm backdrop-blur-sm border border-white/20 relative overflow-hidden">
+              <div className="bg-gradient-to-r from-blue-600 via-indigo-500 to-indigo-600 rounded-md p-4 mb-4 shadow-sm backdrop-blur-sm border border-white/20 relative overflow-hidden">
+                <EnhancedEducationIllustration />
                 <div className="absolute -top-5 -right-5 w-20 h-20 bg-white/10 rounded-full"></div>
                 <div className="absolute -bottom-5 -left-5 w-16 h-16 bg-white/10 rounded-full"></div>
                 <div className="absolute top-4 right-4 w-7 h-7 bg-white/10 rotate-45"></div>
+                <div className="absolute top-1/4 left-1/3 w-6 h-6 bg-white/5 rounded-full"></div>
+                <div className="absolute bottom-1/4 right-1/4 w-8 h-8 bg-white/10 rotate-6"></div>
                 
                 <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-3">
                   <div>
@@ -1423,10 +1676,13 @@ const TeacherDashboard = ({ onLogout }) => {
           {activeTab === 'alerts' && (
             <div style={{padding: '16px'}}>
               {/* Welcome Banner */}
-              <div className="bg-gradient-to-r from-blue-600 via-indigo-500 to-indigo-600 rounded-md p-4 mb-5 shadow-sm backdrop-blur-sm border border-white/20 relative overflow-hidden">
+              <div className="bg-gradient-to-r from-blue-600 via-indigo-500 to-indigo-600 rounded-md p-4 mb-2 shadow-sm backdrop-blur-sm border border-white/20 relative overflow-hidden">
+                <EnhancedEducationIllustration />
                 <div className="absolute -top-5 -right-5 w-20 h-20 bg-white/10 rounded-full"></div>
                 <div className="absolute -bottom-5 -left-5 w-16 h-16 bg-white/10 rounded-full"></div>
                 <div className="absolute top-4 right-4 w-7 h-7 bg-white/10 rotate-45"></div>
+                <div className="absolute top-1/3 left-1/4 w-7 h-7 bg-white/5 rounded-full"></div>
+                <div className="absolute bottom-1/3 right-1/3 w-6 h-6 bg-white/10 rotate-12"></div>
                 
                 <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-3">
                   <div>
@@ -1565,10 +1821,13 @@ const TeacherDashboard = ({ onLogout }) => {
           {activeTab === 'settings' && (
             <div>
               {/* Welcome Banner */}
-              <div className="bg-gradient-to-r from-blue-600 via-indigo-500 to-indigo-600 rounded-md p-4 mb-5 shadow-sm backdrop-blur-sm border border-white/20 relative overflow-hidden">
+              <div className="bg-gradient-to-r from-blue-600 via-indigo-500 to-indigo-600 rounded-md p-4 mb-4 shadow-sm backdrop-blur-sm border border-white/20 relative overflow-hidden">
+                <EnhancedEducationIllustration />
                 <div className="absolute -top-5 -right-5 w-20 h-20 bg-white/10 rounded-full"></div>
                 <div className="absolute -bottom-5 -left-5 w-16 h-16 bg-white/10 rounded-full"></div>
                 <div className="absolute top-4 right-4 w-7 h-7 bg-white/10 rotate-45"></div>
+                <div className="absolute top-1/3 left-1/4 w-7 h-7 bg-white/5 rounded-full"></div>
+                <div className="absolute bottom-1/3 right-1/3 w-6 h-6 bg-white/10 rotate-12"></div>
                 
                 <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-3">
                   <div>

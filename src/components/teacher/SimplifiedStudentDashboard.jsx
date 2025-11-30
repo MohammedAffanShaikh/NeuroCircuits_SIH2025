@@ -1735,7 +1735,7 @@ const SimplifiedStudentDashboard = ({ onLogout }) => {
             <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
               <div className="bg-white rounded-2xl p-5 max-w-4xl w-full max-h-[90vh] overflow-auto">
                 <div className="flex items-center justify-between mb-5">
-                  <h3 className="text-[15px] font-bold text-gray-900">{selectedClass.name} - Class Details</h3>
+                  <h3 className="text-[12px] font-bold text-gray-900">{selectedClass.name} - Class Details</h3>
                   <button 
                     onClick={() => setSelectedClass(null)}
                     className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors"
@@ -1752,9 +1752,9 @@ const SimplifiedStudentDashboard = ({ onLogout }) => {
                   
                   <div className="relative z-10 flex items-center gap-4">
                     <div className="flex-1">
-                      <h2 className="text-sm font-bold text-white mb-2">{selectedClass.name}</h2>
+                      <h2 className="text-xs font-bold text-white mb-2">{selectedClass.name}</h2>
                       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                        <div className="text-xs text-blue-100">
+                        <div className="text-[9px] text-blue-100">
                           <span className="font-medium">Teacher:</span> {selectedClass.teacher}
                         </div>
                         <div className="text-xs text-blue-100">
@@ -1773,7 +1773,7 @@ const SimplifiedStudentDashboard = ({ onLogout }) => {
                 
                 {/* Study Resources Section */}
                 <div className="mb-8">
-                  <h3 className="text-[13px] font-bold text-gray-900 mb-4 flex items-center gap-2">
+                  <h3 className="text-[10px] font-bold text-gray-900 mb-4 flex items-center gap-2">
                     <BookOpen className="w-4 h-4 text-indigo-600" />
                     Study Resources
                   </h3>
@@ -1786,11 +1786,11 @@ const SimplifiedStudentDashboard = ({ onLogout }) => {
                         <div className="flex items-start gap-2 mb-3">
                           <FileText className="w-5 h-5 text-indigo-600 mt-0.5" />
                           <div>
-                            <h4 className="font-bold text-gray-900 text-[11px]">Chapter 5 Notes</h4>
-                            <p className="text-gray-600 text-[10px]">PDF Document</p>
+                            <h4 className="font-bold text-gray-900 text-[8px]">Chapter 5 Notes</h4>
+                            <p className="text-gray-600 text-[7px]">PDF Document</p>
                           </div>
                         </div>
-                        <button className="w-full py-1.5 bg-gradient-to-r from-blue-500 to-indigo-600 text-white text-[10px] font-medium rounded-md hover:from-blue-600 hover:to-indigo-700 transition-all">
+                        <button className="w-full py-1.5 bg-gradient-to-r from-blue-500 to-indigo-600 text-white text-[7px] font-medium rounded-md hover:from-blue-600 hover:to-indigo-700 transition-all">
                           View/Download
                         </button>
                       </div>
@@ -1802,11 +1802,11 @@ const SimplifiedStudentDashboard = ({ onLogout }) => {
                         <div className="flex items-start gap-2 mb-3">
                           <Globe className="w-5 h-5 text-green-600 mt-0.5" />
                           <div>
-                            <h4 className="font-bold text-gray-900 text-[11px]">Interactive Learning</h4>
-                            <p className="text-gray-600 text-[10px]">Online Resource</p>
+                            <h4 className="font-bold text-gray-900 text-[8px]">Interactive Learning</h4>
+                            <p className="text-gray-600 text-[7px]">Online Resource</p>
                           </div>
                         </div>
-                        <button className="w-full py-1.5 bg-gradient-to-r from-green-500 to-emerald-600 text-white text-[10px] font-medium rounded-md hover:from-green-600 hover:to-emerald-700 transition-all">
+                        <button className="w-full py-1.5 bg-gradient-to-r from-green-500 to-emerald-600 text-white text-[7px] font-medium rounded-md hover:from-green-600 hover:to-emerald-700 transition-all">
                           View/Download
                         </button>
                       </div>
@@ -1818,11 +1818,11 @@ const SimplifiedStudentDashboard = ({ onLogout }) => {
                         <div className="flex items-start gap-2 mb-3">
                           <Palette className="w-5 h-5 text-purple-600 mt-0.5" />
                           <div>
-                            <h4 className="font-bold text-gray-900 text-[11px]">Presentation Slides</h4>
-                            <p className="text-gray-600 text-[10px]">PPT Document</p>
+                            <h4 className="font-bold text-gray-900 text-[8px]">Presentation Slides</h4>
+                            <p className="text-gray-600 text-[7px]">PPT Document</p>
                           </div>
                         </div>
-                        <button className="w-full py-1.5 bg-gradient-to-r from-purple-500 to-violet-600 text-white text-[10px] font-medium rounded-md hover:from-purple-600 hover:to-violet-700 transition-all">
+                        <button className="w-full py-1.5 bg-gradient-to-r from-purple-500 to-violet-600 text-white text-[7px] font-medium rounded-md hover:from-purple-600 hover:to-violet-700 transition-all">
                           View/Download
                         </button>
                       </div>

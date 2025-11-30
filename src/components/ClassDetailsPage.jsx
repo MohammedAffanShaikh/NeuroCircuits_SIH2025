@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ArrowLeft, BookOpen, User, FileText, Play, MousePointerClick, Image, Volume2, Presentation, HelpCircle, ExternalLink, Calendar, Clock } from 'lucide-react';
+import UltraModernHeader from './UltraModernHeader';
 
 const ClassDetailsPage = () => {
   const navigate = useNavigate();
@@ -125,6 +126,17 @@ const ClassDetailsPage = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 p-0 md:p-4">
       <div className="max-w-full mx-auto h-screen flex flex-col">
+        {/* Ultra Modern Header */}
+        <div className="flex-shrink-0">
+          <UltraModernHeader 
+            dashboardTitle={`${classData.subject} - ${classData.name}`}
+            userType="Class Details"
+            userName={classData.teacher}
+            userRole={`${classData.subject} Teacher`}
+            onLogout={() => navigate('/')}
+          />
+        </div>
+        
         {/* Back Button - Hidden in full screen mode, visible in popup */}
         <button 
           onClick={() => window.close()}
@@ -169,8 +181,8 @@ const ClassDetailsPage = () => {
           <div className="lg:col-span-2 space-y-6">
             {/* Class Overview */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-              <h2 className="text-xl font-bold text-gray-900 mb-4">Class Overview</h2>
-              <p className="text-gray-600 mb-6">
+              <h2 className="text-lg font-bold text-gray-900 mb-4">Class Overview</h2>
+              <p className="text-sm text-gray-600 mb-6">
                 Welcome to {classData.subject}! This course covers fundamental concepts and practical applications 
                 in the field. Throughout this semester, you'll explore key topics, engage in hands-on activities, 
                 and develop critical thinking skills essential for your academic journey.
@@ -205,8 +217,8 @@ const ClassDetailsPage = () => {
 
             {/* Study Resources */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-              <h2 className="text-xl font-bold text-gray-900 mb-4">Study Resources</h2>
-              <p className="text-gray-600 mb-4">Access materials, videos, and interactive content for this subject.</p>
+              <h2 className="text-lg font-bold text-gray-900 mb-4">Study Resources</h2>
+              <p className="text-sm text-gray-600 mb-4">Access materials, videos, and interactive content for this subject.</p>
               
               <div className="space-y-4">
                 {classData.resources.map((resource, index) => (
@@ -246,7 +258,7 @@ const ClassDetailsPage = () => {
           <div className="space-y-6">
             {/* Class Schedule */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-              <h2 className="text-lg font-bold text-gray-900 mb-4">Class Schedule</h2>
+              <h2 className="text-md font-bold text-gray-900 mb-4">Class Schedule</h2>
               <div className="space-y-4">
                 {classSchedule.map((schedule, index) => (
                   <div key={index} className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
@@ -264,7 +276,7 @@ const ClassDetailsPage = () => {
 
             {/* Upcoming Assignments */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-              <h2 className="text-lg font-bold text-gray-900 mb-4">Upcoming Assignments</h2>
+              <h2 className="text-md font-bold text-gray-900 mb-4">Upcoming Assignments</h2>
               <div className="space-y-3">
                 {upcomingAssignments.map((assignment, index) => (
                   <div key={index} className="p-3 border border-gray-200 rounded-lg">
