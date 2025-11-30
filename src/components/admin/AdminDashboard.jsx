@@ -2796,76 +2796,76 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
       {showAddClassModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-md w-full max-w-md max-h-80 overflow-y-auto">
-            <div className="p-4 border-b border-gray-100">
+            <div className="p-3 border-b border-gray-100">
               <div className="flex items-center justify-between">
-                <h3 className="text-sm font-bold text-gray-900">Add New Class</h3>
+                <h3 className="text-xs font-bold text-gray-900">Add New Class</h3>
                 <button 
                   onClick={closeAddClassModal}
-                  className="p-1.5 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-md transition-all"
+                  className="p-1 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-md transition-all"
                 >
-                  <X className="w-4 h-4" />
+                  <X className="w-3 h-3" />
                 </button>
               </div>
             </div>
             
-            <div className="p-4">
-              <div className="space-y-3">
+            <div className="p-3">
+              <div className="space-y-2">
                 <div>
-                  <label className="block text-[10px] font-medium text-gray-700 mb-1.5">Class Name</label>
+                  <label className="block text-[9px] font-medium text-gray-700 mb-1">Class Name</label>
                   <input 
                     type="text" 
                     name="name"
                     value={newClassData.name}
                     onChange={handleNewClassChange}
-                    className="w-full px-3 py-1.5 bg-gray-50 border border-gray-200 rounded-md text-[10px] focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-2 py-1 bg-gray-50 border border-gray-200 rounded-md text-[9px] focus:outline-none focus:ring-1 focus:ring-blue-500"
                     placeholder="Enter class name (e.g., Grade 10-A)"
                   />
                 </div>
                 <div>
-                  <label className="block text-[10px] font-medium text-gray-700 mb-1.5">Subject</label>
+                  <label className="block text-[9px] font-medium text-gray-700 mb-1">Subject</label>
                   <input 
                     type="text" 
                     name="subject"
                     value={newClassData.subject}
                     onChange={handleNewClassChange}
-                    className="w-full px-3 py-1.5 bg-gray-50 border border-gray-200 rounded-md text-[10px] focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-2 py-1 bg-gray-50 border border-gray-200 rounded-md text-[9px] focus:outline-none focus:ring-1 focus:ring-blue-500"
                     placeholder="Enter subject name"
                   />
                 </div>
                 <div>
-                  <label className="block text-[10px] font-medium text-gray-700 mb-1.5">Teacher</label>
+                  <label className="block text-[9px] font-medium text-gray-700 mb-1">Teacher</label>
                   <input 
                     type="text" 
                     name="teacher"
                     value={newClassData.teacher}
                     onChange={handleNewClassChange}
-                    className="w-full px-3 py-1.5 bg-gray-50 border border-gray-200 rounded-md text-[10px] focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-2 py-1 bg-gray-50 border border-gray-200 rounded-md text-[9px] focus:outline-none focus:ring-1 focus:ring-blue-500"
                     placeholder="Enter teacher name"
                   />
                 </div>
                 <div>
-                  <label className="block text-[10px] font-medium text-gray-700 mb-1.5">Number of Students</label>
+                  <label className="block text-[9px] font-medium text-gray-700 mb-1">Number of Students</label>
                   <input 
                     type="number" 
                     name="students"
                     value={newClassData.students}
                     onChange={handleNewClassChange}
-                    className="w-full px-3 py-1.5 bg-gray-50 border border-gray-200 rounded-md text-[10px] focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-2 py-1 bg-gray-50 border border-gray-200 rounded-md text-[9px] focus:outline-none focus:ring-1 focus:ring-blue-500"
                     placeholder="Enter number of students"
                   />
                 </div>
               </div>
               
-              <div className="flex gap-2 mt-4">
+              <div className="flex gap-2 mt-3">
                 <button 
                   onClick={closeAddClassModal}
-                  className="flex-1 px-3 py-1.5 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-all text-[10px]"
+                  className="flex-1 px-2 py-1 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-all text-[9px]"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={handleAddClass}
-                  className="flex-1 px-3 py-1.5 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-md hover:from-blue-600 hover:to-indigo-700 transition-all text-[10px] shadow-sm hover:shadow-md"
+                  className="flex-1 px-2 py-1 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-md hover:from-blue-600 hover:to-indigo-700 transition-all text-[9px] shadow-sm hover:shadow-md"
                 >
                   Add Class
                 </button>
