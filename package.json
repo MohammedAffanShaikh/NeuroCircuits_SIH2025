@@ -17,6 +17,7 @@
     "@tailwindcss/cli": "^4.1.17",
     "@tailwindcss/postcss": "^4.1.17",
     "chart.js": "^4.5.1",
+    "firebase": "^12.6.0",
     "framer-motion": "^12.23.24",
     "i18next": "^25.6.3",
     "lucide-react": "^0.554.0",

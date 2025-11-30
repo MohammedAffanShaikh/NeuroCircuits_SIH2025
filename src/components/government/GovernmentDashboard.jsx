@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Users, School, Utensils, TrendingUp, AlertTriangle, FileText, Settings, LogOut, Home, Search, Filter, Download, Plus, Eye, Edit, Trash2, Printer, BarChart, PieChart, LineChart, Calendar, Clock, Shield, MapPin, CheckCircle, XCircle, RefreshCw, Bell, Menu, X, Building, Activity, User, Book, Target, Award, Camera, Mail, Save, GraduationCap } from 'lucide-react';
+import { Users, School, Utensils, TrendingUp, AlertTriangle, FileText, Settings, LogOut, Home, Search, Filter, Download, Plus, Eye, Edit, Trash2, Printer, BarChart, PieChart, LineChart, Calendar, Clock, Shield, MapPin, CheckCircle, XCircle, RefreshCw, Bell, Menu, X, Building, Activity, User, Book, Target, Award, Camera, Mail, Save, GraduationCap, Minus, Monitor } from 'lucide-react';
 import { BarChart as RechartsBarChart, Bar, LineChart as RechartsLineChart, Line, PieChart as RechartsPieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { motion, AnimatePresence } from 'framer-motion';
 import UltraModernHeader from '../UltraModernHeader';
@@ -17,6 +17,23 @@ const GovernmentDashboard = ({ onLogout }) => {
     students: '',
     performance: 'B'
   });
+
+  // Sample alerts data
+  const alerts = [
+    { id: 1, type: 'safety', message: 'Unauthorized entry detected at Delhi Public School', time: '10 mins ago', severity: 'high', status: 'new' },
+    { id: 2, type: 'performance', message: 'St. Marys Convent School showing significant improvement', time: '25 mins ago', severity: 'positive', status: 'new' },
+    { id: 3, type: 'resource', message: 'Budget allocation for Kendriya Vidyalaya', time: '1 hour ago', severity: 'medium', status: 'acknowledged' },
+  ];
+
+  // Sample schools data - moved to the top to avoid reference error
+  const [schools, setSchools] = useState([
+    { id: 1, name: 'Delhi Public School', students: 1250, attendance: 94.2, performance: 'A', alerts: alerts.filter(a => a.message.includes('Delhi Public')).length },
+    { id: 2, name: 'St. Marys Convent School', students: 850, attendance: 96.8, performance: 'A+', alerts: alerts.filter(a => a.message.includes('St. Mary')).length },
+    { id: 3, name: 'Kendriya Vidyalaya', students: 920, attendance: 89.5, performance: 'B', alerts: alerts.filter(a => a.message.includes('Kendriya')).length },
+    { id: 4, name: 'DAV Public School', students: 1100, attendance: 91.7, performance: 'B+', alerts: 0 },
+    { id: 5, name: 'Saboo Siddik Degree', students: 1500, attendance: 88.5, performance: 'B', alerts: 0 },
+    { id: 6, name: 'Saboo Siddik Polytechnic', students: 1800, attendance: 90.2, performance: 'B+', alerts: 0 },
+  ]);
 
   // Sample data for the dashboard
   const [districtData, setDistrictData] = useState({
@@ -43,15 +60,15 @@ const GovernmentDashboard = ({ onLogout }) => {
   const [appliedSchool, setAppliedSchool] = useState('All Schools');
   const [appliedDuration, setAppliedDuration] = useState('weekly');
 
-  // Sample meal attendance data
-  const mealAttendanceData = [
-    { id: 1, schoolId: 1, schoolName: 'Delhi Public School', totalStudents: 1250, presentToday: 1150, date: '2023-06-15' },
-    { id: 2, schoolId: 2, schoolName: 'St. Marys Convent School', totalStudents: 850, presentToday: 780, date: '2023-06-15' },
-    { id: 3, schoolId: 3, schoolName: 'Kendriya Vidyalaya', totalStudents: 920, presentToday: 840, date: '2023-06-15' },
-    { id: 4, schoolId: 4, schoolName: 'DAV Public School', totalStudents: 1100, presentToday: 1010, date: '2023-06-15' },
-    { id: 5, schoolId: 5, schoolName: 'Saboo Siddik Degree', totalStudents: 1500, presentToday: 1380, date: '2023-06-15' },
-    { id: 6, schoolId: 6, schoolName: 'Saboo Siddik Polytechnic', totalStudents: 1800, presentToday: 1650, date: '2023-06-15' }
-  ];
+  // Sample meal attendance data - now derived from schools state
+  const mealAttendanceData = schools.map(school => ({
+    id: school.id,
+    schoolId: school.id,
+    schoolName: school.name,
+    totalStudents: school.students,
+    presentToday: Math.floor(school.students * school.attendance / 100),
+    date: '2023-06-15'
+  }));
 
   // Sample weekly and monthly meal data
   const weeklyMealData = [
@@ -200,23 +217,6 @@ const GovernmentDashboard = ({ onLogout }) => {
     { month: 'Jun', attendance: 92.3, schools: 41 },
   ];
 
-  // Sample alerts data
-  const alerts = [
-    { id: 1, type: 'safety', message: 'Unauthorized entry detected at Delhi Public School', time: '10 mins ago', severity: 'high', status: 'new' },
-    { id: 2, type: 'performance', message: 'St. Marys Convent School showing significant improvement', time: '25 mins ago', severity: 'positive', status: 'new' },
-    { id: 3, type: 'resource', message: 'Budget allocation for Kendriya Vidyalaya', time: '1 hour ago', severity: 'medium', status: 'acknowledged' },
-  ];
-
-  // Sample schools data
-  const [schools, setSchools] = useState([
-    { id: 1, name: 'Delhi Public School', students: 1250, attendance: 94.2, performance: 'A', alerts: alerts.filter(a => a.message.includes('Delhi Public')).length },
-    { id: 2, name: 'St. Marys Convent School', students: 850, attendance: 96.8, performance: 'A+', alerts: alerts.filter(a => a.message.includes('St. Mary')).length },
-    { id: 3, name: 'Kendriya Vidyalaya', students: 920, attendance: 89.5, performance: 'B', alerts: alerts.filter(a => a.message.includes('Kendriya')).length },
-    { id: 4, name: 'DAV Public School', students: 1100, attendance: 91.7, performance: 'B+', alerts: 0 },
-    { id: 5, name: 'Saboo Siddik Degree', students: 1500, attendance: 88.5, performance: 'B', alerts: 0 },
-    { id: 6, name: 'Saboo Siddik Polytechnic', students: 1800, attendance: 90.2, performance: 'B+', alerts: 0 },
-  ]);
-
   const getSeverityColor = (severity) => {
     switch (severity) {
       case 'critical': return 'bg-red-50 border-red-200 text-red-800';
@@ -240,8 +240,9 @@ const GovernmentDashboard = ({ onLogout }) => {
   // Function to add a new school
   const addNewSchool = () => {
     if (newSchool.name && newSchool.students) {
+      const schoolId = schools.length + 1;
       const schoolObj = {
-        id: schools.length + 1,
+        id: schoolId,
         name: newSchool.name,
         students: parseInt(newSchool.students),
         attendance: 90, // Default attendance
@@ -420,6 +421,7 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
     { label: 'Daily Meals', value: districtData.totalMeals.toLocaleString(), icon: Utensils, color: 'from-indigo-400 to-indigo-500', change: '+150' },
     { label: 'Attendance Rate', value: `${districtData.attendanceRate}%`, icon: TrendingUp, color: 'from-indigo-500 to-purple-600', change: '+0.8%' },
   ];
+
 
   return (
     <div className="flex min-h-screen h-screen overflow-hidden bg-gradient-to-br from-blue-50 to-indigo-50">
