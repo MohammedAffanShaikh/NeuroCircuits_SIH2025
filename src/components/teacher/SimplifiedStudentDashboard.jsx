@@ -338,19 +338,19 @@ const SimplifiedStudentDashboard = ({ onLogout }) => {
                               </div>
                             </td>
                             <td className="px-3 py-2.5 whitespace-nowrap">
-                              <span className={`px-2 py-1 text-[9px] font-semibold rounded-full inline-flex items-center ${assignment.priority === 'high' ? 'bg-red-100 text-red-800 border border-red-200' : assignment.priority === 'medium' ? 'bg-amber-100 text-amber-800 border border-amber-200' : 'bg-green-100 text-green-800 border border-green-200'}`}>
-                                <div className={`w-1.5 h-1.5 rounded-full mr-1.5 ${assignment.priority === 'high' ? 'bg-red-500' : assignment.priority === 'medium' ? 'bg-amber-500' : 'bg-green-500'}`}></div>
+                              <span className={`px-1.5 py-0.5 text-[8px] font-semibold rounded-full inline-flex items-center ${assignment.priority === 'high' ? 'bg-red-100 text-red-800 border border-red-200' : assignment.priority === 'medium' ? 'bg-amber-100 text-amber-800 border border-amber-200' : 'bg-green-100 text-green-800 border border-green-200'}`}>
+                                <div className={`w-1 h-1 rounded-full mr-1 ${assignment.priority === 'high' ? 'bg-red-500' : assignment.priority === 'medium' ? 'bg-amber-500' : 'bg-green-500'}`}></div>
                                 {assignment.priority.charAt(0).toUpperCase() + assignment.priority.slice(1)}
                               </span>
                             </td>
                             <td className="px-3 py-2.5 whitespace-nowrap">
-                              <span className={`px-2 py-1 text-[9px] font-semibold rounded-full inline-flex items-center ${assignment.status === 'submitted' ? 'bg-indigo-100 text-indigo-800 border border-indigo-200' : assignment.status === 'graded' ? 'bg-blue-100 text-blue-800 border border-blue-200' : 'bg-amber-100 text-amber-800 border border-amber-200'}`}>
+                              <span className={`px-1.5 py-0.5 text-[8px] font-semibold rounded-full inline-flex items-center ${assignment.status === 'submitted' ? 'bg-indigo-100 text-indigo-800 border border-indigo-200' : assignment.status === 'graded' ? 'bg-blue-100 text-blue-800 border border-blue-200' : 'bg-amber-100 text-amber-800 border border-amber-200'}`}>
                                 {assignment.status === 'submitted' ? (
-                                  <CheckCircle className="w-3 h-3 mr-1.5" />
+                                  <CheckCircle className="w-2.5 h-2.5 mr-1" />
                                 ) : assignment.status === 'graded' ? (
-                                  <Award className="w-3 h-3 mr-1.5" />
+                                  <Award className="w-2.5 h-2.5 mr-1" />
                                 ) : (
-                                  <Clock className="w-3 h-3 mr-1.5" />
+                                  <Clock className="w-2.5 h-2.5 mr-1" />
                                 )}
                                 {assignment.status.charAt(0).toUpperCase() + assignment.status.slice(1)}
                               </span>
@@ -527,19 +527,19 @@ const SimplifiedStudentDashboard = ({ onLogout }) => {
                             </td>
                             <td className="px-3 py-2.5 whitespace-nowrap text-[10px] text-gray-800">{assignment.dueDisplay}</td>
                             <td className="px-3 py-2.5 whitespace-nowrap">
-                              <span className={`px-2 py-1 text-[9px] font-semibold rounded-full inline-flex items-center ${assignment.priority === 'high' ? 'bg-red-100 text-red-800 border border-red-200' : assignment.priority === 'medium' ? 'bg-amber-100 text-amber-800 border border-amber-200' : 'bg-green-100 text-green-800 border border-green-200'}`}>
-                                <div className={`w-1.5 h-1.5 rounded-full mr-1.5 ${assignment.priority === 'high' ? 'bg-red-500' : assignment.priority === 'medium' ? 'bg-amber-500' : 'bg-green-500'}`}></div>
+                              <span className={`px-1.5 py-0.5 text-[8px] font-semibold rounded-full inline-flex items-center ${assignment.priority === 'high' ? 'bg-red-100 text-red-800 border border-red-200' : assignment.priority === 'medium' ? 'bg-amber-100 text-amber-800 border border-amber-200' : 'bg-green-100 text-green-800 border border-green-200'}`}>
+                                <div className={`w-1 h-1 rounded-full mr-1 ${assignment.priority === 'high' ? 'bg-red-500' : assignment.priority === 'medium' ? 'bg-amber-500' : 'bg-green-500'}`}></div>
                                 {assignment.priority.charAt(0).toUpperCase() + assignment.priority.slice(1)}
                               </span>
                             </td>
                             <td className="px-3 py-2.5 whitespace-nowrap">
-                              <span className={`px-2 py-1 text-[9px] font-semibold rounded-full inline-flex items-center ${assignment.status === 'submitted' ? 'bg-indigo-100 text-indigo-800 border border-indigo-200' : assignment.status === 'graded' ? 'bg-blue-100 text-blue-800 border border-blue-200' : 'bg-amber-100 text-amber-800 border border-amber-200'}`}>
+                              <span className={`px-1.5 py-0.5 text-[8px] font-semibold rounded-full inline-flex items-center ${assignment.status === 'submitted' ? 'bg-indigo-100 text-indigo-800 border border-indigo-200' : assignment.status === 'graded' ? 'bg-blue-100 text-blue-800 border border-blue-200' : 'bg-amber-100 text-amber-800 border border-amber-200'}`}>
                                 {assignment.status === 'submitted' ? (
-                                  <CheckCircle className="w-3 h-3 mr-1.5" />
+                                  <CheckCircle className="w-2.5 h-2.5 mr-1" />
                                 ) : assignment.status === 'graded' ? (
-                                  <Award className="w-3 h-3 mr-1.5" />
+                                  <Award className="w-2.5 h-2.5 mr-1" />
                                 ) : (
-                                  <Clock className="w-3 h-3 mr-1.5" />
+                                  <Clock className="w-2.5 h-2.5 mr-1" />
                                 )}
                                 {assignment.status.charAt(0).toUpperCase() + assignment.status.slice(1)}
                               </span>
@@ -820,15 +820,15 @@ const SimplifiedStudentDashboard = ({ onLogout }) => {
                           <td className="px-3 py-2.5 whitespace-nowrap text-[10px] font-medium text-gray-900">{record.date}</td>
                           <td className="px-3 py-2.5 whitespace-nowrap text-[10px] text-gray-800">{record.day}</td>
                           <td className="px-3 py-2.5 whitespace-nowrap">
-                            <span className={`px-2 py-1 text-[9px] font-semibold rounded-full inline-flex items-center ${record.status === 'present' ? 'bg-green-100 text-green-800 border border-green-200' : record.status === 'late' ? 'bg-yellow-100 text-yellow-800 border border-yellow-200' : record.status === 'absent' ? 'bg-red-100 text-red-800 border border-red-200' : 'bg-gray-100 text-gray-800 border border-gray-200'}`}>
+                            <span className={`px-1.5 py-0.5 text-[8px] font-semibold rounded-full inline-flex items-center ${record.status === 'present' ? 'bg-green-100 text-green-800 border border-green-200' : record.status === 'late' ? 'bg-yellow-100 text-yellow-800 border border-yellow-200' : record.status === 'absent' ? 'bg-red-100 text-red-800 border border-red-200' : 'bg-gray-100 text-gray-800 border border-gray-200'}`}>
                               {record.status === 'present' ? (
-                                <CheckCircle className="w-3 h-3 mr-1.5 text-green-500" />
+                                <CheckCircle className="w-2.5 h-2.5 mr-1 text-green-500" />
                               ) : record.status === 'late' ? (
-                                <Clock className="w-3 h-3 mr-1.5 text-yellow-500" />
+                                <Clock className="w-2.5 h-2.5 mr-1 text-yellow-500" />
                               ) : record.status === 'absent' ? (
-                                <X className="w-3 h-3 mr-1.5 text-red-500" />
+                                <X className="w-2.5 h-2.5 mr-1 text-red-500" />
                               ) : (
-                                <Calendar className="w-3 h-3 mr-1.5 text-gray-500" />
+                                <Calendar className="w-2.5 h-2.5 mr-1 text-gray-500" />
                               )}
                               {record.status.charAt(0).toUpperCase() + record.status.slice(1)}
                             </span>
@@ -1856,7 +1856,7 @@ const SimplifiedStudentDashboard = ({ onLogout }) => {
             <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
               <div className="bg-white rounded-2xl p-5 max-w-4xl w-full max-h-[90vh] overflow-auto">
                 <div className="flex items-center justify-between mb-5">
-                  <h3 className="text-[9px] font-bold text-gray-900">{selectedClass.name} - Class Details</h3>
+                  <h3 className="text-[13px] font-bold text-gray-900">{selectedClass.name} - Class Details</h3>
                   <button 
                     onClick={() => setSelectedClass(null)}
                     className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors"
@@ -1873,18 +1873,18 @@ const SimplifiedStudentDashboard = ({ onLogout }) => {
                   
                   <div className="relative z-10 flex items-center gap-4">
                     <div className="flex-1">
-                      <h2 className="text-[7px] font-bold text-white mb-2">{selectedClass.name}</h2>
+                      <h2 className="text-[11px] font-bold text-white mb-2">{selectedClass.name}</h2>
                       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                        <div className="text-[6px] text-blue-100">
+                        <div className="text-[10px] text-blue-100">
                           <span className="font-medium">Teacher:</span> {selectedClass.teacher}
                         </div>
-                        <div className="text-xs text-blue-100">
+                        <div className="text-base text-blue-100">
                           <span className="font-medium">Period:</span> {selectedClass.period}
                         </div>
-                        <div className="text-xs text-blue-100">
+                        <div className="text-base text-blue-100">
                           <span className="font-medium">Period:</span> {selectedClass.period}
                         </div>
-                        <div className="text-[7px] text-blue-100">
+                        <div className="text-[11px] text-blue-100">
                           <span className="font-medium">Room:</span> {selectedClass.room}
                         </div>
                       </div>
@@ -1894,7 +1894,7 @@ const SimplifiedStudentDashboard = ({ onLogout }) => {
                 
                 {/* Study Resources Section */}
                 <div className="mb-8">
-                  <h3 className="text-[7px] font-bold text-gray-900 mb-4 flex items-center gap-2">
+                  <h3 className="text-[11px] font-bold text-gray-900 mb-4 flex items-center gap-2">
                     <BookOpen className="w-4 h-4 text-indigo-600" />
                     Study Resources
                   </h3>
@@ -1907,11 +1907,11 @@ const SimplifiedStudentDashboard = ({ onLogout }) => {
                         <div className="flex items-start gap-2 mb-3">
                           <FileText className="w-5 h-5 text-indigo-600 mt-0.5" />
                           <div>
-                            <h4 className="font-bold text-gray-900 text-[5px]">Chapter 5 Notes</h4>
-                            <p className="text-gray-600 text-[4px]">PDF Document</p>
+                            <h4 className="font-bold text-gray-900 text-[9px]">Chapter 5 Notes</h4>
+                            <p className="text-gray-600 text-[8px]">PDF Document</p>
                           </div>
                         </div>
-                        <button className="w-full py-1.5 bg-gradient-to-r from-blue-500 to-indigo-600 text-white text-[4px] font-medium rounded-md hover:from-blue-600 hover:to-indigo-700 transition-all">
+                        <button className="w-full py-1.5 bg-gradient-to-r from-blue-500 to-indigo-600 text-white text-[8px] font-medium rounded-md hover:from-blue-600 hover:to-indigo-700 transition-all">
                           View/Download
                         </button>
                       </div>
@@ -1923,11 +1923,11 @@ const SimplifiedStudentDashboard = ({ onLogout }) => {
                         <div className="flex items-start gap-2 mb-3">
                           <Globe className="w-5 h-5 text-green-600 mt-0.5" />
                           <div>
-                            <h4 className="font-bold text-gray-900 text-[5px]">Interactive Learning</h4>
-                            <p className="text-gray-600 text-[4px]">Online Resource</p>
+                            <h4 className="font-bold text-gray-900 text-[9px]">Interactive Learning</h4>
+                            <p className="text-gray-600 text-[8px]">Online Resource</p>
                           </div>
                         </div>
-                        <button className="w-full py-1.5 bg-gradient-to-r from-green-500 to-emerald-600 text-white text-[4px] font-medium rounded-md hover:from-green-600 hover:to-emerald-700 transition-all">
+                        <button className="w-full py-1.5 bg-gradient-to-r from-green-500 to-emerald-600 text-white text-[8px] font-medium rounded-md hover:from-green-600 hover:to-emerald-700 transition-all">
                           View/Download
                         </button>
                       </div>
@@ -1939,11 +1939,11 @@ const SimplifiedStudentDashboard = ({ onLogout }) => {
                         <div className="flex items-start gap-2 mb-3">
                           <Palette className="w-5 h-5 text-purple-600 mt-0.5" />
                           <div>
-                            <h4 className="font-bold text-gray-900 text-[5px]">Presentation Slides</h4>
-                            <p className="text-gray-600 text-[4px]">PPT Document</p>
+                            <h4 className="font-bold text-gray-900 text-[9px]">Presentation Slides</h4>
+                            <p className="text-gray-600 text-[8px]">PPT Document</p>
                           </div>
                         </div>
-                        <button className="w-full py-1.5 bg-gradient-to-r from-purple-500 to-violet-600 text-white text-[4px] font-medium rounded-md hover:from-purple-600 hover:to-violet-700 transition-all">
+                        <button className="w-full py-1.5 bg-gradient-to-r from-purple-500 to-violet-600 text-white text-[8px] font-medium rounded-md hover:from-purple-600 hover:to-violet-700 transition-all">
                           View/Download
                         </button>
                       </div>

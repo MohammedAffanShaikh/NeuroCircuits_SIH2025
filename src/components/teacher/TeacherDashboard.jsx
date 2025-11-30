@@ -310,6 +310,8 @@ const TeacherDashboard = ({ onLogout }) => {
   const [editingMethod, setEditingMethod] = useState('');
   const [showStudentAttendanceModal, setShowStudentAttendanceModal] = useState(false);
   const [selectedStudent, setSelectedStudent] = useState(null);
+  const [showClassDetailsModal, setShowClassDetailsModal] = useState(false);
+  const [selectedClassDetails, setSelectedClassDetails] = useState(null);
   
   // Alerts data
   const [alerts] = useState([
@@ -365,6 +367,71 @@ const TeacherDashboard = ({ onLogout }) => {
     dueDate: "",
     description: ""
   });
+  
+  // State for notices
+  const [notices, setNotices] = useState([
+    { 
+      id: 1, 
+      title: "Annual Sports Day Event", 
+      content: "Annual sports day will be held on April 25th, 2024. All students are requested to participate...",
+      audience: "All Classes",
+      priority: "Important",
+      date: "2024-04-15",
+      time: "10:30 AM"
+    },
+    { 
+      id: 2, 
+      title: "Parent-Teacher Meeting", 
+      content: "Parent-teacher meeting scheduled for April 30th, 2024 from 3:00 PM to 5:00 PM in the school auditorium.",
+      audience: "Class 10-A",
+      priority: "Normal",
+      date: "2024-04-14",
+      time: "2:15 PM"
+    },
+    { 
+      id: 3, 
+      title: "Library Closure Notice", 
+      content: "The school library will be closed for maintenance from May 1st to May 3rd, 2024. We apologize for any inconvenience.",
+      audience: "All Students",
+      priority: "Urgent",
+      date: "2024-04-13",
+      time: "9:45 AM"
+    }
+  ]);
+  const [newNotice, setNewNotice] = useState({
+    title: "",
+    content: "",
+    audience: "All Classes",
+    priority: "Normal",
+    attachments: []
+  });
+  
+  // State for notice attachments
+  const [noticeAttachments, setNoticeAttachments] = useState([]);
+  
+  // State for class notes
+  const [classNotes, setClassNotes] = useState([]);
+  const [showAddNoteModal, setShowAddNoteModal] = useState(false);
+  const [newNote, setNewNote] = useState({
+    title: "",
+    content: "",
+    class: ""
+  });
+  
+  // State for file uploads
+  const [showFileUploadModal, setShowFileUploadModal] = useState(false);
+  const [uploadedFiles, setUploadedFiles] = useState([]);
+  const [fileUploads, setFileUploads] = useState([]);
+  
+  // Effect to update notice audience when selectedClassDetails changes
+  useEffect(() => {
+    if (selectedClassDetails && activeTab === 'notices') {
+      setNewNotice(prev => ({
+        ...prev,
+        audience: selectedClassDetails.name
+      }));
+    }
+  }, [selectedClassDetails, activeTab]);
   
   // State for assignment filtering
   const [showAssignmentFilter, setShowAssignmentFilter] = useState(false);
@@ -640,6 +707,225 @@ const TeacherDashboard = ({ onLogout }) => {
     setNewAssignment({ ...newAssignment, [name]: value });
   };
   
+  // Function to handle new notice form input changes
+  const handleNewNoticeChange = (e) => {
+    const { name, value } = e.target;
+    setNewNotice({ ...newNotice, [name]: value });
+  };
+  
+  // Function to add a new notice
+  const addNewNotice = () => {
+    if (newNotice.title && newNotice.content) {
+      const noticeObj = {
+        id: notices.length + 1,
+        title: newNotice.title,
+        content: newNotice.content,
+        audience: newNotice.audience,
+        priority: newNotice.priority,
+        date: new Date().toISOString().split('T')[0],
+        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        author: teacherData.name,
+        attachments: noticeAttachments.map(file => ({
+          name: file.name,
+          size: file.size,
+          type: file.type
+        }))
+      };
+      
+      setNotices([noticeObj, ...notices]);
+      setNewNotice({
+        title: "",
+        content: "",
+        audience: "All Classes",
+        priority: "Normal",
+        attachments: []
+      });
+      setNoticeAttachments([]);
+    }
+  };
+  
+  // Function to clear the new notice form
+  const clearNoticeForm = () => {
+    setNewNotice({
+      title: "",
+      content: "",
+      audience: "All Classes",
+      priority: "Normal"
+    });
+    setNoticeAttachments([]);
+  };
+  
+  // Function to handle notice attachment selection
+  const handleNoticeAttachment = (e) => {
+    const files = Array.from(e.target.files);
+    setNoticeAttachments(prev => [...prev, ...files]);
+  };
+  
+  // Function to remove a notice attachment
+  const removeNoticeAttachment = (index) => {
+    setNoticeAttachments(prev => prev.filter((_, i) => i !== index));
+  };
+  
+  // Function to add a new note
+  const addNewNote = () => {
+    if (newNote.title && newNote.content) {
+      const noteObj = {
+        id: classNotes.length + 1,
+        title: newNote.title,
+        content: newNote.content,
+        class: newNote.class,
+        date: new Date().toISOString().split('T')[0],
+        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      };
+      
+      setClassNotes([noteObj, ...classNotes]);
+      setNewNote({
+        title: "",
+        content: "",
+        class: ""
+      });
+      setShowAddNoteModal(false);
+    }
+  };
+  
+  // Function to handle new note form input changes
+  const handleNewNoteChange = (e) => {
+    const { name, value } = e.target;
+    setNewNote({ ...newNote, [name]: value });
+  };
+  
+  // Function to clear the new note form
+  const clearNoteForm = () => {
+    setNewNote({
+      title: "",
+      content: "",
+      class: ""
+    });
+  };
+  
+  // Function to get notes for a specific class
+  const getNotesForClass = (className) => {
+    return classNotes.filter(note => note.class === className);
+  };
+  
+  // Function to delete a note
+  const deleteNote = (noteId) => {
+    setClassNotes(classNotes.filter(note => note.id !== noteId));
+  };
+  
+  // Function to edit a note
+  const editNote = (noteId, updatedNote) => {
+    setClassNotes(classNotes.map(note => 
+      note.id === noteId ? { ...note, ...updatedNote } : note
+    ));
+  };
+  
+  // Function to handle file selection
+  const handleFileSelect = (e) => {
+    const files = Array.from(e.target.files);
+    const newFiles = files.map(file => ({
+      id: Date.now() + Math.random(),
+      file: file,
+      name: file.name,
+      size: file.size,
+      type: file.type,
+      class: selectedClassDetails?.name || newNote.class,
+      preview: file.type.startsWith('image/') ? URL.createObjectURL(file) : null
+    }));
+    
+    setFileUploads([...fileUploads, ...newFiles]);
+  };
+  
+  // Function to remove a file from upload list
+  const removeFile = (fileId) => {
+    setFileUploads(fileUploads.filter(file => file.id !== fileId));
+  };
+  
+  // Function to upload files
+  const uploadFiles = () => {
+    // In a real application, this would send the files to a server
+    // For now, we'll just add them to the uploaded files list
+    const newUploads = fileUploads.map(file => ({
+      ...file,
+      id: Date.now() + Math.random(),
+      uploadDate: new Date().toISOString().split('T')[0],
+      uploadTime: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+    }));
+    
+    setUploadedFiles([...uploadedFiles, ...newUploads]);
+    setFileUploads([]);
+    setShowFileUploadModal(false);
+    
+    // Show success message
+    alert(`${newUploads.length} file(s) uploaded successfully!`);
+  };
+  
+  // Initialize fileUploads with class information when opening the modal
+  useEffect(() => {
+    if (showFileUploadModal && selectedClassDetails) {
+      // Ensure all file uploads have the correct class information
+      setFileUploads(prevUploads => prevUploads.map(file => ({
+        ...file,
+        class: selectedClassDetails.name
+      })));
+    }
+  }, [showFileUploadModal, selectedClassDetails]);
+  
+  // Function to format file size
+  const formatFileSize = (bytes) => {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+  };
+  
+  // Function to get file icon based on file type
+  const getFileIcon = (fileType) => {
+    if (fileType.startsWith('image/')) {
+      return '🖼️';
+    } else if (fileType.includes('pdf')) {
+      return '📄';
+    } else if (fileType.includes('word')) {
+      return '📝';
+    } else if (fileType.includes('excel') || fileType.includes('spreadsheet')) {
+      return '📊';
+    } else if (fileType.includes('powerpoint') || fileType.includes('presentation')) {
+      return '📽️';
+    } else {
+      return '📁';
+    }
+  };
+  
+  // Function to get files for a specific class
+  const getFilesForClass = (className) => {
+    return uploadedFiles.filter(file => file.class === className);
+  };
+  
+  // Function to delete an uploaded file
+  const deleteUploadedFile = (fileId) => {
+    setUploadedFiles(uploadedFiles.filter(file => file.id !== fileId));
+  };
+  
+  // Function to get priority badge class
+  const getPriorityBadgeClass = (priority) => {
+    switch (priority) {
+      case 'Urgent':
+        return 'bg-red-100 text-red-800';
+      case 'Important':
+        return 'bg-blue-100 text-blue-800';
+      default:
+        return 'bg-green-100 text-green-800';
+    }
+  };
+  
+  // Function to get time ago
+  const getTimeAgo = (date, time) => {
+    // For simplicity, returning static values
+    // In a real application, you would calculate the actual time difference
+    return '2 hours ago';
+  };
+  
   // Function to handle assignment filter changes
   const handleAssignmentFilterChange = (e) => {
     const { name, value } = e.target;
@@ -747,15 +1033,31 @@ const TeacherDashboard = ({ onLogout }) => {
 
   // Function to get chart data based on selected time range
   const getChartData = () => {
+    // Get the total number of students in the class
+    const totalStudents = studentAttendanceData.length;
+    
+    // Get the raw data based on time range
+    let rawData;
     switch (chartTimeRange) {
       case 'Last 30 Days':
-        return monthlyAttendanceData;
+        rawData = monthlyAttendanceData;
+        break;
       case 'Last 90 Days':
-        return quarterlyAttendanceData;
+        rawData = quarterlyAttendanceData;
+        break;
       case 'Last 7 Days':
       default:
-        return weeklyAttendanceData;
+        rawData = weeklyAttendanceData;
+        break;
     }
+    
+    // Convert absolute numbers to percentages
+    return rawData.map(item => ({
+      ...item,
+      present: Math.round((item.present / totalStudents) * 100),
+      absent: Math.round((item.absent / totalStudents) * 100),
+      late: Math.round((item.late / totalStudents) * 100)
+    }));
   };
   
   const summaryStats = [
@@ -788,11 +1090,11 @@ const TeacherDashboard = ({ onLogout }) => {
             </div>
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-1">
-                <span className="text-xs font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent truncate block">
+                <span className="text-[11px] font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent truncate block">
                   {teacherData.name}
                 </span>
               </div>
-              <p className="text-xs text-gray-500 truncate">{teacherData.subject} Teacher</p>
+              <p className="text-[11px] text-gray-500 truncate">{teacherData.subject} Teacher</p>
             </div>
           </div>
         </div>
@@ -803,6 +1105,7 @@ const TeacherDashboard = ({ onLogout }) => {
             { id: 'classes', icon: BookOpen, label: 'Classes' },
             { id: 'attendance', icon: UserCheck, label: 'Attendance' },
             { id: 'assignments', icon: ClipboardList, label: 'Assignments' },
+            { id: 'notices', icon: MessageSquare, label: 'Post Notices', 'data-tab': 'notices' },
             { id: 'reports', icon: FileText, label: 'Reports' },
             { id: 'alerts', icon: Bell, label: 'Alerts' },
             { id: 'settings', icon: Settings, label: 'Settings' },
@@ -817,9 +1120,9 @@ const TeacherDashboard = ({ onLogout }) => {
               }`}
             >
               <tab.icon className="w-3.5 h-3.5" />
-              <span className="font-medium text-xs">{tab.label}</span>
+              <span className="font-medium text-[11px]">{tab.label}</span>
               {tab.id === 'alerts' && (
-                <span className="ml-auto bg-red-500 text-white text-xs font-bold rounded-full w-3.5 h-3.5 flex items-center justify-center">
+                <span className="ml-auto bg-red-500 text-white text-[11px] font-bold rounded-full w-3.5 h-3.5 flex items-center justify-center">
                   {alerts.filter(a => a.status === 'new').length}
                 </span>
               )}
@@ -833,14 +1136,14 @@ const TeacherDashboard = ({ onLogout }) => {
             className="w-full flex items-center gap-2 px-2.5 py-2 rounded-md text-gray-600 hover:bg-blue-50 hover:text-blue-600 transition-all"
           >
             <User className="w-3.5 h-3.5" />
-            <span className="font-medium text-xs">Change Avatar</span>
+            <span className="font-medium text-[11px]">Change Avatar</span>
           </button>
           <button 
             onClick={onLogout}
             className="w-full flex items-center gap-2 px-2.5 py-2 rounded-md text-gray-600 hover:bg-red-50 hover:text-red-600 transition-all"
           >
             <LogOut className="w-3.5 h-3.5" />
-            <span className="font-medium text-xs">Logout</span>
+            <span className="font-medium text-[11px]">Logout</span>
           </button>
         </div>
       </motion.div>
@@ -995,8 +1298,8 @@ const TeacherDashboard = ({ onLogout }) => {
                           axisLine={false} 
                           tickLine={false} 
                           tick={{ fill: '#666', fontSize: 8 }}
-                          domain={[0, 40]}
-                          ticks={[0, 5, 10, 15, 20, 25, 30, 35, 40]}
+                          domain={[0, 100]}
+                          ticks={[0, 20, 40, 60, 80, 100]}
                         />
                         <Tooltip 
                           contentStyle={{ 
@@ -1007,9 +1310,11 @@ const TeacherDashboard = ({ onLogout }) => {
                             fontSize: '8px',
                             color: '#333'
                           }}
+                          formatter={(value) => [`${value}%`, 'Percentage']}
                         />
                         <Legend 
                           wrapperStyle={{ fontSize: '8px' }}
+                          formatter={(value) => `${value} (%)`}
                         />
                         <Line 
                           type="monotone" 
@@ -1102,7 +1407,10 @@ const TeacherDashboard = ({ onLogout }) => {
                       subtitle={classObj.name}
                       teacher={teacherData.name}
                       theme={classObj.color}
-                      onClick={() => window.open(`/class/${index}`, '_blank', 'noopener,noreferrer')}
+                      onClick={() => {
+                        setSelectedClassDetails(classObj);
+                        setShowClassDetailsModal(true);
+                      }}
                       onMenuClick={() => console.log(`${classObj.name} menu clicked`)}
                     />
                   </div>
@@ -1116,7 +1424,10 @@ const TeacherDashboard = ({ onLogout }) => {
                       subtitle={classObj.name}
                       teacher={teacherData.name}
                       theme={classObj.color}
-                      onClick={() => window.open(`/class/${index + 3}`, '_blank', 'noopener,noreferrer')}
+                      onClick={() => {
+                        setSelectedClassDetails(classObj);
+                        setShowClassDetailsModal(true);
+                      }}
                       onMenuClick={() => console.log(`${classObj.name} menu clicked`)}
                     />
                   </div>
@@ -1576,8 +1887,8 @@ const TeacherDashboard = ({ onLogout }) => {
                           axisLine={false} 
                           tickLine={false} 
                           tick={{ fill: '#666', fontSize: 8 }}
-                          domain={[0, chartTimeRange === 'Last 7 Days' ? 40 : chartTimeRange === 'Last 30 Days' ? 180 : 700]}
-                          ticks={chartTimeRange === 'Last 7 Days' ? [0, 5, 10, 15, 20, 25, 30, 35, 40] : chartTimeRange === 'Last 30 Days' ? [0, 30, 60, 90, 120, 150, 180] : [0, 100, 200, 300, 400, 500, 600, 700]}
+                          domain={[0, 100]}
+                          ticks={[0, 20, 40, 60, 80, 100]}
                         />
                         <Tooltip 
                           contentStyle={{ 
@@ -1588,9 +1899,11 @@ const TeacherDashboard = ({ onLogout }) => {
                             fontSize: '8px',
                             color: '#333'
                           }}
+                          formatter={(value) => [`${value}%`, 'Percentage']}
                         />
                         <Legend 
                           wrapperStyle={{ fontSize: '8px' }}
+                          formatter={(value) => `${value} (%)`}
                         />
                         <Line 
                           type="monotone" 
@@ -1813,6 +2126,182 @@ const TeacherDashboard = ({ onLogout }) => {
                   </div>
                 </div>
                 
+              </div>
+            </div>
+          )}
+
+          {/* Post Notices Tab */}
+          {activeTab === 'notices' && (
+            <div>
+              {/* Welcome Banner */}
+              <div className="bg-gradient-to-r from-blue-600 via-indigo-500 to-indigo-600 rounded-md p-4 mb-4 shadow-sm backdrop-blur-sm border border-white/20 relative overflow-hidden">
+                <EnhancedEducationIllustration />
+                <div className="absolute -top-5 -right-5 w-20 h-20 bg-white/10 rounded-full"></div>
+                <div className="absolute -bottom-5 -left-5 w-16 h-16 bg-white/10 rounded-full"></div>
+                <div className="absolute top-4 right-4 w-7 h-7 bg-white/10 rotate-45"></div>
+                <div className="absolute top-1/3 left-1/4 w-7 h-7 bg-white/5 rounded-full"></div>
+                <div className="absolute bottom-1/3 right-1/3 w-6 h-6 bg-white/10 rotate-12"></div>
+                
+                <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-3">
+                  <div>
+                    <h2 className="text-[13px] font-bold text-white mb-1.5">Notice Management Dashboard</h2>
+                    <p className="text-[10px] text-blue-100 mb-2">Create and manage important notices for students and staff</p>
+                    <div className="flex flex-wrap gap-2 mt-2">
+                      <div className="flex items-center bg-white/10 rounded-full px-2.5 py-1">
+                        <div className="w-2 h-2 bg-green-400 rounded-full mr-1.5"></div>
+                        <span className="text-[10px] text-white font-medium">{teacherData.school}</span>
+                      </div>
+                      <div className="flex items-center bg-white/10 rounded-full px-2.5 py-1">
+                        <div className="w-2 h-2 bg-blue-400 rounded-full mr-1.5"></div>
+                        <span className="text-[10px] text-white font-medium">Notice Board</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="bg-white/20 rounded-md p-2">
+                      <MessageSquare className="w-5 h-5 text-white" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-[12px] font-bold text-gray-900">Post New Notice</h2>
+                <div className="flex gap-3">
+                  <button 
+                    className="flex items-center gap-1 px-3 py-1.5 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded hover:from-blue-600 hover:to-indigo-700 transition-all shadow-sm hover:shadow text-[10px] font-medium"
+                  >
+                    <Plus className="w-3 h-3" />
+                    Create Notice
+                  </button>
+                </div>
+              </div>
+              
+              {/* Notice Creation Form */}
+              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-6">
+                <h3 className="text-[10px] font-bold text-gray-900 mb-3">Compose Notice</h3>
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-[10px] font-medium text-gray-700 mb-1.5">Notice Title</label>
+                    <input 
+                      type="text" 
+                      name="title"
+                      value={newNotice.title}
+                      onChange={handleNewNoticeChange}
+                      className="w-full px-3 py-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-[10px]"
+                      placeholder="Enter notice title"
+                    />
+                  </div>
+                  
+                  <div>
+                    <label className="block text-[10px] font-medium text-gray-700 mb-1.5">Notice Content</label>
+                    <textarea 
+                      name="content"
+                      value={newNotice.content}
+                      onChange={handleNewNoticeChange}
+                      className="w-full px-3 py-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-[10px]"
+                      placeholder="Enter notice content"
+                      rows="4"
+                    />
+                  </div>
+                  
+                  <div>
+                    <label className="block text-[10px] font-medium text-gray-700 mb-1.5">Target Audience</label>
+                    <select 
+                      name="audience"
+                      value={newNotice.audience}
+                      onChange={handleNewNoticeChange}
+                      className="w-full px-3 py-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-[10px]"
+                    >
+                      <option value="All Classes">All Classes</option>
+                      {teacherData.classes.map((cls, index) => (
+                        <option key={index} value={cls.name}>{cls.name}</option>
+                      ))}
+                      <option value="Staff Only">Staff Only</option>
+                      <option value="Parents">Parents</option>
+                    </select>
+                  </div>
+                  
+                  <div>
+                    <label className="block text-[10px] font-medium text-gray-700 mb-1.5">Priority Level</label>
+                    <div className="flex gap-3">
+                      <label className="flex items-center">
+                        <input 
+                          type="radio" 
+                          name="priority" 
+                          value="Normal"
+                          checked={newNotice.priority === "Normal"}
+                          onChange={handleNewNoticeChange}
+                          className="h-3 w-3 text-blue-600" 
+                        />
+                        <span className="ml-1.5 text-[10px] text-gray-700">Normal</span>
+                      </label>
+                      <label className="flex items-center">
+                        <input 
+                          type="radio" 
+                          name="priority" 
+                          value="Important"
+                          checked={newNotice.priority === "Important"}
+                          onChange={handleNewNoticeChange}
+                          className="h-3 w-3 text-blue-600" 
+                        />
+                        <span className="ml-1.5 text-[10px] text-gray-700">Important</span>
+                      </label>
+                      <label className="flex items-center">
+                        <input 
+                          type="radio" 
+                          name="priority" 
+                          value="Urgent"
+                          checked={newNotice.priority === "Urgent"}
+                          onChange={handleNewNoticeChange}
+                          className="h-3 w-3 text-blue-600" 
+                        />
+                        <span className="ml-1.5 text-[10px] text-gray-700">Urgent</span>
+                      </label>
+                    </div>
+                  </div>
+                  
+                  <div className="flex gap-3 pt-2">
+                    <button 
+                      onClick={clearNoticeForm}
+                      className="px-3 py-1.5 border border-gray-300 text-gray-700 rounded hover:bg-gray-50 transition-all text-[10px]"
+                    >
+                      Clear
+                    </button>
+                    <button 
+                      onClick={addNewNotice}
+                      className="px-3 py-1.5 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded hover:from-blue-600 hover:to-indigo-700 transition-all shadow-sm hover:shadow text-[10px]"
+                    >
+                      Post Notice
+                    </button>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Recent Notices */}
+              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+                <div className="flex justify-between items-center mb-4">
+                  <h3 className="text-[10px] font-bold text-gray-900">Recent Notices</h3>
+                  <button className="text-blue-600 hover:text-blue-800 text-[10px] font-medium">View All</button>
+                </div>
+                
+                <div className="space-y-4">
+                  {notices.map((notice) => (
+                    <div key={notice.id} className="border border-gray-200 rounded-md p-3 hover:bg-blue-50 transition-colors">
+                      <div className="flex justify-between items-start mb-2">
+                        <h4 className="font-medium text-gray-900 text-[12px]">{notice.title}</h4>
+                        <span className={`text-[8px] ${getPriorityBadgeClass(notice.priority)} px-1.5 py-0.5 rounded-full`}>
+                          {notice.priority}
+                        </span>
+                      </div>
+                      <p className="text-gray-600 text-[10px] mb-2">{notice.content}</p>
+                      <div className="flex justify-between items-center text-[10px] text-gray-500">
+                        <span>Posted {getTimeAgo(notice.date, notice.time)}</span>
+                        <span>To: {notice.audience}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           )}
@@ -2270,7 +2759,6 @@ const TeacherDashboard = ({ onLogout }) => {
                     alt={`${person.name} Avatar`} 
                     className="w-16 h-16 rounded-full object-cover mx-auto"
                   />
-                  <p className="text-xs text-center mt-2 text-gray-600">{person.name}</p>
                 </div>
               ))}
             </div>
@@ -2759,6 +3247,315 @@ const TeacherDashboard = ({ onLogout }) => {
                 >
                   Apply Filters
                 </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      
+      {/* Class Details Modal */}
+      {showClassDetailsModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-0">
+          <div className="bg-white rounded-lg shadow-xl max-w-md w-full max-h-[80vh] overflow-y-auto">
+            <div className="p-2">
+              <div className="flex justify-between items-center mb-0">
+                <h3 className="text-[14px] font-bold text-gray-900">Class Details</h3>
+                <button 
+                  onClick={() => setShowClassDetailsModal(false)}
+                  className="text-gray-500 hover:text-gray-700"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+              
+              {selectedClassDetails && (
+                <div className="space-y-1">
+                  <div className="bg-gradient-to-r from-blue-500 to-indigo-600 rounded-lg p-1 text-white">
+                    <h4 className="text-[12px] font-bold">{selectedClassDetails.subject}</h4>
+                    <p className="text-[10px] text-blue-100">{selectedClassDetails.name}</p>
+                    <p className="text-[10px] mt-0.5">Teacher: {teacherData.name}</p>
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-1">
+                    <div className="bg-gray-50 p-1 rounded-lg">
+                      <p className="text-[10px] text-gray-500">Subject</p>
+                      <p className="text-[10px] font-medium">{selectedClassDetails.subject}</p>
+                    </div>
+                    <div className="bg-gray-50 p-1 rounded-lg">
+                      <p className="text-[10px] text-gray-500">Class Name</p>
+                      <p className="text-[10px] font-medium">{selectedClassDetails.name}</p>
+                    </div>
+                  </div>
+                  
+                  <div className="bg-gray-50 p-1 rounded-lg">
+                    <p className="text-[10px] text-gray-500">Students</p>
+                    <p className="text-[10px] font-medium">{studentAttendanceData.filter(s => s.class === selectedClassDetails.name.replace('Class ', '')).length} enrolled</p>
+                  </div>
+                  
+                  {/* Class Notes Section */}
+                  <div className="bg-gray-50 p-1 rounded-lg">
+                    <div className="flex justify-between items-center mb-0.5">
+                      <p className="text-[10px] text-gray-500">Class Notes</p>
+                      <span className="text-[8px] bg-green-100 text-green-800 px-1 py-0.5 rounded-full">
+                        {getNotesForClass(selectedClassDetails.name).length} notes
+                      </span>
+                    </div>
+                    {getNotesForClass(selectedClassDetails.name).length > 0 ? (
+                      <div className="max-h-20 overflow-y-auto">
+                        {getNotesForClass(selectedClassDetails.name).slice(0, 3).map(note => (
+                          <div key={note.id} className="mb-0.5 last:mb-0 text-[8px]">
+                            <p className="font-medium truncate">{note.title}</p>
+                            <p className="text-gray-600 truncate">{note.content}</p>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <p className="text-[8px] text-gray-600">No notes yet</p>
+                    )}
+                  </div>
+                  
+                  {/* Class Files Section */}
+                  <div className="bg-gray-50 p-1 rounded-lg">
+                    <div className="flex justify-between items-center mb-0.5">
+                      <p className="text-[10px] text-gray-500">Class Files</p>
+                      <span className="text-[8px] bg-purple-100 text-purple-800 px-1 py-0.5 rounded-full">
+                        {getFilesForClass(selectedClassDetails.name).length} files
+                      </span>
+                    </div>
+                    {getFilesForClass(selectedClassDetails.name).length > 0 ? (
+                      <div className="max-h-20 overflow-y-auto">
+                        {getFilesForClass(selectedClassDetails.name).slice(0, 3).map(file => (
+                          <div key={file.id} className="mb-0.5 last:mb-0 text-[8px]">
+                            <div className="flex items-center gap-1">
+                              <span className="text-base">{getFileIcon(file.type)}</span>
+                              <div className="min-w-0 flex-1">
+                                <p className="font-medium truncate">{file.name}</p>
+                                <p className="text-gray-600">{formatFileSize(file.size)}</p>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <p className="text-[8px] text-gray-600">No files uploaded yet</p>
+                    )}
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-1 pt-0.5">
+                    <button 
+                      className="flex items-center justify-center gap-1 bg-gradient-to-r from-blue-500 to-blue-600 text-white py-1 px-2 rounded-md hover:from-blue-600 hover:to-blue-700 transition-all"
+                      onClick={() => {
+                        // Set the class for the new student form
+                        setNewStudent({...newStudent, class: selectedClassDetails.name.replace('Class ', '')});
+                        setShowAddStudentForm(true);
+                        setShowClassDetailsModal(false);
+                      }}
+                    >
+                      <User className="w-3 h-3" />
+                      <span className="text-[8px]">Add Student</span>
+                    </button>
+                    <button 
+                      className="flex items-center justify-center gap-1 bg-gradient-to-r from-blue-400 to-blue-500 text-white py-1 px-2 rounded-md hover:from-blue-500 hover:to-blue-600 transition-all"
+                      onClick={() => {
+                        // Set the class for the new note form
+                        setNewNote({...newNote, class: selectedClassDetails.name});
+                        setShowAddNoteModal(true);
+                        setShowClassDetailsModal(false);
+                      }}
+                    >
+                      <FileText className="w-3 h-3" />
+                      <span className="text-[8px]">Add Notes</span>
+                    </button>
+                    <button 
+                      className="flex items-center justify-center gap-1 bg-gradient-to-r from-blue-600 to-blue-700 text-white py-1 px-2 rounded-md hover:from-blue-700 hover:to-blue-800 transition-all"
+                      onClick={() => {
+                        // Set the audience for the new notice form
+                        setNewNotice({...newNotice, audience: selectedClassDetails.name});
+                        setShowClassDetailsModal(false);
+                        // Switch to the notices tab
+                        setActiveTab('notices');
+                      }}
+                    >
+                      <Bell className="w-3 h-3" />
+                      <span className="text-[8px]">Add Notice</span>
+                    </button>
+                    <button 
+                      className="flex items-center justify-center gap-1 bg-gradient-to-r from-blue-700 to-blue-800 text-white py-1 px-2 rounded-md hover:from-blue-800 hover:to-blue-900 transition-all"
+                      onClick={() => {
+                        setShowFileUploadModal(true);
+                        setShowClassDetailsModal(false);
+                      }}
+                    >
+                      <FileText className="w-3 h-3" />
+                      <span className="text-[8px]">Upload Files</span>
+                    </button>
+                  </div>
+                  
+                  {/* Close Button */}
+                  <div className="pt-0.5">
+                    <button 
+                      className="w-full flex items-center justify-center gap-1 bg-gradient-to-r from-blue-300 to-blue-400 text-white py-1 px-2 rounded-md hover:from-blue-400 hover:to-blue-500 transition-all"
+                      onClick={() => setShowClassDetailsModal(false)}
+                    >
+                      <X className="w-3 h-3" />
+                      <span className="text-[8px]">Close</span>
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+      
+      {/* Add Note Modal */}
+      {showAddNoteModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-0">
+          <div className="bg-white rounded-lg shadow-xl max-w-md w-full max-h-[80vh] overflow-y-auto">
+            <div className="p-2">
+              <div className="flex justify-between items-center mb-0">
+                <h3 className="text-[14px] font-bold text-gray-900">Add Class Note</h3>
+                <button 
+                  onClick={() => setShowAddNoteModal(false)}
+                  className="text-gray-500 hover:text-gray-700"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+              
+              <div className="space-y-2">
+                <div className="bg-gradient-to-r from-green-500 to-emerald-600 rounded-lg p-1 text-white">
+                  <h4 className="text-[12px] font-bold">{newNote.class}</h4>
+                  <p className="text-[10px] text-green-100">Add a note for this class</p>
+                </div>
+                
+                <div>
+                  <label className="block text-[10px] font-medium text-gray-700 mb-0.5">Note Title</label>
+                  <input 
+                    type="text" 
+                    name="title"
+                    value={newNote.title}
+                    onChange={handleNewNoteChange}
+                    className="w-full px-1.5 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 text-[10px]"
+                    placeholder="Enter note title"
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-[10px] font-medium text-gray-700 mb-0.5">Note Content</label>
+                  <textarea 
+                    name="content"
+                    value={newNote.content}
+                    onChange={handleNewNoteChange}
+                    className="w-full px-1.5 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 text-[10px]"
+                    placeholder="Enter note content"
+                    rows="2"
+                  />
+                </div>
+                
+                <div className="flex gap-1 pt-0.5">
+                  <button 
+                    onClick={clearNoteForm}
+                    className="px-2 py-1 border border-gray-300 text-gray-700 rounded hover:bg-gray-50 transition-all text-[10px]"
+                  >
+                    Clear
+                  </button>
+                  <button 
+                    onClick={addNewNote}
+                    className="flex-1 bg-gradient-to-r from-green-500 to-emerald-600 text-white py-1 px-2 rounded hover:from-green-600 hover:to-emerald-700 transition-all text-[10px]"
+                  >
+                    Add Note
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      
+      {/* File Upload Modal */}
+      {showFileUploadModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-0">
+          <div className="bg-white rounded-lg shadow-xl max-w-md w-full max-h-[80vh] overflow-y-auto">
+            <div className="p-2">
+              <div className="flex justify-between items-center mb-0">
+                <h3 className="text-[14px] font-bold text-gray-900">Upload Files</h3>
+                <button 
+                  onClick={() => setShowFileUploadModal(false)}
+                  className="text-gray-500 hover:text-gray-700"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+              
+              <div className="space-y-2">
+                <div className="bg-gradient-to-r from-purple-500 to-pink-600 rounded-lg p-1 text-white">
+                  <h4 className="text-[12px] font-bold">{selectedClassDetails?.name || newNote.class}</h4>
+                  <p className="text-[10px] text-purple-100">Upload files for this class</p>
+                </div>
+                
+                {/* File selection area */}
+                <div className="border-2 border-dashed border-gray-300 rounded-lg p-2 text-center cursor-pointer hover:border-purple-400 transition-colors"
+                  onClick={() => document.getElementById('fileInput').click()}
+                >
+                  <div className="flex flex-col items-center justify-center gap-1">
+                    <FileText className="w-4 h-4 text-gray-400" />
+                    <p className="text-[10px] text-gray-600">Click to select files or drag and drop</p>
+                    <p className="text-[8px] text-gray-500">Supports images, documents, and other files</p>
+                    <input 
+                      id="fileInput"
+                      type="file" 
+                      multiple
+                      onChange={handleFileSelect}
+                      className="hidden"
+                    />
+                  </div>
+                </div>
+                
+                {/* Selected files list */}
+                {fileUploads.length > 0 && (
+                  <div className="bg-gray-50 rounded-lg p-1">
+                    <h4 className="text-[10px] font-medium text-gray-700 mb-0.5">Selected Files ({fileUploads.length})</h4>
+                    <div className="space-y-1 max-h-24 overflow-y-auto">
+                      {fileUploads.map((file) => (
+                        <div key={file.id} className="flex items-center justify-between bg-white p-1 rounded border">
+                          <div className="flex items-center gap-1">
+                            <span className="text-base">{getFileIcon(file.type)}</span>
+                            <div className="min-w-0">
+                              <p className="text-[8px] font-medium truncate">{file.name}</p>
+                              <p className="text-[7px] text-gray-500">{formatFileSize(file.size)}</p>
+                            </div>
+                          </div>
+                          <button 
+                            onClick={() => removeFile(file.id)}
+                            className="text-red-500 hover:text-red-700"
+                          >
+                            <X className="w-3 h-3" />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                
+                <div className="flex gap-1 pt-0.5">
+                  <button 
+                    onClick={() => {
+                      setFileUploads([]);
+                      setShowFileUploadModal(false);
+                    }}
+                    className="px-2 py-1 border border-gray-300 text-gray-700 rounded hover:bg-gray-50 transition-all text-[10px]"
+                  >
+                    Cancel
+                  </button>
+                  <button 
+                    onClick={uploadFiles}
+                    disabled={fileUploads.length === 0}
+                    className={`flex-1 py-1 px-2 rounded transition-all text-[10px] ${fileUploads.length === 0 ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : 'bg-gradient-to-r from-purple-500 to-pink-600 text-white hover:from-purple-600 hover:to-pink-700'}`}
+                  >
+                    Upload Files
+                  </button>
+                </div>
               </div>
             </div>
           </div>
