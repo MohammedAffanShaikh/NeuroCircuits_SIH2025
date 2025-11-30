@@ -1,14 +1,40 @@
 import React, { useState } from 'react';
-import { Users, UserCheck, UserX, BookOpen, TrendingUp, FileText, Settings, LogOut, Home, Search, Filter, Download, Plus, Eye, Edit, Trash2, Printer, BarChart, PieChart, LineChart, Calendar, Clock, Shield, MapPin, AlertTriangle, CheckCircle, XCircle, RefreshCw, Bell, Menu, X, School, Activity, User, Book, Utensils, GraduationCap } from 'lucide-react';
+import { Users, UserCheck, UserX, BookOpen, TrendingUp, FileText, Settings, LogOut, Home, Search, Filter, Download, Plus, Eye, Edit, Trash2, Printer, BarChart, PieChart, LineChart, Calendar, Clock, Shield, MapPin, AlertTriangle, CheckCircle, XCircle, RefreshCw, Bell, Menu, X, School, Activity, User, Book, Utensils, GraduationCap, Minus } from 'lucide-react';
 import { BarChart as RechartsBarChart, Bar, LineChart as RechartsLineChart, Line, PieChart as RechartsPieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { motion, AnimatePresence } from 'framer-motion';
 import UltraModernHeader from '../UltraModernHeader';
 
 const AdminDashboard = ({ onLogout }) => {
   const [activeTab, setActiveTab] = useState('home');
+  const [activeSettingsTab, setActiveSettingsTab] = useState('profile');
   const [selectedClass, setSelectedClass] = useState('All Classes');
   const [showAddTeacherModal, setShowAddTeacherModal] = useState(false);
   const [showAddStudentModal, setShowAddStudentModal] = useState(false);
+  const [showAddClassModal, setShowAddClassModal] = useState(false);
+  const [newClassData, setNewClassData] = useState({
+    name: '',
+    subject: '',
+    teacher: '',
+    students: ''
+  });
+  
+  // State for Add Teacher form
+  const [newTeacherData, setNewTeacherData] = useState({
+    name: '',
+    email: '',
+    subject: '',
+    classes: '',
+    students: ''
+  });
+  
+  // State for Add Student form
+  const [newStudentData, setNewStudentData] = useState({
+    name: '',
+    roll: '',
+    class: '',
+    attendance: '',
+    grade: ''
+  });
   const [reportPeriod, setReportPeriod] = useState('weekly'); // weekly, monthly, yearly
   const [teacherAvatarPreview, setTeacherAvatarPreview] = useState(null);
   const [studentAvatarPreview, setStudentAvatarPreview] = useState(null);
@@ -128,16 +154,16 @@ const AdminDashboard = ({ onLogout }) => {
   const selectedSchoolData = getFilteredSchoolData();
 
   // Teachers data for this school
-  const teachers = [
+  const [teachers, setTeachers] = useState([
     { id: 1, name: 'Asrar Pathan', email: 'principal@sabboosiddik.edu', subject: 'Principal', classes: ['Administration'], students: 1500, avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Asrar' },
     { id: 2, name: 'Prof. Mehta', email: 'mehta@sabboosiddik.edu', subject: 'Mathematics', classes: ['Grade 1'], students: 60, avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Mehta' },
     { id: 3, name: 'Dr. Patil', email: 'patil@sabboosiddik.edu', subject: 'Science', classes: ['Grade 3'], students: 70, avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Patil' },
     { id: 4, name: 'Ms. Khan', email: 'khan@sabboosiddik.edu', subject: 'English', classes: ['Grade 6'], students: 70, avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Khan' },
     { id: 5, name: 'Mr. Sharma', email: 'sharma@sabboosiddik.edu', subject: 'Computer Science', classes: ['Grade 8'], students: 80, avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Sharma' },
-  ];
+  ]);
 
   // Students data for this school
-  const students = [
+  const [students, setStudents] = useState([
     { id: 1, name: 'Umme Hani', roll: 'G1-01', class: 'Grade 1', attendance: 92, grade: 'A', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Umme' },
     { id: 2, name: 'Ayesha', roll: 'G2-22', class: 'Grade 2', attendance: 88, grade: 'B+', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Ayesha' },
     { id: 3, name: 'Iqra', roll: 'G3-08', class: 'Grade 3', attendance: 90, grade: 'A-', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Iqra' },
@@ -148,10 +174,10 @@ const AdminDashboard = ({ onLogout }) => {
     { id: 8, name: 'Neha Reddy', roll: 'G8-25', class: 'Grade 8', attendance: 94, grade: 'A', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Neha' },
     { id: 9, name: 'Rohan Mehta', roll: 'G9-15', class: 'Grade 9', attendance: 88, grade: 'B+', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Rohan' },
     { id: 10, name: 'Ananya Desai', roll: 'G10-07', class: 'Grade 10', attendance: 95, grade: 'A', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Ananya' },
-  ];
+  ]);
 
   // Classes data for this school
-  const classes = [
+  const [classes, setClasses] = useState([
     { id: 1, name: 'Grade 1', teacher: 'Prof. Mehta', students: 60, subject: 'Basic Education' },
     { id: 2, name: 'Grade 2', teacher: 'Dr. Patil', students: 60, subject: 'Elementary Studies' },
     { id: 3, name: 'Grade 3', teacher: 'Ms. Khan', students: 70, subject: 'Primary Education' },
@@ -162,7 +188,7 @@ const AdminDashboard = ({ onLogout }) => {
     { id: 8, name: 'Grade 8', teacher: 'Mr. Sharma', students: 80, subject: 'High School Prep' },
     { id: 9, name: 'Grade 9', teacher: 'Prof. Mehta', students: 85, subject: 'High School' },
     { id: 10, name: 'Grade 10', teacher: 'Dr. Patil', students: 90, subject: 'Senior High' },
-  ];
+  ]);
 
   // Performance data for this school
   const performanceData = [
@@ -256,14 +282,116 @@ const AdminDashboard = ({ onLogout }) => {
   const handleAddTeacher = () => {
     // In a real app, this would make an API call to add a teacher
     console.log('Adding new teacher with avatar:', teacherAvatarPreview);
-    setShowAddTeacherModal(false);
-    setTeacherAvatarPreview(null);
+    
+    // Validate required fields
+    if (newTeacherData.name && newTeacherData.email && newTeacherData.subject) {
+      const newTeacher = {
+        id: teachers.length + 1,
+        name: newTeacherData.name,
+        email: newTeacherData.email,
+        subject: newTeacherData.subject,
+        classes: newTeacherData.classes ? [newTeacherData.classes] : ['Unassigned'],
+        students: parseInt(newTeacherData.students) || 0,
+        avatar: teacherAvatarPreview || 'https://api.dicebear.com/7.x/avataaars/svg?seed=' + encodeURIComponent(newTeacherData.name)
+      };
+      
+      // Update the state with the new teacher
+      setTeachers(prevTeachers => [...prevTeachers, newTeacher]);
+      
+      // Reset form and close modal
+      setNewTeacherData({ name: '', email: '', subject: '', classes: '', students: '' });
+      setShowAddTeacherModal(false);
+      setTeacherAvatarPreview(null);
+    }
   };
 
   const handleAddStudent = () => {
     // In a real app, this would make an API call to add a student
     console.log('Adding new student with avatar:', studentAvatarPreview);
+    
+    // Validate required fields
+    if (newStudentData.name && newStudentData.roll && newStudentData.class) {
+      const newStudent = {
+        id: students.length + 1,
+        name: newStudentData.name,
+        roll: newStudentData.roll,
+        class: newStudentData.class,
+        attendance: parseInt(newStudentData.attendance) || 0,
+        grade: newStudentData.grade || 'N/A',
+        avatar: studentAvatarPreview || 'https://api.dicebear.com/7.x/avataaars/svg?seed=' + encodeURIComponent(newStudentData.name)
+      };
+      
+      // Update the state with the new student
+      setStudents(prevStudents => [...prevStudents, newStudent]);
+      
+      // Reset form and close modal
+      setNewStudentData({ name: '', roll: '', class: '', attendance: '', grade: '' });
+      setShowAddStudentModal(false);
+      setStudentAvatarPreview(null);
+    }
+  };
+
+  const handleAddClass = () => {
+    // In a real app, this would make an API call to add a class
+    console.log('Adding new class:', newClassData);
+    
+    // Add the new class to the classes array
+    if (newClassData.name && newClassData.subject) {
+      const newClass = {
+        id: classes.length + 1,
+        name: newClassData.name,
+        subject: newClassData.subject,
+        teacher: newClassData.teacher || 'Not Assigned',
+        students: parseInt(newClassData.students) || 0
+      };
+      
+      // Update the state with the new class
+      setClasses(prevClasses => [...prevClasses, newClass]);
+      
+      // Reset the form and close the modal
+      setNewClassData({ name: '', subject: '', teacher: '', students: '' });
+      setShowAddClassModal(false);
+    }
+  };
+
+  const handleNewClassChange = (e) => {
+    const { name, value } = e.target;
+    setNewClassData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleNewTeacherChange = (e) => {
+    const { name, value } = e.target;
+    setNewTeacherData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleNewStudentChange = (e) => {
+    const { name, value } = e.target;
+    setNewStudentData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const closeAddClassModal = () => {
+    setShowAddClassModal(false);
+    setNewClassData({ name: '', subject: '', teacher: '', students: '' });
+  };
+
+  const closeAddTeacherModal = () => {
+    setShowAddTeacherModal(false);
+    setNewTeacherData({ name: '', email: '', subject: '', classes: '', students: '' });
+    setTeacherAvatarPreview(null);
+  };
+
+  const closeAddStudentModal = () => {
     setShowAddStudentModal(false);
+    setNewStudentData({ name: '', roll: '', class: '', attendance: '', grade: '' });
     setStudentAvatarPreview(null);
   };
 
@@ -1173,7 +1301,10 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
 
               <div className="flex justify-between items-center mb-5">
                 <h2 className="text-sm font-bold text-gray-900">Class Management</h2>
-                <button className="flex items-center gap-1 px-3 py-1.5 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-md hover:from-blue-600 hover:to-indigo-700 transition-all text-[10px] shadow-sm hover:shadow-md">
+                <button 
+                  onClick={() => setShowAddClassModal(true)}
+                  className="flex items-center gap-1 px-3 py-1.5 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-md hover:from-blue-600 hover:to-indigo-700 transition-all text-[10px] shadow-sm hover:shadow-md"
+                >
                   <Plus className="w-3 h-3" />
                   Add Class
                 </button>
@@ -1616,10 +1747,11 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
                         <button
                           key={tab.id}
                           className={`w-full flex items-center gap-2 px-2.5 py-1.5 rounded-md text-left transition-all text-[11px] ${
-                            activeTab === tab.id
+                            activeSettingsTab === tab.id
                               ? 'bg-blue-50 text-blue-600 font-medium'
                               : 'text-gray-600 hover:bg-gray-50'
                           }`}
+                          onClick={() => setActiveSettingsTab(tab.id)}
                         >
                           <IconComponent className="w-3.5 h-3.5" />
                           <span>{tab.label}</span>
@@ -1631,70 +1763,290 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
                 
                 {/* Settings Content */}
                 <div className="lg:col-span-3">
-                  <div className="bg-white rounded-md shadow-sm border border-gray-100 p-3">
-                    <div className="mb-3">
-                      <h2 className="text-sm font-bold text-gray-900 mb-1">Profile Information</h2>
-                      <p className="text-gray-600 text-[10px]">Update your personal and professional details</p>
-                    </div>
-                    
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5 mb-3">
-                      <div className="flex flex-col items-center md:col-span-2">
-                        <div className="relative mb-2">
-                          <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-md flex items-center justify-center text-white font-bold text-base">
-                            AD
+                  {/* Profile Settings */}
+                  {activeSettingsTab === 'profile' && (
+                    <div className="bg-white rounded-md shadow-sm border border-gray-100 p-3">
+                      <div className="mb-3">
+                        <h2 className="text-sm font-bold text-gray-900 mb-1">Profile Information</h2>
+                        <p className="text-gray-600 text-[10px]">Update your personal and professional details</p>
+                      </div>
+                      
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5 mb-3">
+                        <div className="flex flex-col items-center md:col-span-2">
+                          <div className="relative mb-2">
+                            <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-md flex items-center justify-center text-white font-bold text-base">
+                              AD
+                            </div>
+                            <button className="absolute bottom-0 right-0 bg-blue-500 text-white p-1 rounded-full hover:bg-blue-600 transition-colors shadow-sm">
+                              <Edit className="w-2.5 h-2.5" />
+                            </button>
                           </div>
-                          <button className="absolute bottom-0 right-0 bg-blue-500 text-white p-1 rounded-full hover:bg-blue-600 transition-colors shadow-sm">
-                            <Edit className="w-2.5 h-2.5" />
+                          <button className="text-blue-600 hover:text-blue-700 font-medium text-[10px]">
+                            Change Picture
                           </button>
                         </div>
-                        <button className="text-blue-600 hover:text-blue-700 font-medium text-[10px]">
-                          Change Picture
+                        
+                        <div>
+                          <label className="block text-[9px] font-medium text-gray-700 mb-1">Full Name</label>
+                          <input 
+                            type="text" 
+                            defaultValue="Admin User"
+                            className="w-full px-2.5 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-[10px]"
+                          />
+                        </div>
+                        
+                        <div>
+                          <label className="block text-[9px] font-medium text-gray-700 mb-1">Email Address</label>
+                          <input 
+                            type="email" 
+                            defaultValue="admin@school.edu"
+                            className="w-full px-2.5 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-[10px]"
+                          />
+                        </div>
+                        
+                        <div>
+                          <label className="block text-[9px] font-medium text-gray-700 mb-1">School</label>
+                          <input 
+                            type="text" 
+                            defaultValue={schoolData.name}
+                            className="w-full px-2.5 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-[10px]"
+                          />
+                        </div>
+                        
+                        <div>
+                          <label className="block text-[9px] font-medium text-gray-700 mb-1">Position</label>
+                          <input 
+                            type="text" 
+                            defaultValue="School Administrator"
+                            className="w-full px-2.5 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-[10px]"
+                          />
+                        </div>
+                      </div>
+                      
+                      <div className="flex justify-end">
+                        <button className="px-3 py-1 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-md hover:from-blue-600 hover:to-indigo-700 transition-all shadow-sm hover:shadow-md font-medium text-[10px]">
+                          Save
                         </button>
                       </div>
-                      
-                      <div>
-                        <label className="block text-[9px] font-medium text-gray-700 mb-1">Full Name</label>
-                        <input 
-                          type="text" 
-                          defaultValue="Admin User"
-                          className="w-full px-2.5 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-[10px]"
-                        />
+                    </div>
+                  )}
+                  
+                  {/* Notifications Settings */}
+                  {activeSettingsTab === 'notifications' && (
+                    <div className="bg-white rounded-md shadow-sm border border-gray-100 p-3">
+                      <div className="mb-3">
+                        <h2 className="text-sm font-bold text-gray-900 mb-1">Notification Preferences</h2>
+                        <p className="text-gray-600 text-[10px]">Manage how and when you receive notifications</p>
                       </div>
                       
-                      <div>
-                        <label className="block text-[9px] font-medium text-gray-700 mb-1">Email Address</label>
-                        <input 
-                          type="email" 
-                          defaultValue="admin@school.edu"
-                          className="w-full px-2.5 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-[10px]"
-                        />
+                      <div className="space-y-3">
+                        <div className="flex items-center justify-between p-2 bg-gray-50 rounded-md">
+                          <div>
+                            <h3 className="text-[10px] font-medium text-gray-900">Email Notifications</h3>
+                            <p className="text-[9px] text-gray-600">Receive notifications via email</p>
+                          </div>
+                          <label className="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" className="sr-only peer" defaultChecked />
+                            <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-500"></div>
+                          </label>
+                        </div>
+                        
+                        <div className="flex items-center justify-between p-2 bg-gray-50 rounded-md">
+                          <div>
+                            <h3 className="text-[10px] font-medium text-gray-900">Push Notifications</h3>
+                            <p className="text-[9px] text-gray-600">Receive push notifications on your device</p>
+                          </div>
+                          <label className="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" className="sr-only peer" defaultChecked />
+                            <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-500"></div>
+                          </label>
+                        </div>
+                        
+                        <div className="flex items-center justify-between p-2 bg-gray-50 rounded-md">
+                          <div>
+                            <h3 className="text-[10px] font-medium text-gray-900">SMS Notifications</h3>
+                            <p className="text-[9px] text-gray-600">Receive SMS notifications for critical alerts</p>
+                          </div>
+                          <label className="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" className="sr-only peer" />
+                            <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-500"></div>
+                          </label>
+                        </div>
+                        
+                        <div className="flex items-center justify-between p-2 bg-gray-50 rounded-md">
+                          <div>
+                            <h3 className="text-[10px] font-medium text-gray-900">Daily Summary</h3>
+                            <p className="text-[9px] text-gray-600">Receive a daily summary of activities</p>
+                          </div>
+                          <label className="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" className="sr-only peer" defaultChecked />
+                            <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-500"></div>
+                          </label>
+                        </div>
                       </div>
                       
-                      <div>
-                        <label className="block text-[9px] font-medium text-gray-700 mb-1">School</label>
-                        <input 
-                          type="text" 
-                          defaultValue={schoolData.name}
-                          className="w-full px-2.5 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-[10px]"
-                        />
-                      </div>
-                      
-                      <div>
-                        <label className="block text-[9px] font-medium text-gray-700 mb-1">Position</label>
-                        <input 
-                          type="text" 
-                          defaultValue="School Administrator"
-                          className="w-full px-2.5 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-[10px]"
-                        />
+                      <div className="flex justify-end mt-4">
+                        <button className="px-3 py-1 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-md hover:from-blue-600 hover:to-indigo-700 transition-all shadow-sm hover:shadow-md font-medium text-[10px]">
+                          Save Preferences
+                        </button>
                       </div>
                     </div>
-                    
-                    <div className="flex justify-end">
-                      <button className="px-3 py-1 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-md hover:from-blue-600 hover:to-indigo-700 transition-all shadow-sm hover:shadow-md font-medium text-[10px]">
-                        Save
-                      </button>
+                  )}
+                  
+                  {/* Security Settings */}
+                  {activeSettingsTab === 'security' && (
+                    <div className="bg-white rounded-md shadow-sm border border-gray-100 p-3">
+                      <div className="mb-3">
+                        <h2 className="text-sm font-bold text-gray-900 mb-1">Security Settings</h2>
+                        <p className="text-gray-600 text-[10px]">Manage your account security and authentication</p>
+                      </div>
+                      
+                      <div className="space-y-3">
+                        <div>
+                          <h3 className="text-[10px] font-medium text-gray-900 mb-2">Change Password</h3>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                            <div>
+                              <label className="block text-[9px] font-medium text-gray-700 mb-1">Current Password</label>
+                              <input 
+                                type="password" 
+                                placeholder="Enter current password"
+                                className="w-full px-2.5 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-[10px]"
+                              />
+                            </div>
+                            
+                            <div>
+                              <label className="block text-[9px] font-medium text-gray-700 mb-1">New Password</label>
+                              <input 
+                                type="password" 
+                                placeholder="Enter new password"
+                                className="w-full px-2.5 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-[10px]"
+                              />
+                            </div>
+                            
+                            <div>
+                              <label className="block text-[9px] font-medium text-gray-700 mb-1">Confirm New Password</label>
+                              <input 
+                                type="password" 
+                                placeholder="Confirm new password"
+                                className="w-full px-2.5 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-[10px]"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <div>
+                          <h3 className="text-[10px] font-medium text-gray-900 mb-2">Two-Factor Authentication</h3>
+                          <div className="flex items-center justify-between p-2 bg-gray-50 rounded-md">
+                            <div>
+                              <h4 className="text-[10px] font-medium text-gray-900">Enable 2FA</h4>
+                              <p className="text-[9px] text-gray-600">Add an extra layer of security to your account</p>
+                            </div>
+                            <label className="relative inline-flex items-center cursor-pointer">
+                              <input type="checkbox" className="sr-only peer" />
+                              <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-500"></div>
+                            </label>
+                          </div>
+                        </div>
+                        
+                        <div>
+                          <h3 className="text-[10px] font-medium text-gray-900 mb-2">Active Sessions</h3>
+                          <div className="bg-gray-50 rounded-md p-2">
+                            <div className="flex items-center justify-between mb-2">
+                              <div>
+                                <p className="text-[10px] font-medium text-gray-900">Current Session</p>
+                                <p className="text-[9px] text-gray-600">Chrome on Windows • Mumbai, India</p>
+                              </div>
+                              <span className="px-2 py-0.5 bg-green-100 text-green-800 rounded-full text-[9px] font-medium">Active</span>
+                            </div>
+                            <button className="text-[9px] text-red-600 hover:text-red-700 font-medium">
+                              Log out of all other sessions
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div className="flex justify-end mt-4">
+                        <button className="px-3 py-1 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-md hover:from-blue-600 hover:to-indigo-700 transition-all shadow-sm hover:shadow-md font-medium text-[10px]">
+                          Update Security
+                        </button>
+                      </div>
                     </div>
-                  </div>
+                  )}
+                  
+                  {/* Appearance Settings */}
+                  {activeSettingsTab === 'appearance' && (
+                    <div className="bg-white rounded-md shadow-sm border border-gray-100 p-3">
+                      <div className="mb-3">
+                        <h2 className="text-sm font-bold text-gray-900 mb-1">Appearance Settings</h2>
+                        <p className="text-gray-600 text-[10px]">Customize the look and feel of your dashboard</p>
+                      </div>
+                      
+                      <div className="space-y-3">
+                        <div>
+                          <h3 className="text-[10px] font-medium text-gray-900 mb-2">Theme</h3>
+                          <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                            <button className="p-2 border border-blue-500 rounded-md bg-blue-50">
+                              <div className="w-full h-8 bg-gradient-to-r from-blue-500 to-indigo-600 rounded mb-1"></div>
+                              <p className="text-[9px] font-medium text-gray-900">Default</p>
+                            </button>
+                            <button className="p-2 border border-gray-200 rounded-md hover:border-gray-300">
+                              <div className="w-full h-8 bg-gradient-to-r from-green-500 to-teal-600 rounded mb-1"></div>
+                              <p className="text-[9px] font-medium text-gray-900">Nature</p>
+                            </button>
+                            <button className="p-2 border border-gray-200 rounded-md hover:border-gray-300">
+                              <div className="w-full h-8 bg-gradient-to-r from-amber-500 to-orange-600 rounded mb-1"></div>
+                              <p className="text-[9px] font-medium text-gray-900">Sunset</p>
+                            </button>
+                            <button className="p-2 border border-gray-200 rounded-md hover:border-gray-300">
+                              <div className="w-full h-8 bg-gradient-to-r from-purple-500 to-pink-600 rounded mb-1"></div>
+                              <p className="text-[9px] font-medium text-gray-900">Violet</p>
+                            </button>
+                          </div>
+                        </div>
+                        
+                        <div>
+                          <h3 className="text-[10px] font-medium text-gray-900 mb-2">Layout Preferences</h3>
+                          <div className="flex items-center justify-between p-2 bg-gray-50 rounded-md">
+                            <div>
+                              <h4 className="text-[10px] font-medium text-gray-900">Compact Mode</h4>
+                              <p className="text-[9px] text-gray-600">Reduce spacing and make UI more compact</p>
+                            </div>
+                            <label className="relative inline-flex items-center cursor-pointer">
+                              <input type="checkbox" className="sr-only peer" />
+                              <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-500"></div>
+                            </label>
+                          </div>
+                          
+                          <div className="flex items-center justify-between p-2 bg-gray-50 rounded-md mt-2">
+                            <div>
+                              <h4 className="text-[10px] font-medium text-gray-900">Dark Mode</h4>
+                              <p className="text-[9px] text-gray-600">Switch to dark theme for reduced eye strain</p>
+                            </div>
+                            <label className="relative inline-flex items-center cursor-pointer">
+                              <input type="checkbox" className="sr-only peer" />
+                              <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-500"></div>
+                            </label>
+                          </div>
+                        </div>
+                        
+                        <div>
+                          <h3 className="text-[10px] font-medium text-gray-900 mb-2">Language</h3>
+                          <select className="w-full px-2.5 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-[10px]">
+                            <option>English</option>
+                            <option>Hindi</option>
+                            <option>Marathi</option>
+                            <option>Gujarati</option>
+                          </select>
+                        </div>
+                      </div>
+                      
+                      <div className="flex justify-end mt-4">
+                        <button className="px-3 py-1 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-md hover:from-blue-600 hover:to-indigo-700 transition-all shadow-sm hover:shadow-md font-medium text-[10px]">
+                          Save Appearance
+                        </button>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -1927,30 +2279,60 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
                 <div className="overflow-x-auto relative z-10">
                   <table className="w-full">
                     <thead>
-                      <tr className="border-b border-gray-200">
-                        <th className="text-left py-3 px-4 font-medium text-[10px] bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">School</th>
-                        <th className="text-left py-3 px-4 font-medium text-[10px] bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">Total Students</th>
-                        <th className="text-left py-3 px-4 font-medium text-[10px] bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">Present Today</th>
-                        <th className="text-left py-3 px-4 font-medium text-[10px] bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">Meals Served</th>
-                        <th className="text-left py-3 px-4 font-medium text-[10px] bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">Participation Rate</th>
-                        <th className="text-left py-3 px-4 font-medium text-[10px] bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">Status</th>
+                      <tr className="border-b border-gray-200 bg-gradient-to-r from-purple-50 to-indigo-50">
+                        <th className="text-left py-3 px-4 font-bold text-[11px] bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent uppercase tracking-wider">School</th>
+                        <th className="text-left py-3 px-4 font-bold text-[11px] bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent uppercase tracking-wider">Total Students</th>
+                        <th className="text-left py-3 px-4 font-bold text-[11px] bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent uppercase tracking-wider">Present Today</th>
+                        <th className="text-left py-3 px-4 font-bold text-[11px] bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent uppercase tracking-wider">Meals Served</th>
+                        <th className="text-left py-3 px-4 font-bold text-[11px] bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent uppercase tracking-wider">Participation Rate</th>
+                        <th className="text-left py-3 px-4 font-bold text-[11px] bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent uppercase tracking-wider">Status</th>
                       </tr>
                     </thead>
                     <tbody>
                       {selectedSchoolData.map((school) => (
-                        <tr key={school.id} className="border-b border-gray-100 hover:bg-gradient-to-r from-purple-50/50 via-indigo-50/50 to-blue-50/50 transition-all duration-300">
-                          <td className="py-1.5 px-4">
-                            <div className="font-medium text-gray-900 text-[10px] flex items-center gap-1">
-                              <GraduationCap className="w-3 h-3 text-purple-500" />
-                              {school.schoolName}
+                        <tr key={school.id} className="border-b border-gray-100 hover:bg-gradient-to-r from-purple-50/50 via-indigo-50/50 to-blue-50/50 transition-all duration-300 group">
+                          <td className="py-2 px-4">
+                            <div className="font-medium text-gray-900 text-[10px] flex items-center gap-2">
+                              <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-indigo-600 rounded-md flex items-center justify-center text-white font-bold text-[10px] shadow-sm">
+                                {school.schoolName.charAt(0)}
+                              </div>
+                              <div>
+                                <div className="font-semibold">{school.schoolName}</div>
+                                <div className="text-[9px] text-gray-500">ID: {school.id}</div>
+                              </div>
                             </div>
                           </td>
-                          <td className="py-1.5 px-4 text-gray-600 text-[10px]">{school.totalStudents.toLocaleString()}</td>
-                          <td className="py-1.5 px-4 text-gray-600 text-[10px]">{school.presentToday.toLocaleString()}</td>
-                          <td className="py-1.5 px-4 text-gray-600 text-[10px]">{Math.round(school.presentToday * schoolData.mealsPerStudent).toLocaleString()}</td>
-                          <td className="py-1.5 px-4 text-gray-600 text-[10px]">{((school.presentToday / school.totalStudents) * 100).toFixed(1)}%</td>
-                          <td className="py-1.5 px-4">
-                            <span className="px-2 py-0.5 bg-green-100 text-green-800 rounded-full text-[9px] font-medium">Active</span>
+                          <td className="py-2 px-4 text-gray-700 text-[10px] font-medium">
+                            <div className="flex items-center gap-1">
+                              <Users className="w-3 h-3 text-purple-500" />
+                              {school.totalStudents.toLocaleString()}
+                            </div>
+                          </td>
+                          <td className="py-2 px-4 text-gray-700 text-[10px] font-medium">
+                            <div className="flex items-center gap-1">
+                              <User className="w-3 h-3 text-blue-500" />
+                              {school.presentToday.toLocaleString()}
+                            </div>
+                          </td>
+                          <td className="py-2 px-4 text-gray-700 text-[10px] font-medium">
+                            <div className="flex items-center gap-1">
+                              <Utensils className="w-3 h-3 text-amber-500" />
+                              {Math.round(school.presentToday * schoolData.mealsPerStudent).toLocaleString()}
+                            </div>
+                          </td>
+                          <td className="py-2 px-4">
+                            <div className="flex items-center gap-2">
+                              <div className="w-12 h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                                <div 
+                                  className={`h-full rounded-full ${((school.presentToday / school.totalStudents) * 100) >= 95 ? 'bg-green-500' : ((school.presentToday / school.totalStudents) * 100) >= 90 ? 'bg-blue-500' : 'bg-yellow-500'}`}
+                                  style={{ width: `${(school.presentToday / school.totalStudents) * 100}%` }}
+                                ></div>
+                              </div>
+                              <span className="text-[10px] font-bold text-gray-700">{((school.presentToday / school.totalStudents) * 100).toFixed(1)}%</span>
+                            </div>
+                          </td>
+                          <td className="py-2 px-4">
+                            <span className="px-2 py-1 rounded-full text-[9px] font-bold bg-green-100 text-green-800">Active</span>
                           </td>
                         </tr>
                       ))}
@@ -1969,18 +2351,53 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
                   <div className="overflow-x-auto relative z-10">
                     <table className="w-full">
                       <thead>
-                        <tr className="border-b border-gray-200">
-                          <th className="text-left py-2 px-3 font-medium text-[10px] bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Week</th>
-                          <th className="text-left py-2 px-3 font-medium text-[10px] bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Meals Generated</th>
+                        <tr className="border-b border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50">
+                          <th className="text-left py-2 px-3 font-bold text-[11px] bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent uppercase tracking-wider">Week</th>
+                          <th className="text-left py-2 px-3 font-bold text-[11px] bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent uppercase tracking-wider">Meals Generated</th>
+                          <th className="text-left py-2 px-3 font-bold text-[11px] bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent uppercase tracking-wider">Trend</th>
                         </tr>
                       </thead>
                       <tbody>
-                        {weeklyMealData.map((week, index) => (
-                          <tr key={index} className="border-b border-gray-100 hover:bg-gradient-to-r from-blue-50/50 via-indigo-50/50 to-purple-50/50 transition-all duration-300">
-                            <td className="py-2 px-3 text-gray-900 text-[10px] font-medium">{week.week}</td>
-                            <td className="py-2 px-3 text-gray-600 text-[10px]">{week.meals.toLocaleString()}</td>
-                          </tr>
-                        ))}
+                        {weeklyMealData.map((week, index) => {
+                          // Calculate trend compared to previous week
+                          let trend = 0;
+                          let trendType = 'neutral';
+                          if (index > 0) {
+                            const prevWeek = weeklyMealData[index - 1];
+                            trend = ((week.meals - prevWeek.meals) / prevWeek.meals) * 100;
+                            trendType = trend > 0 ? 'up' : trend < 0 ? 'down' : 'neutral';
+                          }
+                          
+                          return (
+                            <tr key={index} className="border-b border-gray-100 hover:bg-gradient-to-r from-blue-50/50 via-indigo-50/50 to-purple-50/50 transition-all duration-300 group">
+                              <td className="py-2 px-3 text-gray-900 text-[10px] font-bold">{week.week}</td>
+                              <td className="py-2 px-3 text-gray-700 text-[10px] font-medium">
+                                <div className="flex items-center gap-1">
+                                  <Utensils className="w-3 h-3 text-blue-500" />
+                                  {week.meals.toLocaleString()}
+                                </div>
+                              </td>
+                              <td className="py-2 px-3">
+                                {index > 0 ? (
+                                  <div className="flex items-center gap-1">
+                                    {trendType === 'up' ? (
+                                      <TrendingUp className="w-3 h-3 text-green-500" />
+                                    ) : trendType === 'down' ? (
+                                      <TrendingUp className="w-3 h-3 text-red-500 rotate-180" />
+                                    ) : (
+                                      <Minus className="w-3 h-3 text-gray-500" />
+                                    )}
+                                    <span className={`text-[10px] font-medium ${trendType === 'up' ? 'text-green-600' : trendType === 'down' ? 'text-red-600' : 'text-gray-600'}`}>
+                                      {trendType === 'neutral' ? '0%' : `${Math.abs(trend).toFixed(1)}%`}
+                                    </span>
+                                  </div>
+                                ) : (
+                                  <span className="text-[10px] text-gray-500">-</span>
+                                )}
+                              </td>
+                            </tr>
+                          );
+                        })}
                       </tbody>
                     </table>
                   </div>
@@ -1994,18 +2411,53 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
                   <div className="overflow-x-auto relative z-10">
                     <table className="w-full">
                       <thead>
-                        <tr className="border-b border-gray-200">
-                          <th className="text-left py-2 px-3 font-medium text-[10px] bg-gradient-to-r from-green-600 to-teal-600 bg-clip-text text-transparent">Month</th>
-                          <th className="text-left py-2 px-3 font-medium text-[10px] bg-gradient-to-r from-green-600 to-teal-600 bg-clip-text text-transparent">Meals Generated</th>
+                        <tr className="border-b border-gray-200 bg-gradient-to-r from-green-50 to-teal-50">
+                          <th className="text-left py-2 px-3 font-bold text-[11px] bg-gradient-to-r from-green-600 to-teal-600 bg-clip-text text-transparent uppercase tracking-wider">Month</th>
+                          <th className="text-left py-2 px-3 font-bold text-[11px] bg-gradient-to-r from-green-600 to-teal-600 bg-clip-text text-transparent uppercase tracking-wider">Meals Generated</th>
+                          <th className="text-left py-2 px-3 font-bold text-[11px] bg-gradient-to-r from-green-600 to-teal-600 bg-clip-text text-transparent uppercase tracking-wider">Trend</th>
                         </tr>
                       </thead>
                       <tbody>
-                        {monthlyMealData.map((month, index) => (
-                          <tr key={index} className="border-b border-gray-100 hover:bg-gradient-to-r from-green-50/50 via-teal-50/50 to-blue-50/50 transition-all duration-300">
-                            <td className="py-2 px-3 text-gray-900 text-[10px] font-medium">{month.month}</td>
-                            <td className="py-2 px-3 text-gray-600 text-[10px]">{month.meals.toLocaleString()}</td>
-                          </tr>
-                        ))}
+                        {monthlyMealData.map((month, index) => {
+                          // Calculate trend compared to previous month
+                          let trend = 0;
+                          let trendType = 'neutral';
+                          if (index > 0) {
+                            const prevMonth = monthlyMealData[index - 1];
+                            trend = ((month.meals - prevMonth.meals) / prevMonth.meals) * 100;
+                            trendType = trend > 0 ? 'up' : trend < 0 ? 'down' : 'neutral';
+                          }
+                          
+                          return (
+                            <tr key={index} className="border-b border-gray-100 hover:bg-gradient-to-r from-green-50/50 via-teal-50/50 to-blue-50/50 transition-all duration-300 group">
+                              <td className="py-2 px-3 text-gray-900 text-[10px] font-bold">{month.month}</td>
+                              <td className="py-2 px-3 text-gray-700 text-[10px] font-medium">
+                                <div className="flex items-center gap-1">
+                                  <Utensils className="w-3 h-3 text-green-500" />
+                                  {month.meals.toLocaleString()}
+                                </div>
+                              </td>
+                              <td className="py-2 px-3">
+                                {index > 0 ? (
+                                  <div className="flex items-center gap-1">
+                                    {trendType === 'up' ? (
+                                      <TrendingUp className="w-3 h-3 text-green-500" />
+                                    ) : trendType === 'down' ? (
+                                      <TrendingUp className="w-3 h-3 text-red-500 rotate-180" />
+                                    ) : (
+                                      <Minus className="w-3 h-3 text-gray-500" />
+                                    )}
+                                    <span className={`text-[10px] font-medium ${trendType === 'up' ? 'text-green-600' : trendType === 'down' ? 'text-red-600' : 'text-gray-600'}`}>
+                                      {trendType === 'neutral' ? '0%' : `${Math.abs(trend).toFixed(1)}%`}
+                                    </span>
+                                  </div>
+                                ) : (
+                                  <span className="text-[10px] text-gray-500">-</span>
+                                )}
+                              </td>
+                            </tr>
+                          );
+                        })}
                       </tbody>
                     </table>
                   </div>
@@ -2024,7 +2476,7 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
               <div className="flex items-center justify-between">
                 <h3 className="text-sm font-bold text-gray-900">Add New Teacher</h3>
                 <button 
-                  onClick={() => setShowAddTeacherModal(false)}
+                  onClick={closeAddTeacherModal}
                   className="p-1.5 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-md transition-all"
                 >
                   <X className="w-4 h-4" />
@@ -2072,6 +2524,9 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
                   <label className="block text-[10px] font-medium text-gray-700 mb-1.5">Full Name</label>
                   <input 
                     type="text" 
+                    name="name"
+                    value={newTeacherData.name}
+                    onChange={handleNewTeacherChange}
                     className="w-full px-3 py-1.5 bg-gray-50 border border-gray-200 rounded-md text-[10px] focus:outline-none focus:ring-2 focus:ring-blue-500"
                     placeholder="Enter teacher's name"
                   />
@@ -2080,25 +2535,51 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
                   <label className="block text-[10px] font-medium text-gray-700 mb-1.5">Email</label>
                   <input 
                     type="email" 
+                    name="email"
+                    value={newTeacherData.email}
+                    onChange={handleNewTeacherChange}
                     className="w-full px-3 py-1.5 bg-gray-50 border border-gray-200 rounded-md text-[10px] focus:outline-none focus:ring-2 focus:ring-blue-500"
                     placeholder="Enter teacher's email"
                   />
                 </div>
                 <div>
                   <label className="block text-[10px] font-medium text-gray-700 mb-1.5">Subject</label>
-                  <select className="w-full px-3 py-1.5 bg-gray-50 border border-gray-200 rounded-md text-[10px] focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    <option>Select subject</option>
-                    <option>Mathematics</option>
-                    <option>Science</option>
-                    <option>English</option>
-                    <option>History</option>
-                  </select>
+                  <input 
+                    type="text" 
+                    name="subject"
+                    value={newTeacherData.subject}
+                    onChange={handleNewTeacherChange}
+                    className="w-full px-3 py-1.5 bg-gray-50 border border-gray-200 rounded-md text-[10px] focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="Enter subject name"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[10px] font-medium text-gray-700 mb-1.5">Class</label>
+                  <input 
+                    type="text" 
+                    name="classes"
+                    value={newTeacherData.classes}
+                    onChange={handleNewTeacherChange}
+                    className="w-full px-3 py-1.5 bg-gray-50 border border-gray-200 rounded-md text-[10px] focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="Enter class name"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[10px] font-medium text-gray-700 mb-1.5">Number of Students</label>
+                  <input 
+                    type="number" 
+                    name="students"
+                    value={newTeacherData.students}
+                    onChange={handleNewTeacherChange}
+                    className="w-full px-3 py-1.5 bg-gray-50 border border-gray-200 rounded-md text-[10px] focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="Enter number of students"
+                  />
                 </div>
               </div>
               
               <div className="flex gap-2 mt-4">
                 <button 
-                  onClick={() => setShowAddTeacherModal(false)}
+                  onClick={closeAddTeacherModal}
                   className="flex-1 px-3 py-1.5 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-all text-[10px]"
                 >
                   Cancel
@@ -2123,7 +2604,7 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
               <div className="flex items-center justify-between">
                 <h3 className="text-sm font-bold text-gray-900">Add New Student</h3>
                 <button 
-                  onClick={() => setShowAddStudentModal(false)}
+                  onClick={closeAddStudentModal}
                   className="p-1.5 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-md transition-all"
                 >
                   <X className="w-4 h-4" />
@@ -2171,6 +2652,9 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
                   <label className="block text-[10px] font-medium text-gray-700 mb-1.5">Full Name</label>
                   <input 
                     type="text" 
+                    name="name"
+                    value={newStudentData.name}
+                    onChange={handleNewStudentChange}
                     className="w-full px-3 py-1.5 bg-gray-50 border border-gray-200 rounded-md text-[10px] focus:outline-none focus:ring-2 focus:ring-blue-500"
                     placeholder="Enter student's name"
                   />
@@ -2179,35 +2663,51 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
                   <label className="block text-[10px] font-medium text-gray-700 mb-1.5">Roll Number</label>
                   <input 
                     type="text" 
+                    name="roll"
+                    value={newStudentData.roll}
+                    onChange={handleNewStudentChange}
                     className="w-full px-3 py-1.5 bg-gray-50 border border-gray-200 rounded-md text-[10px] focus:outline-none focus:ring-2 focus:ring-blue-500"
                     placeholder="Enter roll number"
                   />
                 </div>
                 <div>
                   <label className="block text-[10px] font-medium text-gray-700 mb-1.5">Class</label>
-                  <select className="w-full px-3 py-1.5 bg-gray-50 border border-gray-200 rounded-md text-[10px] focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    <option>Select class</option>
-                    <option>6A</option>
-                    <option>6B</option>
-                    <option>7A</option>
-                    <option>7B</option>
-                    <option>8A</option>
-                    <option>8B</option>
-                    <option>9A</option>
-                    <option>9B</option>
-                    <option>10A</option>
-                    <option>10B</option>
-                    <option>11A</option>
-                    <option>11B</option>
-                    <option>12A</option>
-                    <option>12B</option>
-                  </select>
+                  <input 
+                    type="text" 
+                    name="class"
+                    value={newStudentData.class}
+                    onChange={handleNewStudentChange}
+                    className="w-full px-3 py-1.5 bg-gray-50 border border-gray-200 rounded-md text-[10px] focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="Enter class name"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[10px] font-medium text-gray-700 mb-1.5">Attendance (%)</label>
+                  <input 
+                    type="number" 
+                    name="attendance"
+                    value={newStudentData.attendance}
+                    onChange={handleNewStudentChange}
+                    className="w-full px-3 py-1.5 bg-gray-50 border border-gray-200 rounded-md text-[10px] focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="Enter attendance percentage"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[10px] font-medium text-gray-700 mb-1.5">Grade</label>
+                  <input 
+                    type="text" 
+                    name="grade"
+                    value={newStudentData.grade}
+                    onChange={handleNewStudentChange}
+                    className="w-full px-3 py-1.5 bg-gray-50 border border-gray-200 rounded-md text-[10px] focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="Enter grade"
+                  />
                 </div>
               </div>
               
               <div className="flex gap-2 mt-4">
                 <button 
-                  onClick={() => setShowAddStudentModal(false)}
+                  onClick={closeAddStudentModal}
                   className="flex-1 px-3 py-1.5 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-all text-[10px]"
                 >
                   Cancel
@@ -2217,6 +2717,89 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
                   className="flex-1 px-3 py-1.5 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-md hover:from-blue-600 hover:to-indigo-700 transition-all text-[10px] shadow-sm hover:shadow-md"
                 >
                   Add Student
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Add Class Modal */}
+      {showAddClassModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-md w-full max-w-md max-h-80 overflow-y-auto">
+            <div className="p-4 border-b border-gray-100">
+              <div className="flex items-center justify-between">
+                <h3 className="text-sm font-bold text-gray-900">Add New Class</h3>
+                <button 
+                  onClick={closeAddClassModal}
+                  className="p-1.5 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-md transition-all"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+            
+            <div className="p-4">
+              <div className="space-y-3">
+                <div>
+                  <label className="block text-[10px] font-medium text-gray-700 mb-1.5">Class Name</label>
+                  <input 
+                    type="text" 
+                    name="name"
+                    value={newClassData.name}
+                    onChange={handleNewClassChange}
+                    className="w-full px-3 py-1.5 bg-gray-50 border border-gray-200 rounded-md text-[10px] focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="Enter class name (e.g., Grade 10-A)"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[10px] font-medium text-gray-700 mb-1.5">Subject</label>
+                  <input 
+                    type="text" 
+                    name="subject"
+                    value={newClassData.subject}
+                    onChange={handleNewClassChange}
+                    className="w-full px-3 py-1.5 bg-gray-50 border border-gray-200 rounded-md text-[10px] focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="Enter subject name"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[10px] font-medium text-gray-700 mb-1.5">Teacher</label>
+                  <input 
+                    type="text" 
+                    name="teacher"
+                    value={newClassData.teacher}
+                    onChange={handleNewClassChange}
+                    className="w-full px-3 py-1.5 bg-gray-50 border border-gray-200 rounded-md text-[10px] focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="Enter teacher name"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[10px] font-medium text-gray-700 mb-1.5">Number of Students</label>
+                  <input 
+                    type="number" 
+                    name="students"
+                    value={newClassData.students}
+                    onChange={handleNewClassChange}
+                    className="w-full px-3 py-1.5 bg-gray-50 border border-gray-200 rounded-md text-[10px] focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="Enter number of students"
+                  />
+                </div>
+              </div>
+              
+              <div className="flex gap-2 mt-4">
+                <button 
+                  onClick={closeAddClassModal}
+                  className="flex-1 px-3 py-1.5 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-all text-[10px]"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleAddClass}
+                  className="flex-1 px-3 py-1.5 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-md hover:from-blue-600 hover:to-indigo-700 transition-all text-[10px] shadow-sm hover:shadow-md"
+                >
+                  Add Class
                 </button>
               </div>
             </div>
