@@ -9,6 +9,8 @@ import AdminDashboard from './components/admin/AdminDashboard';
 import GovernmentDashboard from './components/government/GovernmentDashboard';
 import ClassDetailsPage from './components/ClassDetailsPage';
 import AttendSmartLogo from './components/AttendSmartLogo';
+// Import Google OAuth provider
+import { GoogleOAuthProvider } from '@react-oauth/google';
 
 export default function App() {
   const [userType, setUserType] = useState('');
@@ -23,26 +25,28 @@ export default function App() {
 
   return (
     <Router>
-      <ThemeProvider>
-        <div>
-          <Routes>
-            <Route path="/" element={
-              userType === '' ? 
-                <LoginPage onLogin={handleLogin} /> : 
-                userType === 'teacher' ? 
-                  <TeacherDashboard onLogout={handleLogout} /> : 
-                userType === 'student' ? 
-                  <SimplifiedStudentDashboard onLogout={handleLogout} /> : 
-                userType === 'admin' ? 
-                  <AdminDashboard onLogout={handleLogout} /> : 
-                userType === 'government' ? 
-                  <GovernmentDashboard onLogout={handleLogout} /> : 
-                  <LoginPage onLogin={handleLogin} />
-            } />
-            <Route path="/class/:classId" element={<ClassDetailsPage />} />
-          </Routes>
-        </div>
-      </ThemeProvider>
+      <GoogleOAuthProvider clientId="590317163674-rrj6uvnklsehhuubnkhho19tno9uff20.apps.googleusercontent.com">
+        <ThemeProvider>
+          <div>
+            <Routes>
+              <Route path="/" element={
+                userType === '' ? 
+                  <LoginPage onLogin={handleLogin} /> : 
+                  userType === 'teacher' ? 
+                    <TeacherDashboard onLogout={handleLogout} /> : 
+                  userType === 'student' ? 
+                    <SimplifiedStudentDashboard onLogout={handleLogout} /> : 
+                  userType === 'admin' ? 
+                    <AdminDashboard onLogout={handleLogout} /> : 
+                  userType === 'government' ? 
+                    <GovernmentDashboard onLogout={handleLogout} /> : 
+                    <LoginPage onLogin={handleLogin} />
+              } />
+              <Route path="/class/:classId" element={<ClassDetailsPage />} />
+            </Routes>
+          </div>
+        </ThemeProvider>
+      </GoogleOAuthProvider>
     </Router>
   );
 }

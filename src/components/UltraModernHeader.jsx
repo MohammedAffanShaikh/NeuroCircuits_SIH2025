@@ -18,6 +18,7 @@ const UltraModernHeader = ({
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const [selectedClass, setSelectedClass] = useState('');
   const [particles, setParticles] = useState([]);
+  const [isLessThan800, setIsLessThan800] = useState(typeof window !== 'undefined' ? window.innerWidth < 800 : false);
   const headerRef = useRef(null);
   const [currentDate] = useState(new Date().toLocaleDateString('en-US', { 
     month: 'short', 
@@ -27,6 +28,16 @@ const UltraModernHeader = ({
 
   // Force re-render when language changes
   const [, forceUpdate] = useReducer(x => x + 1, 0);
+  
+  // Track window width for mobile detection
+  useEffect(() => {
+    const handleResize = () => {
+      setIsLessThan800(window.innerWidth < 800);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
   
   // Add effect to handle language changes
   useEffect(() => {
@@ -161,11 +172,11 @@ const UltraModernHeader = ({
           <div className="flex flex-row items-center justify-between gap-3.5">
             {/* Left side - Dashboard title and search */}
             <div className="flex items-center gap-3.5 flex-1">
-              {/* Menu button for mobile */}
-              {showMenuButton && (
+              {/* Menu button for mobile - only visible for screens less than 800px */}
+              {showMenuButton && isLessThan800 && (
                 <button 
                   onClick={onMenuToggle}
-                  className="lg:hidden p-1.5 rounded-lg bg-white/50 backdrop-blur-sm border border-white/30 text-gray-700 hover:bg-white/70 transition-all duration-300 shadow-sm hover:shadow-md"
+                  className="p-1.5 rounded-lg bg-white/50 backdrop-blur-sm border border-white/30 text-gray-700 hover:bg-white/70 transition-all duration-300 shadow-sm hover:shadow-md"
                 >
                   {isMenuOpen ? <X className="w-4.5 h-4.5" /> : <Menu className="w-4.5 h-4.5" />}
                 </button>

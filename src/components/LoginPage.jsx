@@ -3,6 +3,9 @@ import { motion } from 'framer-motion';
 import { Eye, EyeOff, User, Lock, School, Mail, Key, ArrowRight, BookOpen, GraduationCap, Users } from 'lucide-react';
 import AttendSmartLogo from './AttendSmartLogo';
 import ThemeToggle from './ThemeToggle';
+// Import Google OAuth components
+import { useGoogleLogin } from '@react-oauth/google';
+import axios from 'axios';
 
 const LoginPage = ({ onLogin }) => {
   const [username, setUsername] = useState('');
@@ -15,14 +18,32 @@ const LoginPage = ({ onLogin }) => {
   const [testimonialIndex, setTestimonialIndex] = useState(0);
   const [email, setEmail] = useState('');
 
-  const handleGoogleLogin = () => {
-    // Simulate Google login
-    setIsLoading(true);
-    setTimeout(() => {
+  // Google OAuth login handler
+  const handleGoogleLogin = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      setIsLoading(true);
+      try {
+        // Get user info from Google
+        const userInfo = await axios.get(
+          'https://www.googleapis.com/oauth2/v3/userinfo',
+          { headers: { Authorization: `Bearer ${tokenResponse.access_token}` } }
+        );
+        
+        console.log('Google user info:', userInfo.data);
+        // Pass the user type to the onLogin function
+        onLogin(userType);
+      } catch (error) {
+        console.error('Error fetching user info:', error);
+        setError('Failed to authenticate with Google');
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    onError: () => {
+      setError('Google login failed');
       setIsLoading(false);
-      onLogin(userType); // Use the currently selected user type
-    }, 1000);
-  };
+    }
+  });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
