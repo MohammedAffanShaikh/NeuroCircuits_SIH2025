@@ -44,14 +44,14 @@ const TeacherDashboard = ({ onLogout }) => {
   
   // State for managing attendance data
   const [studentAttendanceData, setStudentAttendanceData] = useState([
-    { id: 1, name: 'Rahul Sharma', class: 'Class 10-A', roll: 15, status: { present: true, absent: false, late: false }, method: 'RFID', lastUpdated: '2024-04-15 09:15:22' },
-    { id: 2, name: 'Priya Patel', class: 'Class 10-A', roll: 22, status: { present: true, absent: false, late: false }, method: 'Face Recognition', lastUpdated: '2024-04-15 09:14:45' },
-    { id: 3, name: 'Amit Kumar', class: 'Class 10-A', roll: 5, status: { present: false, absent: true, late: false }, method: 'Pending', lastUpdated: 'N/A' },
-    { id: 4, name: 'Sneha Gupta', class: 'Class 10-A', roll: 18, status: { present: false, absent: false, late: true }, method: 'QR Code', lastUpdated: '2024-04-15 09:25:30' },
-    { id: 5, name: 'Vikram Singh', class: 'Class 11-B', roll: 12, status: { present: true, absent: false, late: false }, method: 'RFID', lastUpdated: '2024-04-15 09:10:15' },
-    { id: 6, name: 'Anjali Mehta', class: 'Class 11-B', roll: 8, status: { present: false, absent: true, late: false }, method: 'Manual', lastUpdated: 'N/A' },
-    { id: 7, name: 'Rohit Verma', class: 'Class 12-C', roll: 25, status: { present: true, absent: false, late: false }, method: 'Face Recognition', lastUpdated: '2024-04-15 09:05:40' },
-    { id: 8, name: 'Pooja Desai', class: 'Class 12-C', roll: 30, status: { present: false, absent: false, late: true }, method: 'RFID', lastUpdated: '2024-04-15 09:20:10' },
+    { id: 1, name: 'Rahul Sharma', class: '10A', roll: 15, status: { present: true, absent: false, late: false }, method: 'RFID', lastUpdated: '2024-04-15 09:15:22' },
+    { id: 2, name: 'Priya Patel', class: '10A', roll: 22, status: { present: true, absent: false, late: false }, method: 'Face Recognition', lastUpdated: '2024-04-15 09:14:45' },
+    { id: 3, name: 'Amit Kumar', class: '10A', roll: 5, status: { present: false, absent: true, late: false }, method: 'Pending', lastUpdated: 'N/A' },
+    { id: 4, name: 'Sneha Gupta', class: '10A', roll: 18, status: { present: false, absent: false, late: true }, method: 'QR Code', lastUpdated: '2024-04-15 09:25:30' },
+    { id: 5, name: 'Vikram Singh', class: '10A', roll: 12, status: { present: true, absent: false, late: false }, method: 'RFID', lastUpdated: '2024-04-15 09:10:15' },
+    { id: 6, name: 'Anjali Mehta', class: '10A', roll: 8, status: { present: false, absent: true, late: false }, method: 'Manual', lastUpdated: 'N/A' },
+    { id: 7, name: 'Rohit Verma', class: '10A', roll: 25, status: { present: true, absent: false, late: false }, method: 'Face Recognition', lastUpdated: '2024-04-15 09:05:40' },
+    { id: 8, name: 'Pooja Desai', class: '10A', roll: 30, status: { present: false, absent: false, late: true }, method: 'RFID', lastUpdated: '2024-04-15 09:20:10' },
   ]);
   
   // State for new student form
@@ -59,7 +59,7 @@ const TeacherDashboard = ({ onLogout }) => {
   const [showAddClassForm, setShowAddClassForm] = useState(false);
   const [newStudent, setNewStudent] = useState({
     name: '',
-    class: 'Class 10-A',
+    class: '10A',
     roll: '',
     method: 'Manual'
   });
@@ -81,6 +81,69 @@ const TeacherDashboard = ({ onLogout }) => {
     { id: 2, type: 'device', message: 'RFID reader malfunctioning', time: '5 hours ago', severity: 'medium', status: 'acknowledged' },
     { id: 3, type: 'safety', message: 'Unauthorized access attempt', time: '1 day ago', severity: 'critical', status: 'resolved' },
   ]);
+  
+  // State for assignments
+  const [assignments, setAssignments] = useState([
+    { 
+      id: 1, 
+      title: "Chapter 5 Exercises", 
+      subject: "Mathematics", 
+      class: "10A", 
+      dueDate: "2024-04-25",
+      description: "Complete all exercises from Chapter 5",
+      students: [
+        { id: 1, name: "Rahul Sharma", submitted: true, grade: "A" },
+        { id: 2, name: "Priya Patel", submitted: true, grade: "B+" },
+        { id: 3, name: "Amit Kumar", submitted: false, grade: "-" },
+        { id: 4, name: "Sneha Gupta", submitted: true, grade: "A-" },
+        { id: 5, name: "Vikram Singh", submitted: false, grade: "-" },
+        { id: 6, name: "Anjali Mehta", submitted: false, grade: "-" },
+        { id: 7, name: "Rohit Verma", submitted: true, grade: "B" },
+        { id: 8, name: "Pooja Desai", submitted: true, grade: "A" },
+      ]
+    },
+    { 
+      id: 2, 
+      title: "Lab Report - Photosynthesis", 
+      subject: "Science", 
+      class: "10A", 
+      dueDate: "2024-04-28",
+      description: "Write a detailed lab report on photosynthesis experiment",
+      students: [
+        { id: 1, name: "Rahul Sharma", submitted: true, grade: "A" },
+        { id: 2, name: "Priya Patel", submitted: true, grade: "B+" },
+        { id: 3, name: "Amit Kumar", submitted: false, grade: "-" },
+        { id: 4, name: "Sneha Gupta", submitted: true, grade: "A-" },
+        { id: 5, name: "Vikram Singh", submitted: false, grade: "-" },
+        { id: 6, name: "Anjali Mehta", submitted: false, grade: "-" },
+        { id: 7, name: "Rohit Verma", submitted: true, grade: "B" },
+        { id: 8, name: "Pooja Desai", submitted: true, grade: "A" },
+      ]
+    }
+  ]);
+  const [showAddAssignmentForm, setShowAddAssignmentForm] = useState(false);
+  const [newAssignment, setNewAssignment] = useState({
+    title: "",
+    subject: teacherData.subject,
+    class: "10A",
+    dueDate: "",
+    description: ""
+  });
+  
+  // State for assignment filtering
+  const [showAssignmentFilter, setShowAssignmentFilter] = useState(false);
+  const [assignmentFilter, setAssignmentFilter] = useState({
+    class: "",
+    subject: "",
+    status: "all"
+  });
+  
+  // State for reports filtering
+  const [showReportsFilter, setShowReportsFilter] = useState(false);
+  const [reportsFilter, setReportsFilter] = useState({
+    class: "",
+    dateRange: "last7days"
+  });
   
   // Function to add a new student
   const addNewStudent = () => {
@@ -183,7 +246,7 @@ const TeacherDashboard = ({ onLogout }) => {
   // Function to close the add student form
   const closeAddStudentForm = () => {
     setShowAddStudentForm(false);
-    setNewStudent({ name: '', class: 'Class 10-A', roll: '', method: 'Manual' });
+    setNewStudent({ name: '', class: '10A', roll: '', method: 'Manual' });
   };
   
   // Function to delete a student
@@ -200,6 +263,65 @@ const TeacherDashboard = ({ onLogout }) => {
     })));
   };
   
+  // Function to export attendance report as CSV
+  const exportAttendanceReport = () => {
+    // Create CSV content
+    const headers = ['Student Name', 'Class', 'Roll Number', 'Status', 'Attendance Method', 'Last Updated'];
+    const csvContent = [
+      headers.join(','),
+      ...studentAttendanceData.map(student => {
+        const status = student.status.present ? 'Present' : student.status.absent ? 'Absent' : 'Late';
+        return [
+          `"${student.name}"`,
+          `"${student.class}"`,
+          student.roll,
+          `"${status}"`,
+          `"${student.method}"`,
+          `"${student.lastUpdated}"`
+        ].join(',');
+      })
+    ].join('\n');
+    
+    // Create download link
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.setAttribute('href', url);
+    link.setAttribute('download', `attendance_report_${new Date().toISOString().slice(0, 10)}.csv`);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+  
+  // Function to handle reports filter changes
+  const handleReportsFilterChange = (e) => {
+    const { name, value } = e.target;
+    setReportsFilter({ ...reportsFilter, [name]: value });
+  };
+  
+  // Function to apply reports filters
+  const applyReportsFilters = () => {
+    // In a real application, this would filter the data
+    // For now, we'll just close the modal
+    setShowReportsFilter(false);
+    console.log('Reports filters applied:', reportsFilter);
+  };
+  
+  // Function to reset reports filters
+  const resetReportsFilters = () => {
+    setReportsFilter({
+      class: "",
+      dateRange: "last7days"
+    });
+  };
+  
+  // Get unique classes for reports filter
+  const getUniqueClassesForReports = () => {
+    const classes = studentAttendanceData.map(student => student.class);
+    return [...new Set(classes)];
+  };
+  
   // Function to mark all present
   const markAllPresent = () => {
     setStudentAttendanceData(studentAttendanceData.map(student => ({
@@ -208,6 +330,144 @@ const TeacherDashboard = ({ onLogout }) => {
       lastUpdated: new Date().toLocaleString()
     })));
   };
+  
+  // Function to add a new assignment
+  const addNewAssignment = () => {
+    if (newAssignment.title && newAssignment.dueDate) {
+      // Get students for the selected class
+      const classStudents = studentAttendanceData
+        .filter(student => student.class === newAssignment.class)
+        .map(student => ({
+          id: student.id,
+          name: student.name,
+          submitted: false,
+          grade: "-"
+        }));
+      
+      const assignmentObj = {
+        id: assignments.length + 1,
+        title: newAssignment.title,
+        subject: newAssignment.subject,
+        class: newAssignment.class,
+        dueDate: newAssignment.dueDate,
+        description: newAssignment.description,
+        students: classStudents
+      };
+      
+      setAssignments([...assignments, assignmentObj]);
+      setNewAssignment({
+        title: "",
+        subject: teacherData.subject,
+        class: "10A",
+        dueDate: "",
+        description: ""
+      });
+      setShowAddAssignmentForm(false);
+    }
+  };
+  
+  // Function to update student submission status
+  const updateStudentSubmission = (assignmentId, studentId, submitted) => {
+    setAssignments(assignments.map(assignment => {
+      if (assignment.id === assignmentId) {
+        const updatedStudents = assignment.students.map(student => {
+          if (student.id === studentId) {
+            return { ...student, submitted };
+          }
+          return student;
+        });
+        return { ...assignment, students: updatedStudents };
+      }
+      return assignment;
+    }));
+  };
+  
+  // Function to update student grade
+  const updateStudentGrade = (assignmentId, studentId, grade) => {
+    setAssignments(assignments.map(assignment => {
+      if (assignment.id === assignmentId) {
+        const updatedStudents = assignment.students.map(student => {
+          if (student.id === studentId) {
+            return { ...student, grade };
+          }
+          return student;
+        });
+        return { ...assignment, students: updatedStudents };
+      }
+      return assignment;
+    }));
+  };
+  
+  // Function to handle new assignment form input changes
+  const handleNewAssignmentChange = (e) => {
+    const { name, value } = e.target;
+    setNewAssignment({ ...newAssignment, [name]: value });
+  };
+  
+  // Function to handle assignment filter changes
+  const handleAssignmentFilterChange = (e) => {
+    const { name, value } = e.target;
+    setAssignmentFilter({ ...assignmentFilter, [name]: value });
+  };
+  
+  // Function to apply assignment filters
+  const applyAssignmentFilters = () => {
+    // Filtering is handled by the render logic, so we just close the modal
+    setShowAssignmentFilter(false);
+  };
+  
+  // Function to reset assignment filters
+  const resetAssignmentFilters = () => {
+    setAssignmentFilter({
+      class: "",
+      subject: "",
+      status: "all"
+    });
+  };
+  
+  // Function to get filtered assignments
+  const getFilteredAssignments = () => {
+    return assignments.filter(assignment => {
+      // Filter by class
+      if (assignmentFilter.class && assignment.class !== assignmentFilter.class) {
+        return false;
+      }
+      
+      // Filter by subject
+      if (assignmentFilter.subject && assignment.subject !== assignmentFilter.subject) {
+        return false;
+      }
+      
+      // Filter by status
+      if (assignmentFilter.status !== "all") {
+        const submittedCount = assignment.students.filter(s => s.submitted).length;
+        const totalCount = assignment.students.length;
+        const completionRate = totalCount > 0 ? submittedCount / totalCount : 0;
+        
+        if (assignmentFilter.status === "completed" && completionRate < 1) {
+          return false;
+        } else if (assignmentFilter.status === "pending" && completionRate >= 1) {
+          return false;
+        }
+      }
+      
+      return true;
+    });
+  };
+  
+  // Get unique classes and subjects for filter options
+  const getUniqueClasses = () => {
+    const classes = assignments.map(a => a.class);
+    return [...new Set(classes)];
+  };
+  
+  const getUniqueSubjects = () => {
+    const subjects = assignments.map(a => a.subject);
+    return [...new Set(subjects)];
+  };
+  
+  // Get filtered assignments for display
+  const filteredAssignments = getFilteredAssignments();
 
   // Sync profileData with teacherData when teacherData changes
   useEffect(() => {
@@ -224,7 +484,10 @@ const TeacherDashboard = ({ onLogout }) => {
   const absentCount = studentAttendanceData.filter(student => student.status.absent).length;
   const lateCount = studentAttendanceData.filter(student => student.status.late).length;
   
-  // Generate mock weekly attendance data for 40 students
+  // State for chart time range
+  const [chartTimeRange, setChartTimeRange] = useState('Last 7 Days');
+  
+  // Generate mock attendance data for different time ranges
   const weeklyAttendanceData = [
     { day: 'Mon', present: 32, absent: 3, late: 5 },
     { day: 'Tue', present: 30, absent: 4, late: 6 },
@@ -232,7 +495,33 @@ const TeacherDashboard = ({ onLogout }) => {
     { day: 'Thu', present: 33, absent: 3, late: 4 },
     { day: 'Fri', present: 36, absent: 1, late: 3 },
   ];
+  
+  const monthlyAttendanceData = [
+    { day: 'Week 1', present: 150, absent: 20, late: 30 },
+    { day: 'Week 2', present: 145, absent: 25, late: 30 },
+    { day: 'Week 3', present: 160, absent: 15, late: 25 },
+    { day: 'Week 4', present: 155, absent: 18, late: 27 },
+  ];
+  
+  const quarterlyAttendanceData = [
+    { day: 'Month 1', present: 620, absent: 85, late: 95 },
+    { day: 'Month 2', present: 600, absent: 90, late: 110 },
+    { day: 'Month 3', present: 650, absent: 60, late: 90 },
+  ];
 
+  // Function to get chart data based on selected time range
+  const getChartData = () => {
+    switch (chartTimeRange) {
+      case 'Last 30 Days':
+        return monthlyAttendanceData;
+      case 'Last 90 Days':
+        return quarterlyAttendanceData;
+      case 'Last 7 Days':
+      default:
+        return weeklyAttendanceData;
+    }
+  };
+  
   const summaryStats = [
     { label: 'Total Students', value: studentAttendanceData.length, icon: Users, color: 'from-blue-500 to-blue-600' },
     { label: 'Present Today', value: presentCount, icon: UserCheck, color: 'from-green-500 to-green-600' },
@@ -277,6 +566,7 @@ const TeacherDashboard = ({ onLogout }) => {
             { id: 'home', icon: Home, label: 'Dashboard Home' },
             { id: 'classes', icon: BookOpen, label: 'Classes' },
             { id: 'attendance', icon: UserCheck, label: 'Attendance' },
+            { id: 'assignments', icon: ClipboardList, label: 'Assignments' },
             { id: 'reports', icon: FileText, label: 'Reports' },
             { id: 'alerts', icon: Bell, label: 'Alerts' },
             { id: 'settings', icon: Settings, label: 'Settings' },
@@ -440,16 +730,17 @@ const TeacherDashboard = ({ onLogout }) => {
                     <h3 className="text-xs font-bold text-gray-900">Weekly Attendance Trend Analysis</h3>
                     <select 
                       className="text-[10px] border border-gray-300 rounded-full px-3 py-1.5 bg-white"
-                      onChange={(e) => console.log('Time range changed:', e.target.value)}
+                      value={chartTimeRange}
+                      onChange={(e) => setChartTimeRange(e.target.value)}
                     >
-                      <option>Last 7 Days</option>
-                      <option>Last 30 Days</option>
-                      <option>Last 90 Days</option>
+                      <option value="Last 7 Days">Last 7 Days</option>
+                      <option value="Last 30 Days">Last 30 Days</option>
+                      <option value="Last 90 Days">Last 90 Days</option>
                     </select>
                   </div>
                   <div className="h-44">
                     <ResponsiveContainer width="100%" height="100%">
-                      <LineChart data={weeklyAttendanceData}>
+                      <LineChart data={getChartData()}>
                         <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#eee" />
                         <XAxis 
                           dataKey="day" 
@@ -735,6 +1026,166 @@ const TeacherDashboard = ({ onLogout }) => {
             </div>
           )}
 
+          {/* Assignments Tab */}
+          {activeTab === 'assignments' && (
+            <div>
+              {/* Welcome Banner */}
+              <div className="bg-gradient-to-r from-blue-600 via-indigo-500 to-indigo-600 rounded-md p-4 mb-5 shadow-sm backdrop-blur-sm border border-white/20 relative overflow-hidden">
+                <div className="absolute -top-5 -right-5 w-20 h-20 bg-white/10 rounded-full"></div>
+                <div className="absolute -bottom-5 -left-5 w-16 h-16 bg-white/10 rounded-full"></div>
+                <div className="absolute top-4 right-4 w-7 h-7 bg-white/10 rotate-45"></div>
+                
+                <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-3">
+                  <div>
+                    <h2 className="text-base font-bold text-white mb-1.5">Assignment Management Dashboard</h2>
+                    <p className="text-[10px] text-blue-100 mb-2">Create and manage student assignments and track submissions</p>
+                    <div className="flex flex-wrap gap-2 mt-2">
+                      <div className="flex items-center bg-white/10 rounded-full px-2.5 py-1">
+                        <div className="w-2 h-2 bg-green-400 rounded-full mr-1.5"></div>
+                        <span className="text-[10px] text-white font-medium">{teacherData.school}</span>
+                      </div>
+                      <div className="flex items-center bg-white/10 rounded-full px-2.5 py-1">
+                        <div className="w-2 h-2 bg-blue-400 rounded-full mr-1.5"></div>
+                        <span className="text-[10px] text-white font-medium">{assignments.length} Assignments</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="bg-white/20 rounded-md p-2">
+                      <ClipboardList className="w-5 h-5 text-white" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-sm font-bold text-gray-900">Assignment Management</h2>
+                <div className="flex gap-3">
+                  <button 
+                    onClick={() => setShowAddAssignmentForm(true)}
+                    className="flex items-center gap-1 px-2 py-0.5 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded hover:from-blue-600 hover:to-indigo-700 transition-all shadow-sm hover:shadow text-xs"
+                  >
+                    <Plus className="w-2.5 h-2.5" />
+                    Post Assignment
+                  </button>
+                  <button 
+                    onClick={() => setShowAssignmentFilter(true)}
+                    className="flex items-center gap-1 px-2 py-0.5 bg-blue-100 text-blue-700 rounded hover:bg-blue-200 transition-all shadow-sm hover:shadow text-xs"
+                  >
+                    <Filter className="w-2.5 h-2.5" />
+                    Filter
+                  </button>
+                </div>
+              </div>
+
+              {/* Assignments List */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+                {filteredAssignments.map((assignment) => (
+                  <div key={assignment.id} className="bg-white rounded-md p-3 shadow-sm border border-gray-200">
+                    <div className="flex justify-between items-start mb-2">
+                      <h3 className="font-bold text-gray-900 text-sm">{assignment.title}</h3>
+                      <span className="text-[10px] bg-blue-100 text-blue-800 px-1.5 py-0.5 rounded-full">
+                        {assignment.subject}
+                      </span>
+                    </div>
+                    <p className="text-gray-600 text-[10px] mb-2">{assignment.description}</p>
+                    <div className="flex justify-between items-center text-[10px] text-gray-500 mb-3">
+                      <span>Class: {assignment.class}</span>
+                      <span>Due: {new Date(assignment.dueDate).toLocaleDateString()}</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <div className="text-[10px]">
+                        <span className="text-gray-600">Submissions: </span>
+                        <span className="font-medium">
+                          {assignment.students.filter(s => s.submitted).length}/{assignment.students.length}
+                        </span>
+                      </div>
+                      <button 
+                        onClick={() => console.log('View assignment details')}
+                        className="text-blue-600 hover:text-blue-800 text-[10px] font-medium"
+                      >
+                        View Details
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Assignment Submission Tracking */}
+              <div className="bg-white rounded-md p-2.5 shadow-sm">
+                <h3 className="font-bold text-gray-900 text-sm mb-3">Track Student Submissions</h3>
+                <div className="overflow-hidden rounded-sm border border-gray-200">
+                  <table className="w-full text-[9px]">
+                    <thead>
+                      <tr className="bg-gray-50 border-b border-gray-200">
+                        <th className="text-left py-1 px-1.5 font-medium text-gray-500 text-[9px]">Assignment</th>
+                        <th className="text-left py-1 px-1.5 font-medium text-gray-500 text-[9px]">Student</th>
+                        <th className="text-left py-1 px-1.5 font-medium text-gray-500 text-[9px]">Status</th>
+                        <th className="text-left py-1 px-1.5 font-medium text-gray-500 text-[9px]">Grade</th>
+                        <th className="text-left py-1 px-1.5 font-medium text-gray-500 text-[9px]">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {filteredAssignments.flatMap(assignment => 
+                        assignment.students.map(student => {
+                          // Find the full student object from studentAttendanceData
+                          const fullStudent = studentAttendanceData.find(s => s.id === student.id);
+                          return (
+                            <tr key={`${assignment.id}-${student.id}`} className="border-b border-gray-100 hover:bg-blue-50 transition-colors duration-150">
+                              <td className="py-1 px-1.5">
+                                <div className="font-medium text-gray-900 text-[10px]">{assignment.title}</div>
+                                <div className="text-gray-500 text-[9px]">{assignment.class}</div>
+                              </td>
+                              <td className="py-1 px-1.5">
+                                <div className="flex items-center gap-1">
+                                  {fullStudent && (
+                                    <div className="relative">
+                                      <img 
+                                        src={getStudentAvatar(fullStudent.name)}
+                                        alt="Student Avatar" 
+                                        className="w-6 h-6 rounded-full object-cover shadow-sm border-2 border-indigo-200"
+                                      />
+                                      <div className="absolute bottom-0 right-0 w-1 h-1 bg-green-400 rounded-full border border-white"></div>
+                                    </div>
+                                  )}
+                                  <span className="font-medium text-gray-900 text-[10px]">{student.name}</span>
+                                </div>
+                              </td>
+                              <td className="py-1 px-1.5">
+                                <div className="flex gap-0.5">
+                                  <button 
+                                    onClick={() => updateStudentSubmission(assignment.id, student.id, !student.submitted)}
+                                    className={`px-1 py-0.5 rounded-full text-[9px] font-medium transition-all duration-200 ${student.submitted ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
+                                  >
+                                    {student.submitted ? 'Submitted' : 'Pending'}
+                                  </button>
+                                </div>
+                              </td>
+                              <td className="py-1 px-1.5 text-gray-600 text-[10px]">
+                                <span>{student.grade}</span>
+                              </td>
+                              <td className="py-1 px-1.5">
+                                <div className="flex gap-0.5">
+                                  <input
+                                    type="text"
+                                    value={student.grade}
+                                    onChange={(e) => updateStudentGrade(assignment.id, student.id, e.target.value)}
+                                    className="w-12 px-1 py-0.5 border border-gray-300 rounded text-[9px]"
+                                    placeholder="Grade"
+                                  />
+                                </div>
+                              </td>
+                            </tr>
+                          );
+                        })
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Reports Tab */}
           {activeTab === 'reports' && (
             <div className="pt-2">
@@ -771,14 +1222,14 @@ const TeacherDashboard = ({ onLogout }) => {
                 <h2 className="text-sm font-bold text-gray-900">Attendance Reports & Analytics</h2>
                 <div className="flex gap-2">
                   <button 
-                    onClick={() => console.log('Filter clicked')}
-                    className="flex items-center gap-1 px-3 py-1.5 bg-gray-100 text-gray-700 rounded-full hover:bg-gray-200 transition-all text-xs font-medium"
+                    onClick={() => setShowReportsFilter(true)}
+                    className="flex items-center gap-1 px-3 py-1.5 bg-blue-100 text-blue-700 rounded-full hover:bg-blue-200 transition-all text-xs font-medium"
                   >
                     <Filter className="w-3 h-3" />
                     Filter Data
                   </button>
                   <button 
-                    onClick={() => console.log('Export Report clicked')}
+                    onClick={exportAttendanceReport}
                     className="flex items-center gap-1 px-3 py-1.5 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-full hover:from-blue-600 hover:to-indigo-700 transition-all shadow-sm hover:shadow text-xs font-medium"
                   >
                     <Download className="w-3 h-3" />
@@ -850,16 +1301,17 @@ const TeacherDashboard = ({ onLogout }) => {
                     <h3 className="text-xs font-bold text-gray-900">Weekly Attendance Trend Analysis</h3>
                     <select 
                       className="text-[10px] border border-gray-300 rounded-full px-3 py-1.5 bg-white"
-                      onChange={(e) => console.log('Time range changed:', e.target.value)}
+                      value={chartTimeRange}
+                      onChange={(e) => setChartTimeRange(e.target.value)}
                     >
-                      <option>Last 7 Days</option>
-                      <option>Last 30 Days</option>
-                      <option>Last 90 Days</option>
+                      <option value="Last 7 Days">Last 7 Days</option>
+                      <option value="Last 30 Days">Last 30 Days</option>
+                      <option value="Last 90 Days">Last 90 Days</option>
                     </select>
                   </div>
                   <div className="h-44">
                     <ResponsiveContainer width="100%" height="100%">
-                      <LineChart data={weeklyAttendanceData}>
+                      <LineChart data={getChartData()}>
                         <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#eee" />
                         <XAxis 
                           dataKey="day" 
@@ -871,8 +1323,8 @@ const TeacherDashboard = ({ onLogout }) => {
                           axisLine={false} 
                           tickLine={false} 
                           tick={{ fill: '#666', fontSize: 8 }}
-                          domain={[0, 40]}
-                          ticks={[0, 5, 10, 15, 20, 25, 30, 35, 40]}
+                          domain={[0, chartTimeRange === 'Last 7 Days' ? 40 : chartTimeRange === 'Last 30 Days' ? 180 : 700]}
+                          ticks={chartTimeRange === 'Last 7 Days' ? [0, 5, 10, 15, 20, 25, 30, 35, 40] : chartTimeRange === 'Last 30 Days' ? [0, 30, 60, 90, 120, 150, 180] : [0, 100, 200, 300, 400, 500, 600, 700]}
                         />
                         <Tooltip 
                           contentStyle={{ 
@@ -1510,23 +1962,41 @@ const TeacherDashboard = ({ onLogout }) => {
             </div>
             <div className="grid grid-cols-3 gap-4">
               {[{
-              
+                name: 'James',
                 avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=James'
               }, {
-                
+                name: 'Sarah',
                 avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah'
               }, {
-                
+                name: 'Michael',
                 avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Michael'
               }, {
-               
+                name: 'Emma',
                 avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Emma'
               }, {
-                
+                name: 'David',
                 avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=David'
               }, {
-                
+                name: 'Sophia',
                 avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Sophia'
+              }, {
+                name: 'Olivia',
+                avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Olivia'
+              }, {
+                name: 'William',
+                avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=William'
+              }, {
+                name: 'Ava',
+                avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Ava'
+              }, {
+                name: 'Alexander',
+                avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Alexander'
+              }, {
+                name: 'Mia',
+                avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Mia'
+              }, {
+                name: 'Ethan',
+                avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Ethan'
               }].map((person, index) => (
                 <div 
                   key={index} 
@@ -1792,6 +2262,244 @@ const TeacherDashboard = ({ onLogout }) => {
                     </div>
                   ))}
                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      
+      {/* Add Assignment Form Modal */}
+      {showAddAssignmentForm && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl p-6 max-w-md w-full max-h-[90vh] overflow-auto">
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-lg font-bold text-gray-900">Post New Assignment</h3>
+              <button 
+                onClick={() => setShowAddAssignmentForm(false)}
+                className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+              >
+                <X className="w-5 h-5 text-gray-500" />
+              </button>
+            </div>
+            
+            <div className="space-y-4">
+              <div>
+                <label className="block text-xs font-medium text-gray-700 mb-1.5">Assignment Title</label>
+                <input 
+                  type="text" 
+                  name="title"
+                  value={newAssignment.title}
+                  onChange={handleNewAssignmentChange}
+                  className="w-full px-3 py-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-xs"
+                  placeholder="Enter assignment title"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-xs font-medium text-gray-700 mb-1.5">Subject</label>
+                <input 
+                  type="text" 
+                  name="subject"
+                  value={newAssignment.subject}
+                  onChange={handleNewAssignmentChange}
+                  className="w-full px-3 py-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-xs"
+                  placeholder="Enter subject"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-xs font-medium text-gray-700 mb-1.5">Class</label>
+                <select 
+                  name="class"
+                  value={newAssignment.class}
+                  onChange={handleNewAssignmentChange}
+                  className="w-full px-3 py-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-xs"
+                >
+                  {teacherData.classes.map((classObj, index) => (
+                    <option key={index} value={classObj.name}>{classObj.name}</option>
+                  ))}
+                </select>
+              </div>
+              
+              <div>
+                <label className="block text-xs font-medium text-gray-700 mb-1.5">Due Date</label>
+                <input 
+                  type="date" 
+                  name="dueDate"
+                  value={newAssignment.dueDate}
+                  onChange={handleNewAssignmentChange}
+                  className="w-full px-3 py-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-xs"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-xs font-medium text-gray-700 mb-1.5">Description</label>
+                <textarea 
+                  name="description"
+                  value={newAssignment.description}
+                  onChange={handleNewAssignmentChange}
+                  className="w-full px-3 py-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-xs"
+                  placeholder="Enter assignment description"
+                  rows="3"
+                />
+              </div>
+              
+              <div className="flex gap-3 pt-4">
+                <button 
+                  onClick={() => setShowAddAssignmentForm(false)}
+                  className="flex-1 px-3 py-1.5 border border-gray-300 text-gray-700 rounded hover:bg-gray-50 transition-all text-xs"
+                >
+                  Cancel
+                </button>
+                <button 
+                  onClick={addNewAssignment}
+                  className="flex-1 px-3 py-1.5 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded hover:from-blue-600 hover:to-indigo-700 transition-all shadow-sm hover:shadow text-xs"
+                >
+                  Post Assignment
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      
+      {/* Assignment Filter Modal */}
+      {showAssignmentFilter && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl p-4 max-w-md w-full max-h-[80vh] overflow-auto">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-base font-bold text-gray-900">Filter Assignments</h3>
+              <button 
+                onClick={() => setShowAssignmentFilter(false)}
+                className="p-1 hover:bg-gray-100 rounded transition-colors"
+              >
+                <X className="w-4 h-4 text-gray-500" />
+              </button>
+            </div>
+            
+            <div className="space-y-3">
+              <div>
+                <label className="block text-[10px] font-medium text-gray-700 mb-1">Class</label>
+                <select 
+                  name="class"
+                  value={assignmentFilter.class}
+                  onChange={handleAssignmentFilterChange}
+                  className="w-full px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-[10px]"
+                >
+                  <option value="">All Classes</option>
+                  {getUniqueClasses().map((className, index) => (
+                    <option key={index} value={className}>{className}</option>
+                  ))}
+                </select>
+              </div>
+              
+              <div>
+                <label className="block text-[10px] font-medium text-gray-700 mb-1">Subject</label>
+                <select 
+                  name="subject"
+                  value={assignmentFilter.subject}
+                  onChange={handleAssignmentFilterChange}
+                  className="w-full px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-[10px]"
+                >
+                  <option value="">All Subjects</option>
+                  {getUniqueSubjects().map((subjectName, index) => (
+                    <option key={index} value={subjectName}>{subjectName}</option>
+                  ))}
+                </select>
+              </div>
+              
+              <div>
+                <label className="block text-[10px] font-medium text-gray-700 mb-1">Status</label>
+                <select 
+                  name="status"
+                  value={assignmentFilter.status}
+                  onChange={handleAssignmentFilterChange}
+                  className="w-full px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-[10px]"
+                >
+                  <option value="all">All Assignments</option>
+                  <option value="completed">Completed</option>
+                  <option value="pending">Pending</option>
+                </select>
+              </div>
+              
+              <div className="flex gap-2 pt-3">
+                <button 
+                  onClick={resetAssignmentFilters}
+                  className="flex-1 px-2 py-1 border border-gray-300 text-gray-700 rounded hover:bg-gray-50 transition-all text-[10px]"
+                >
+                  Reset
+                </button>
+                <button 
+                  onClick={applyAssignmentFilters}
+                  className="flex-1 px-2 py-1 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded hover:from-blue-600 hover:to-indigo-700 transition-all shadow-sm hover:shadow text-[10px]"
+                >
+                  Apply Filters
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      
+      {/* Reports Filter Modal */}
+      {showReportsFilter && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl p-4 max-w-md w-full max-h-[80vh] overflow-auto">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-base font-bold text-gray-900">Filter Reports</h3>
+              <button 
+                onClick={() => setShowReportsFilter(false)}
+                className="p-1 hover:bg-gray-100 rounded transition-colors"
+              >
+                <X className="w-4 h-4 text-gray-500" />
+              </button>
+            </div>
+            
+            <div className="space-y-3">
+              <div>
+                <label className="block text-[10px] font-medium text-gray-700 mb-1">Class</label>
+                <select 
+                  name="class"
+                  value={reportsFilter.class}
+                  onChange={handleReportsFilterChange}
+                  className="w-full px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-[10px]"
+                >
+                  <option value="">All Classes</option>
+                  {getUniqueClassesForReports().map((className, index) => (
+                    <option key={index} value={className}>{className}</option>
+                  ))}
+                </select>
+              </div>
+              
+              <div>
+                <label className="block text-[10px] font-medium text-gray-700 mb-1">Date Range</label>
+                <select 
+                  name="dateRange"
+                  value={reportsFilter.dateRange}
+                  onChange={handleReportsFilterChange}
+                  className="w-full px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-[10px]"
+                >
+                  <option value="last7days">Last 7 Days</option>
+                  <option value="last30days">Last 30 Days</option>
+                  <option value="last90days">Last 90 Days</option>
+                  <option value="thismonth">This Month</option>
+                  <option value="lastmonth">Last Month</option>
+                </select>
+              </div>
+              
+              <div className="flex gap-2 pt-3">
+                <button 
+                  onClick={resetReportsFilters}
+                  className="flex-1 px-2 py-1 border border-gray-300 text-gray-700 rounded hover:bg-gray-50 transition-all text-[10px]"
+                >
+                  Reset
+                </button>
+                <button 
+                  onClick={applyReportsFilters}
+                  className="flex-1 px-2 py-1 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded hover:from-blue-600 hover:to-indigo-700 transition-all shadow-sm hover:shadow text-[10px]"
+                >
+                  Apply Filters
+                </button>
               </div>
             </div>
           </div>
