@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
-import { Users, User, UserCheck, UserX, Bell, AlertTriangle, Download, Calendar, Clock, Activity, Shield, MapPin, TrendingUp, FileText, Settings, LogOut, Menu, X, Home, BookOpen, ClipboardList, MessageSquare, Search, ChevronDown, CheckCircle2, Eye, Edit, Printer, Filter, Plus, Save, XCircle, RefreshCw, PieChart, Palette } from 'lucide-react';
+import { Users, User, UserCheck, UserX, Bell, AlertTriangle, Download, Calendar, Clock, Activity, Shield, MapPin, TrendingUp, FileText, Settings, LogOut, Menu, X, Home, BookOpen, ClipboardList, MessageSquare, Search, Eye, Edit, Printer, Filter, Plus, Save, RefreshCw } from 'lucide-react';
 import { BarChart, Bar, LineChart, Line, PieChart as RechartsPieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { motion } from 'framer-motion';
 import AttendSmartLogo from '../AttendSmartLogo';
@@ -247,7 +246,6 @@ const TeacherDashboard = ({ onLogout }) => {
       </g>
     </svg>
   );
-  const { t, i18n } = useTranslation();
   const [activeTab, setActiveTab] = useState('home');
   const [selectedClass, setSelectedClass] = useState('Class 10-A');
   
@@ -1909,28 +1907,28 @@ const TeacherDashboard = ({ onLogout }) => {
                           type="monotone" 
                           dataKey="present" 
                           name="Present Students" 
-                          stroke="#8B5CF6" 
+                          stroke="#3B82F6" 
                           strokeWidth={2}
-                          dot={{ r: 3, fill: '#A78BFA' }}
-                          activeDot={{ r: 5, fill: '#A78BFA' }}
+                          dot={{ r: 3, fill: '#3B82F6' }}
+                          activeDot={{ r: 5, fill: '#3B82F6' }}
                         />
                         <Line 
                           type="monotone" 
                           dataKey="absent" 
                           name="Absent Students" 
-                          stroke="#3B82F6" 
+                          stroke="#6366F1" 
                           strokeWidth={2}
-                          dot={{ r: 3, fill: '#60A5FA' }}
-                          activeDot={{ r: 5, fill: '#60A5FA' }}
+                          dot={{ r: 3, fill: '#6366F1' }}
+                          activeDot={{ r: 5, fill: '#6366F1' }}
                         />
                         <Line 
                           type="monotone" 
                           dataKey="late" 
                           name="Late Arrivals" 
-                          stroke="#1D4ED8" 
+                          stroke="#8B5CF6" 
                           strokeWidth={2}
-                          dot={{ r: 3, fill: '#3B82F6' }}
-                          activeDot={{ r: 5, fill: '#3B82F6' }}
+                          dot={{ r: 3, fill: '#8B5CF6' }}
+                          activeDot={{ r: 5, fill: '#8B5CF6' }}
                         />
                       </LineChart>
                     </ResponsiveContainer>

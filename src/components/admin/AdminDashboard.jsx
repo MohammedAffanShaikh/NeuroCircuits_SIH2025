@@ -3,6 +3,7 @@ import { Users, UserCheck, UserX, BookOpen, TrendingUp, FileText, Settings, LogO
 import { BarChart as RechartsBarChart, Bar, LineChart as RechartsLineChart, Line, PieChart as RechartsPieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { motion, AnimatePresence } from 'framer-motion';
 import UltraModernHeader from '../UltraModernHeader';
+import ParticleBackground from '../ParticleBackground';
 
 const AdminDashboard = ({ onLogout }) => {
   const [activeTab, setActiveTab] = useState('home');
@@ -737,6 +738,7 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
 
   return (
     <div className="flex min-h-screen h-screen overflow-hidden bg-gradient-to-br from-blue-50 to-indigo-50">
+      <ParticleBackground />
       {/* Sidebar */}
       <motion.div 
         initial={{ x: -100, opacity: 0 }}
@@ -870,13 +872,13 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
               </div>
 
               {/* Summary Cards */}
-              <div className="flex gap-4 mb-6">
+              <div className="grid grid-cols-1 sm:grid-cols-4 lg:grid-cols-4 gap-4 mb-6">
                 {summaryStats.map((stat, index) => {
                   const IconComponent = stat.icon;
                   return (
                     <div 
                       key={index}
-                      className={`flex-grow bg-gradient-to-br ${stat.color} rounded-md p-4 shadow-sm border border-white/20 backdrop-blur-sm relative overflow-hidden`}
+                      className={`bg-gradient-to-br ${stat.color} rounded-md p-4 shadow-sm border border-white/20 backdrop-blur-sm relative overflow-hidden`}
                     >
                       <div className="absolute -top-2 -right-2 w-10 h-10 bg-white/10 rounded-full"></div>
                       <div className="absolute -bottom-2 -left-2 w-8 h-8 bg-white/10 rounded-full"></div>
@@ -957,10 +959,10 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
                         <Line 
                           type="monotone" 
                           dataKey="attendance" 
-                          stroke="#1e40af" 
+                          stroke="#3B82F6" 
                           strokeWidth={3}
-                          dot={{ r: 7, fill: '#fff', strokeWidth: 2, stroke: '#1e40af' }}
-                          activeDot={{ r: 9, fill: '#fff', strokeWidth: 2, stroke: '#1e3a8a' }}
+                          dot={{ r: 7, fill: '#fff', strokeWidth: 2, stroke: '#3B82F6' }}
+                          activeDot={{ r: 9, fill: '#fff', strokeWidth: 2, stroke: '#6366F1' }}
                           animationDuration={800}
                         />
                       </RechartsLineChart>
@@ -1676,7 +1678,7 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
                           animationDuration={800}
                         >
                           {classes.map((entry, index) => (
-                            <Cell key={`cell-${index}`} fill="#60a5fa" />
+                            <Cell key={`cell-${index}`} fill="#3B82F6" />
                           ))}
                         </Bar>
                       </RechartsBarChart>
@@ -1727,10 +1729,10 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
                           type="monotone" 
                           dataKey="averageScore" 
                           name="Average Score" 
-                          stroke="#93c5fd" 
+                          stroke="#3B82F6" 
                           strokeWidth={3}
-                          dot={{ r: 6, fill: '#bfdbfe', strokeWidth: 2, stroke: '#1d4ed8' }}
-                          activeDot={{ r: 8, fill: '#bfdbfe', strokeWidth: 2, stroke: '#1d4ed8' }}
+                          dot={{ r: 6, fill: '#3B82F6', strokeWidth: 2, stroke: '#3B82F6' }}
+                          activeDot={{ r: 8, fill: '#3B82F6', strokeWidth: 2, stroke: '#6366F1' }}
                           animationDuration={800}
                         />
                       </RechartsLineChart>

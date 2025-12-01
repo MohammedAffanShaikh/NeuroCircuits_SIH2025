@@ -1,12 +1,18 @@
 import React, { useState } from 'react';
 import { Home, FileText, Award, AlertCircle, Settings, User, LogOut, Users, CheckCircle, Clock, TrendingUp, X, BookOpen, Calculator, FlaskConical, PenTool, Globe, Music, Palette, Edit, RefreshCw, UserCheck, Calendar } from 'lucide-react';
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
 import UltraModernHeader from '../UltraModernHeader';
+import ParticleBackground from '../ParticleBackground';
 
 const SimplifiedStudentDashboard = ({ onLogout }) => {
   const [activeTab, setActiveTab] = useState('home');
   const [showAvatarModal, setShowAvatarModal] = useState(false);
   const [selectedClass, setSelectedClass] = useState(null);
   const [studentAvatar, setStudentAvatar] = useState('https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah&backgroundColor=ffffff&radius=50');
+  
+  // Date range filter state for attendance
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
 
   // Settings state
   const [settings, setSettings] = useState({
@@ -23,6 +29,74 @@ const SimplifiedStudentDashboard = ({ onLogout }) => {
       loginAlerts: true
     }
   });
+
+  // Sample data for classes - in a real app, this would come from an API or context
+  const classData = [
+    { id: 1, name: 'Mathematics', teacher: 'Mr. Johnson', period: '2nd', students: 32, room: '204', subject: 'Mathematics' },
+    { id: 2, name: 'Science', teacher: 'Dr. Smith', period: '3rd', students: 30, room: '301', subject: 'Science' },
+    { id: 3, name: 'English', teacher: 'Ms. Williams', period: '1st', students: 31, room: '105', subject: 'English' },
+    { id: 4, name: 'History', teacher: 'Mr. Brown', period: '4th', students: 29, room: '208', subject: 'History' },
+    { id: 5, name: 'Geography', teacher: 'Mrs. Davis', period: '5th', students: 30, room: '305', subject: 'Geography' },
+    { id: 6, name: 'Art', teacher: 'Ms. Taylor', period: '6th', students: 28, room: 'Art Hall', subject: 'Art' }
+  ];
+
+  // Helper function to get class count
+  const getClassCount = () => {
+    return classData.length;
+  };
+
+  // Helper function to get subject list
+  const getSubjectList = () => {
+    const subjects = classData.map(cls => cls.subject);
+    return subjects.join(', ');
+  };
+
+  // Helper functions for attendance data
+  const getOverallAttendance = () => {
+    return studentData.attendancePercentage;
+  };
+
+  const getPerfectStreak = () => {
+    // Calculate perfect streak based on present days
+    return studentData.presentDays - studentData.absentDays - studentData.lateDays;
+  };
+
+  const getLateEntries = () => {
+    return studentData.lateDays;
+  };
+
+  // Function to filter attendance records by date range
+  const filterAttendanceRecords = (records) => {
+    if (!startDate || !endDate) return records;
+    
+    return records.filter(record => {
+      const recordDate = new Date(record.date);
+      return recordDate >= new Date(startDate) && recordDate <= new Date(endDate);
+    });
+  };
+
+  // Function to handle date range filter application
+  const applyDateFilter = () => {
+    // The filter is applied automatically through the filterAttendanceRecords function
+    console.log('Date filter applied:', startDate, endDate);
+  };
+
+  // Function to reset date filter
+  const resetDateFilter = () => {
+    setStartDate('');
+    setEndDate('');
+  };
+
+  // Sample attendance records data
+  const attendanceRecords = [
+    { date: '2024-04-01', day: 'Monday', status: 'present', time: '08:15 AM', remarks: 'On Time' },
+    { date: '2024-04-02', day: 'Tuesday', status: 'late', time: '09:30 AM', remarks: '30 mins late' },
+    { date: '2024-04-03', day: 'Wednesday', status: 'present', time: '08:10 AM', remarks: 'On Time' },
+    { date: '2024-04-04', day: 'Thursday', status: 'present', time: '08:20 AM', remarks: 'On Time' },
+    { date: '2024-04-05', day: 'Friday', status: 'present', time: '08:05 AM', remarks: 'Early Arrival' },
+    { date: '2024-04-06', day: 'Saturday', status: 'absent', time: '-', remarks: 'Medical Leave' },
+    { date: '2024-04-07', day: 'Sunday', status: 'holiday', time: '-', remarks: 'Weekend' }
+  ];
 
   // Sample data
   const initialStudentData = {
@@ -134,6 +208,7 @@ const SimplifiedStudentDashboard = ({ onLogout }) => {
 
   return (
     <div className="flex min-h-screen h-screen overflow-hidden bg-gradient-to-br from-blue-50 to-indigo-50">
+      <ParticleBackground />
       {/* Sidebar - Reduced size by 1 unit */}
       <div className="w-52 bg-white shadow-lg flex flex-col h-full">
         <div className="p-2.5 border-b border-gray-100">
@@ -250,21 +325,29 @@ const SimplifiedStudentDashboard = ({ onLogout }) => {
                 </div>
               </div>
 
-              {/* Summary Stats - Reduced card sizes by 1 unit and added geometric designs */}
-              <div className="flex gap-2 mb-5">
+              {/* Summary Stats - Enhanced with interactive elements and better design */}
+              <div className="flex gap-3 mb-5 flex-wrap">
                 {summaryStats.map((stat, index) => (
-                  <div key={index} className={`flex-grow bg-gradient-to-br ${stat.color} rounded-lg p-3 shadow-sm border border-white/30 backdrop-blur-sm text-white relative overflow-hidden`}>
+                  <div key={index} className={`flex-grow bg-gradient-to-br ${stat.color} rounded-lg p-3 shadow-sm border border-white/30 backdrop-blur-sm text-white relative overflow-hidden transition-transform duration-300 hover:scale-[1.02] hover:shadow-md`}>
                     {/* Geometric design elements */}
                     <div className="absolute -top-4 -right-4 w-16 h-16 bg-white/10 rounded-full"></div>
                     <div className="absolute -bottom-4 -left-4 w-14 h-14 bg-white/10 rounded-full"></div>
                     <div className="absolute top-2 right-2 w-6 h-6 bg-white/10 rotate-45"></div>
                     <div className="flex items-center justify-between relative z-10">
                       <div>
-                        <p className="text-blue-100 text-[11px]">{stat.label}</p>
-                        <p className="text-lg font-bold mt-0.5">{stat.value}</p>
-                        <p className="text-blue-100 text-[9px] mt-0.5">{stat.change} from last week</p>
+                        <p className="text-blue-100 text-[11px] flex items-center gap-1">
+                          <stat.icon className="w-3 h-3" />
+                          {stat.label}
+                        </p>
+                        <p className="text-xl font-bold mt-1">{stat.value}</p>
+                        <p className="text-blue-100 text-[9px] mt-1 flex items-center gap-1">
+                          <TrendingUp className="w-2.5 h-2.5" />
+                          {stat.change} from last week
+                        </p>
                       </div>
-                      <stat.icon className="w-6 h-6 text-blue-200 relative z-10" />
+                      <div className="bg-white/20 rounded-full p-2 backdrop-blur-sm">
+                        <stat.icon className="w-5 h-5 text-white" />
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -569,15 +652,15 @@ const SimplifiedStudentDashboard = ({ onLogout }) => {
                     <div className="flex flex-wrap gap-2 mt-2">
                       <div className="flex items-center bg-white/10 rounded-full px-2.5 py-1">
                         <div className="w-2 h-2 bg-green-400 rounded-full mr-1.5"></div>
-                        <span className="text-[10px] text-white font-medium">92% Overall</span>
+                        <span className="text-[10px] text-white font-medium">{getOverallAttendance()}% Overall</span>
                       </div>
                       <div className="flex items-center bg-white/10 rounded-full px-2.5 py-1">
                         <div className="w-2 h-2 bg-blue-400 rounded-full mr-1.5"></div>
-                        <span className="text-[10px] text-white font-medium">7 Perfect Streak</span>
+                        <span className="text-[10px] text-white font-medium">{getPerfectStreak()} Perfect Streak</span>
                       </div>
                       <div className="flex items-center bg-white/10 rounded-full px-2.5 py-1">
                         <div className="w-2 h-2 bg-amber-400 rounded-full mr-1.5"></div>
-                        <span className="text-[10px] text-white font-medium">3 Late Entries</span>
+                        <span className="text-[10px] text-white font-medium">{getLateEntries()} Late Entries</span>
                       </div>
                     </div>
                   </div>
@@ -589,9 +672,9 @@ const SimplifiedStudentDashboard = ({ onLogout }) => {
                 </div>
               </div>
               
-              {/* Attendance Summary Cards */}
-              <div className="flex gap-5 mb-7">
-                <div className="flex-1 bg-gradient-to-br from-blue-600 to-indigo-500 rounded-md p-4 shadow-sm border border-blue-200/30 backdrop-blur-sm text-white relative overflow-hidden">
+              {/* Attendance Summary Cards - Enhanced design */}
+              <div className="grid grid-cols-4 gap-3 mb-7">
+                <div className="bg-gradient-to-br from-blue-600 to-indigo-500 rounded-md p-3 shadow-sm border border-blue-200/30 backdrop-blur-sm text-white relative overflow-hidden transition-transform duration-300 hover:scale-[1.02] hover:shadow-md">
                   <div className="absolute -top-5 -right-5 w-16 h-16 bg-white/10 rounded-full"></div>
                   <div className="absolute -bottom-5 -left-5 w-14 h-14 bg-white/10 rounded-full"></div>
                   {/* Additional geometric elements */}
@@ -601,14 +684,20 @@ const SimplifiedStudentDashboard = ({ onLogout }) => {
                   <div className="absolute bottom-5.5 right-3.5 w-2.5 h-2.5 bg-white/10 rotate-45"></div>
                   <div className="flex items-center justify-between relative z-10">
                     <div>
-                      <p className="text-[11px] text-blue-100">Overall Attendance</p>
-                      <p className="text-lg font-bold mt-2.5">92%</p>
+                      <p className="text-[11px] text-blue-100 flex items-center gap-1">
+                        <UserCheck className="w-3.5 h-3.5" />
+                        Overall Attendance
+                      </p>
+                      <p className="text-2xl font-bold mt-2">{getOverallAttendance()}%</p>
+                      <p className="text-blue-100 text-[9px] mt-1">Excellent performance</p>
                     </div>
-                    <UserCheck className="w-7 h-7 text-blue-200 relative z-10" />
+                    <div className="bg-white/20 rounded-full p-2 backdrop-blur-sm">
+                      <UserCheck className="w-5 h-5 text-white" />
+                    </div>
                   </div>
                 </div>
                 
-                <div className="flex-1 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-md p-4 shadow-sm border border-indigo-200/30 backdrop-blur-sm text-white relative overflow-hidden">
+                <div className="bg-gradient-to-br from-indigo-500 to-purple-600 rounded-md p-4 shadow-sm border border-indigo-200/30 backdrop-blur-sm text-white relative overflow-hidden transition-transform duration-300 hover:scale-[1.02] hover:shadow-md">
                   <div className="absolute -top-5 -right-5 w-16 h-16 bg-white/10 rounded-full"></div>
                   <div className="absolute -bottom-5 -left-5 w-14 h-14 bg-white/10 rounded-full"></div>
                   {/* Additional geometric elements */}
@@ -618,14 +707,20 @@ const SimplifiedStudentDashboard = ({ onLogout }) => {
                   <div className="absolute bottom-5.5 right-3.5 w-2.5 h-2.5 bg-white/10 rotate-45"></div>
                   <div className="flex items-center justify-between relative z-10">
                     <div>
-                      <p className="text-[11px] text-indigo-100">This Month</p>
-                      <p className="text-lg font-bold mt-2.5">95%</p>
+                      <p className="text-[11px] text-indigo-100 flex items-center gap-1">
+                        <Calendar className="w-3.5 h-3.5" />
+                        This Month
+                      </p>
+                      <p className="text-2xl font-bold mt-2">95%</p>
+                      <p className="text-indigo-100 text-[9px] mt-1">Consistent attendance</p>
                     </div>
-                    <Calendar className="w-7 h-7 text-indigo-200 relative z-10" />
+                    <div className="bg-white/20 rounded-full p-2 backdrop-blur-sm">
+                      <Calendar className="w-5 h-5 text-white" />
+                    </div>
                   </div>
                 </div>
                 
-                <div className="flex-1 bg-gradient-to-br from-violet-600 to-purple-500 rounded-md p-4 shadow-sm border border-violet-200/30 backdrop-blur-sm text-white relative overflow-hidden">
+                <div className="bg-gradient-to-br from-violet-600 to-purple-500 rounded-md p-4 shadow-sm border border-violet-200/30 backdrop-blur-sm text-white relative overflow-hidden transition-transform duration-300 hover:scale-[1.02] hover:shadow-md">
                   <div className="absolute -top-5 -right-5 w-16 h-16 bg-white/10 rounded-full"></div>
                   <div className="absolute -bottom-5 -left-5 w-14 h-14 bg-white/10 rounded-full"></div>
                   {/* Additional geometric elements */}
@@ -635,14 +730,20 @@ const SimplifiedStudentDashboard = ({ onLogout }) => {
                   <div className="absolute bottom-5.5 right-3.5 w-2.5 h-2.5 bg-white/10 rotate-45"></div>
                   <div className="flex items-center justify-between relative z-10">
                     <div>
-                      <p className="text-[11px] text-violet-100">Late Entries</p>
-                      <p className="text-lg font-bold mt-2.5">3</p>
+                      <p className="text-[11px] text-violet-100 flex items-center gap-1">
+                        <Clock className="w-3.5 h-3.5" />
+                        Late Entries
+                      </p>
+                      <p className="text-2xl font-bold mt-2">{getLateEntries()}</p>
+                      <p className="text-violet-100 text-[9px] mt-1">This month</p>
                     </div>
-                    <Clock className="w-7 h-7 text-violet-200 relative z-10" />
+                    <div className="bg-white/20 rounded-full p-2 backdrop-blur-sm">
+                      <Clock className="w-5 h-5 text-white" />
+                    </div>
                   </div>
                 </div>
                 
-                <div className="flex-1 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-md p-4 shadow-sm border border-blue-200/30 backdrop-blur-sm text-white relative overflow-hidden">
+                <div className="bg-gradient-to-br from-blue-500 to-indigo-600 rounded-md p-4 shadow-sm border border-blue-200/30 backdrop-blur-sm text-white relative overflow-hidden transition-transform duration-300 hover:scale-[1.02] hover:shadow-md">
                   <div className="absolute -top-5 -right-5 w-16 h-16 bg-white/10 rounded-full"></div>
                   <div className="absolute -bottom-5 -left-5 w-14 h-14 bg-white/10 rounded-full"></div>
                   {/* Additional geometric elements */}
@@ -652,10 +753,16 @@ const SimplifiedStudentDashboard = ({ onLogout }) => {
                   <div className="absolute bottom-5.5 right-3.5 w-2.5 h-2.5 bg-white/10 rotate-45"></div>
                   <div className="flex items-center justify-between relative z-10">
                     <div>
-                      <p className="text-[11px] text-blue-100">Perfect Streak</p>
-                      <p className="text-lg font-bold mt-2.5">7 days</p>
+                      <p className="text-[11px] text-blue-100 flex items-center gap-1">
+                        <Award className="w-3.5 h-3.5" />
+                        Perfect Streak
+                      </p>
+                      <p className="text-2xl font-bold mt-2">{getPerfectStreak()} days</p>
+                      <p className="text-blue-100 text-[9px] mt-1">Consecutive perfect</p>
                     </div>
-                    <Award className="w-7 h-7 text-blue-200 relative z-10" />
+                    <div className="bg-white/20 rounded-full p-2 backdrop-blur-sm">
+                      <Award className="w-5 h-5 text-white" />
+                    </div>
                   </div>
                 </div>
               </div>
@@ -674,36 +781,43 @@ const SimplifiedStudentDashboard = ({ onLogout }) => {
                 <div className="flex items-center justify-between mb-4 relative z-10">
                   <h3 className="font-bold text-gray-900 text-[11px]">Weekly Attendance</h3>
                   <div className="flex gap-1">
-                    <span className="px-1.5 py-0.5 bg-blue-100 text-blue-800 text-[9px] font-medium rounded-full">Last 5 Days</span>
+                    <span className="px-1.5 py-0.5 bg-blue-100 text-blue-800 text-[9px] font-medium rounded-full">Last 7 Days</span>
                   </div>
                 </div>
-                <div className="flex items-end justify-between h-20 gap-2 mt-4">
+                <div className="flex items-end justify-between h-24 gap-1 mt-4">
                   {[
-                    { day: 'Mon', status: 'present' },
-                    { day: 'Tue', status: 'absent' },
-                    { day: 'Wed', status: 'present' },
-                    { day: 'Thu', status: 'present' },
-                    { day: 'Fri', status: 'present' }
+                    { day: 'Mon', status: 'present', date: '01' },
+                    { day: 'Tue', status: 'absent', date: '02' },
+                    { day: 'Wed', status: 'present', date: '03' },
+                    { day: 'Thu', status: 'present', date: '04' },
+                    { day: 'Fri', status: 'present', date: '05' },
+                    { day: 'Sat', status: 'holiday', date: '06' },
+                    { day: 'Sun', status: 'holiday', date: '07' }
                   ].map((day, index) => (
                     <div key={index} className="flex flex-col items-center flex-1">
-                      <div className="text-[8px] text-gray-500 mb-1">{day.day}</div>
+                      <div className="text-[7px] text-gray-500 mb-1">{day.day}</div>
+                      <div className="text-[7px] text-gray-400 mb-1">{day.date}</div>
                       <div 
                         className={`w-full rounded-t flex items-center justify-center ${
                           day.status === 'present' 
-                            ? 'bg-gradient-to-t from-blue-500 to-blue-400 h-full' 
-                            : 'bg-gradient-to-t from-indigo-500 to-indigo-400 h-3/4'
+                            ? 'bg-gradient-to-t from-blue-500 to-indigo-500 h-full' 
+                            : day.status === 'absent' 
+                              ? 'bg-gradient-to-t from-indigo-500 to-purple-500 h-3/4'
+                              : 'bg-gradient-to-t from-purple-400 to-blue-400 h-1/2'
                         }`}
                       >
                         {day.status === 'present' ? (
                           <CheckCircle className="w-3 h-3 text-white" />
-                        ) : (
+                        ) : day.status === 'absent' ? (
                           <X className="w-3 h-3 text-white" />
+                        ) : (
+                          <Calendar className="w-3 h-3 text-white" />
                         )}
                       </div>
                     </div>
                   ))}
                 </div>
-                <div className="flex justify-center gap-4 mt-3">
+                <div className="flex justify-center gap-3 mt-3">
                   <div className="flex items-center gap-1">
                     <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
                     <span className="text-[8px] text-gray-600">Present</span>
@@ -712,10 +826,14 @@ const SimplifiedStudentDashboard = ({ onLogout }) => {
                     <div className="w-2 h-2 bg-indigo-500 rounded-full"></div>
                     <span className="text-[8px] text-gray-600">Absent</span>
                   </div>
+                  <div className="flex items-center gap-1">
+                    <div className="w-2 h-2 bg-purple-400 rounded-full"></div>
+                    <span className="text-[8px] text-gray-600">Holiday</span>
+                  </div>
                 </div>
               </div>
               
-              {/* 6-Month Attendance Trend */}
+              {/* 6-Month Attendance Trend - Enhanced Visualization */}
               <div className="bg-white rounded-md shadow-sm border border-gray-100 p-4 mb-6 relative overflow-hidden">
                 {/* Geometric background elements */}
                 <div className="absolute top-0 right-0 w-24 h-24">
@@ -734,7 +852,7 @@ const SimplifiedStudentDashboard = ({ onLogout }) => {
                     <span className="px-1.5 py-0.5 bg-indigo-100 text-indigo-800 text-[9px] font-medium rounded-full">Jan - Jun 2024</span>
                   </div>
                 </div>
-                <div className="flex items-end h-24 gap-1 mt-4">
+                <div className="flex items-end h-32 gap-1 mt-4">
                   {[
                     { month: 'Jan', present: 28, late: 2, absent: 1, total: 31 },
                     { month: 'Feb', present: 26, late: 1, absent: 1, total: 28 },
@@ -745,22 +863,28 @@ const SimplifiedStudentDashboard = ({ onLogout }) => {
                   ].map((month, index) => (
                     <div key={index} className="flex flex-col items-center flex-1">
                       <div className="text-[8px] text-gray-500 mb-1">{month.month}</div>
-                      <div className="flex flex-col w-full">
+                      <div className="flex flex-col w-full rounded-md overflow-hidden border border-gray-100 shadow-sm">
                         {/* Present days - blue */}
                         <div 
-                          className="w-full bg-blue-600 rounded-t"
+                          className="w-full bg-gradient-to-t from-blue-500 to-blue-400 flex items-center justify-center"
                           style={{ height: `${(month.present / month.total) * 100}%` }}
-                        ></div>
+                        >
+                          <span className="text-[7px] text-white font-bold">{month.present}</span>
+                        </div>
                         {/* Late days - indigo */}
                         <div 
-                          className="w-full bg-indigo-500"
+                          className="w-full bg-gradient-to-t from-indigo-500 to-indigo-400 flex items-center justify-center"
                           style={{ height: `${(month.late / month.total) * 100}%` }}
-                        ></div>
-                        {/* Absent days - indigo */}
+                        >
+                          <span className="text-[7px] text-white font-bold">{month.late}</span>
+                        </div>
+                        {/* Absent days - purple */}
                         <div 
-                          className="w-full bg-indigo-600 rounded-b"
+                          className="w-full bg-gradient-to-t from-purple-500 to-purple-400 flex items-center justify-center rounded-b"
                           style={{ height: `${(month.absent / month.total) * 100}%` }}
-                        ></div>
+                        >
+                          <span className="text-[7px] text-white font-bold">{month.absent}</span>
+                        </div>
                       </div>
                       <div className="text-[9px] font-bold text-gray-900 mt-1">
                         {Math.round((month.present / month.total) * 100)}%
@@ -768,9 +892,9 @@ const SimplifiedStudentDashboard = ({ onLogout }) => {
                     </div>
                   ))}
                 </div>
-                <div className="flex justify-center gap-4 mt-3">
+                <div className="flex justify-center gap-3 mt-3">
                   <div className="flex items-center gap-1">
-                    <div className="w-2 h-2 bg-blue-600 rounded-full"></div>
+                    <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
                     <span className="text-[8px] text-gray-600">Present</span>
                   </div>
                   <div className="flex items-center gap-1">
@@ -778,8 +902,49 @@ const SimplifiedStudentDashboard = ({ onLogout }) => {
                     <span className="text-[8px] text-gray-600">Late</span>
                   </div>
                   <div className="flex items-center gap-1">
-                    <div className="w-2 h-2 bg-indigo-600 rounded-full"></div>
+                    <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
                     <span className="text-[8px] text-gray-600">Absent</span>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Date Range Filter */}
+              <div className="bg-white rounded-md shadow-sm border border-gray-100 p-4 mb-5 relative overflow-hidden">
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                  <h3 className="font-bold text-gray-900 text-[11px]">Filter Attendance Records</h3>
+                  <div className="flex flex-col md:flex-row gap-3">
+                    <div className="flex flex-col">
+                      <label className="text-[9px] text-gray-600 mb-1">Start Date</label>
+                      <input 
+                        type="date" 
+                        value={startDate}
+                        onChange={(e) => setStartDate(e.target.value)}
+                        className="px-2 py-1 border border-gray-300 rounded text-[10px] focus:outline-none focus:ring-1 focus:ring-blue-500"
+                      />
+                    </div>
+                    <div className="flex flex-col">
+                      <label className="text-[9px] text-gray-600 mb-1">End Date</label>
+                      <input 
+                        type="date" 
+                        value={endDate}
+                        onChange={(e) => setEndDate(e.target.value)}
+                        className="px-2 py-1 border border-gray-300 rounded text-[10px] focus:outline-none focus:ring-1 focus:ring-blue-500"
+                      />
+                    </div>
+                    <div className="flex items-end gap-2">
+                      <button 
+                        onClick={applyDateFilter}
+                        className="px-3 py-1 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded text-[10px] hover:from-blue-600 hover:to-indigo-700 transition-all"
+                      >
+                        Apply Filter
+                      </button>
+                      <button 
+                        onClick={resetDateFilter}
+                        className="px-3 py-1 bg-gray-100 text-gray-700 rounded text-[10px] hover:bg-gray-200 transition-all"
+                      >
+                        Reset
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -807,15 +972,7 @@ const SimplifiedStudentDashboard = ({ onLogout }) => {
                       </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-50">
-                      {[
-                        { date: '2024-04-01', day: 'Monday', status: 'present', time: '08:15 AM', remarks: 'On Time' },
-                        { date: '2024-04-02', day: 'Tuesday', status: 'late', time: '09:30 AM', remarks: '30 mins late' },
-                        { date: '2024-04-03', day: 'Wednesday', status: 'present', time: '08:10 AM', remarks: 'On Time' },
-                        { date: '2024-04-04', day: 'Thursday', status: 'present', time: '08:20 AM', remarks: 'On Time' },
-                        { date: '2024-04-05', day: 'Friday', status: 'present', time: '08:05 AM', remarks: 'Early Arrival' },
-                        { date: '2024-04-06', day: 'Saturday', status: 'absent', time: '-', remarks: 'Medical Leave' },
-                        { date: '2024-04-07', day: 'Sunday', status: 'holiday', time: '-', remarks: 'Weekend' }
-                      ].map((record, index) => (
+                      {filterAttendanceRecords(attendanceRecords).map((record, index) => (
                         <tr key={index} className="hover:bg-indigo-50/50 transition-all duration-200">
                           <td className="px-3 py-2.5 whitespace-nowrap text-[10px] font-medium text-gray-900">{record.date}</td>
                           <td className="px-3 py-2.5 whitespace-nowrap text-[10px] text-gray-800">{record.day}</td>
@@ -839,6 +996,11 @@ const SimplifiedStudentDashboard = ({ onLogout }) => {
                       ))}
                     </tbody>
                   </table>
+                  {filterAttendanceRecords(attendanceRecords).length === 0 && (
+                    <div className="text-center py-8 text-gray-500 text-[10px]">
+                      No attendance records found for the selected date range.
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -1064,142 +1226,46 @@ const SimplifiedStudentDashboard = ({ onLogout }) => {
                   <h2 className="text-sm font-bold text-gray-900">Notice Board</h2>
                   <p className="text-gray-600 text-[10px]">All important announcements and updates</p>
                 </div>
-                <div className="flex items-center gap-2">
-                  <div className="relative">
-                    <input 
-                      type="text" 
-                      placeholder="Search notices..." 
-                      className="pl-2 pr-4 py-1.5 text-[10px] border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 w-32"
-                    />
-                  </div>
-                </div>
               </div>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="space-y-3">
                 {/* Notice Card 1 */}
-                <div className="bg-white rounded-md shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-all duration-300 relative">
-                  <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 to-indigo-500"></div>
-                  <div className="p-3">
-                    <div className="flex items-start justify-between mb-2">
-                      <h3 className="font-bold text-gray-900 text-[11px]">Science Fair Registration</h3>
-                      <span className="px-1.5 py-0.5 bg-blue-100 text-blue-800 text-[8px] font-medium rounded-full whitespace-nowrap">New</span>
-                    </div>
-                    <p className="text-gray-600 text-[10px] mb-3 line-clamp-2">Registration for the annual Science Fair is now open. All students from grades 9-12 are encouraged to participate.</p>
-                    <div className="flex flex-wrap gap-1 mb-3">
-                      <span className="px-2 py-1 bg-blue-100 text-blue-800 text-[9px] font-medium rounded-full">Event</span>
-                      <span className="px-2 py-1 bg-green-100 text-green-800 text-[9px] font-medium rounded-full">Science</span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-gray-500 text-[9px]">Science Department</span>
-                      <span className="text-gray-500 text-[9px]">Mar 15, 2024</span>
-                    </div>
+                <div className="bg-white rounded border border-gray-200 p-3">
+                  <div className="flex items-start justify-between mb-2">
+                    <h3 className="font-bold text-gray-900 text-[11px]">Science Fair Registration</h3>
+                    <span className="px-1.5 py-0.5 bg-blue-100 text-blue-800 text-[8px] font-medium rounded-full whitespace-nowrap">New</span>
+                  </div>
+                  <p className="text-gray-600 text-[10px] mb-2">Registration for the annual Science Fair is now open. All students from grades 9-12 are encouraged to participate.</p>
+                  <div className="flex items-center justify-between text-[9px] text-gray-500">
+                    <span>Science Department</span>
+                    <span>Mar 15, 2024</span>
                   </div>
                 </div>
                 
                 {/* Notice Card 2 */}
-                <div className="bg-white rounded-md shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-all duration-300 relative">
-                  <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-amber-500 to-orange-500"></div>
-                  <div className="p-3">
-                    <div className="flex items-start justify-between mb-2">
-                      <h3 className="font-bold text-gray-900 text-[11px]">Library Closure Notice</h3>
-                      <span className="px-1.5 py-0.5 bg-amber-100 text-amber-800 text-[8px] font-medium rounded-full whitespace-nowrap">Important</span>
-                    </div>
-                    <p className="text-gray-600 text-[10px] mb-3 line-clamp-2">The school library will be closed for maintenance from April 18th to April 20th. We apologize for any inconvenience.</p>
-                    <div className="flex flex-wrap gap-1 mb-3">
-                      <span className="px-2 py-1 bg-yellow-100 text-yellow-800 text-[9px] font-medium rounded-full">Maintenance</span>
-                      <span className="px-2 py-1 bg-purple-100 text-purple-800 text-[9px] font-medium rounded-full">Library</span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-gray-500 text-[9px]">Library Staff</span>
-                      <span className="text-gray-500 text-[9px]">Mar 12, 2024</span>
-                    </div>
+                <div className="bg-white rounded border border-gray-200 p-3">
+                  <div className="flex items-start justify-between mb-2">
+                    <h3 className="font-bold text-gray-900 text-[11px]">Library Closure Notice</h3>
+                    <span className="px-1.5 py-0.5 bg-amber-100 text-amber-800 text-[8px] font-medium rounded-full whitespace-nowrap">Important</span>
+                  </div>
+                  <p className="text-gray-600 text-[10px] mb-2">The school library will be closed for maintenance from April 18th to April 20th. We apologize for any inconvenience.</p>
+                  <div className="flex items-center justify-between text-[9px] text-gray-500">
+                    <span>Library Staff</span>
+                    <span>Mar 12, 2024</span>
                   </div>
                 </div>
                 
                 {/* Notice Card 3 */}
-                <div className="bg-white rounded-md shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-all duration-300 relative">
-                  <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-pink-500 to-rose-500"></div>
-                  <div className="p-3">
-                    <div className="flex items-start justify-between mb-2">
-                      <h3 className="font-bold text-gray-900 text-[11px]">Art Exhibition Inauguration</h3>
-                      <span className="px-1.5 py-0.5 bg-pink-100 text-pink-800 text-[8px] font-medium rounded-full whitespace-nowrap">Event</span>
-                    </div>
-                    <p className="text-gray-600 text-[10px] mb-3 line-clamp-2">Join us for the inauguration of our annual student art exhibition on April 22nd at 3 PM in the school gallery.</p>
-                    <div className="flex flex-wrap gap-1 mb-3">
-                      <span className="px-2 py-1 bg-pink-100 text-pink-800 text-[9px] font-medium rounded-full">Event</span>
-                      <span className="px-2 py-1 bg-purple-100 text-purple-800 text-[9px] font-medium rounded-full">Art</span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-gray-500 text-[9px]">Art Department</span>
-                      <span className="text-gray-500 text-[9px]">Apr 11, 2024</span>
-                    </div>
+                <div className="bg-white rounded border border-gray-200 p-3">
+                  <div className="flex items-start justify-between mb-2">
+                    <h3 className="font-bold text-gray-900 text-[11px]">Art Exhibition Inauguration</h3>
+                    <span className="px-1.5 py-0.5 bg-pink-100 text-pink-800 text-[8px] font-medium rounded-full whitespace-nowrap">Event</span>
                   </div>
-                </div>
-                
-                {/* Notice Card 4 */}
-                <div className="bg-white rounded-md shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-all duration-300 relative">
-                  <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-green-500 to-emerald-500"></div>
-                  <div className="p-3">
-                    <div className="flex items-start justify-between mb-2">
-                      <h3 className="font-bold text-gray-900 text-[11px]">Sports Day Announcement</h3>
-                      <span className="px-1.5 py-0.5 bg-green-100 text-green-800 text-[8px] font-medium rounded-full whitespace-nowrap">Upcoming</span>
-                    </div>
-                    <p className="text-gray-600 text-[10px] mb-3 line-clamp-2">Annual Sports Day will be held on May 5th. All students are required to wear their sports uniform. Registration closes April 30th.</p>
-                    <div className="flex flex-wrap gap-1 mb-3">
-                      <span className="px-2 py-1 bg-green-100 text-green-800 text-[9px] font-medium rounded-full">Event</span>
-                      <span className="px-2 py-1 bg-orange-100 text-orange-800 text-[9px] font-medium rounded-full">Sports</span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-gray-500 text-[9px]">Physical Education</span>
-                      <span className="text-gray-500 text-[9px]">Apr 15, 2024</span>
-                    </div>
+                  <p className="text-gray-600 text-[10px] mb-2">Join us for the inauguration of our annual student art exhibition on April 22nd at 3 PM in the school gallery.</p>
+                  <div className="flex items-center justify-between text-[9px] text-gray-500">
+                    <span>Art Department</span>
+                    <span>Apr 11, 2024</span>
                   </div>
-                </div>
-                
-                {/* Notice Card 5 */}
-                <div className="bg-white rounded-md shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-all duration-300 relative">
-                  <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-indigo-500 to-purple-500"></div>
-                  <div className="p-3">
-                    <div className="flex items-start justify-between mb-2">
-                      <h3 className="font-bold text-gray-900 text-[11px]">Parent-Teacher Meeting</h3>
-                      <span className="px-1.5 py-0.5 bg-indigo-100 text-indigo-800 text-[8px] font-medium rounded-full whitespace-nowrap">Meeting</span>
-                    </div>
-                    <p className="text-gray-600 text-[10px] mb-3 line-clamp-2">Parent-Teacher meetings will be held on April 28th from 2 PM to 5 PM. Please book your slot through the parent portal.</p>
-                    <div className="flex flex-wrap gap-1 mb-3">
-                      <span className="px-2 py-1 bg-blue-100 text-blue-800 text-[9px] font-medium rounded-full">Meeting</span>
-                      <span className="px-2 py-1 bg-indigo-100 text-indigo-800 text-[9px] font-medium rounded-full">Parents</span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-gray-500 text-[9px]">Administration</span>
-                      <span className="text-gray-500 text-[9px]">Apr 10, 2024</span>
-                    </div>
-                  </div>
-                </div>
-                
-                {/* Notice Card 6 */}
-                <div className="bg-white rounded-md shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-all duration-300 relative">
-                  <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-purple-500 to-violet-500"></div>
-                  <div className="p-3">
-                    <div className="flex items-start justify-between mb-2">
-                      <h3 className="font-bold text-gray-900 text-[11px]">Mathematics Workshop</h3>
-                      <span className="px-1.5 py-0.5 bg-purple-100 text-purple-800 text-[8px] font-medium rounded-full whitespace-nowrap">Workshop</span>
-                    </div>
-                    <p className="text-gray-600 text-[10px] mb-3 line-clamp-2">A special mathematics workshop for grade 10 students will be conducted on April 25th during the 4th period in Room 204.</p>
-                    <div className="flex flex-wrap gap-1 mb-3">
-                      <span className="px-2 py-1 bg-purple-100 text-purple-800 text-[9px] font-medium rounded-full">Workshop</span>
-                      <span className="px-2 py-1 bg-blue-100 text-blue-800 text-[9px] font-medium rounded-full">Mathematics</span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-gray-500 text-[9px]">Mathematics Dept</span>
-                      <span className="text-gray-500 text-[9px]">Apr 18, 2024</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="mt-5 flex items-center justify-between">
-                <div className="text-[10px] text-gray-500">
-                  Showing 6 of 6 notices
                 </div>
               </div>
             </div>
@@ -1220,7 +1286,7 @@ const SimplifiedStudentDashboard = ({ onLogout }) => {
                     <div className="flex flex-wrap gap-2 mt-2">
                       <div className="flex items-center bg-white/10 rounded-full px-2.5 py-1">
                         <div className="w-2 h-2 bg-blue-400 rounded-full mr-1.5"></div>
-                        <span className="text-[10px] text-white font-medium">3 Total Classes</span>
+                        <span className="text-[10px] text-white font-medium">{getClassCount()} Total Classes</span>
                       </div>
                       <div className="flex items-center bg-white/10 rounded-full px-2.5 py-1">
                         <div className="w-2 h-2 bg-green-400 rounded-full mr-1.5"></div>
@@ -1228,7 +1294,7 @@ const SimplifiedStudentDashboard = ({ onLogout }) => {
                       </div>
                       <div className="flex items-center bg-white/10 rounded-full px-2.5 py-1">
                         <div className="w-2 h-2 bg-purple-400 rounded-full mr-1.5"></div>
-                        <span className="text-[10px] text-white font-medium">Math, Science, English</span>
+                        <span className="text-[10px] text-white font-medium">{getSubjectList()}</span>
                       </div>
                     </div>
                   </div>
@@ -1266,13 +1332,7 @@ const SimplifiedStudentDashboard = ({ onLogout }) => {
                         <span className="font-medium">Teacher:</span> Mr. Johnson
                       </div>
                       <div className="text-[10px] text-gray-600">
-                        <span className="font-medium">Period:</span> 2nd
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-center justify-between mb-3">
-                      <div className="text-[10px] text-gray-600">
-                        <span className="font-medium">Room:</span> 204
+                        <span className="font-medium">Students:</span> 32
                       </div>
                     </div>
                     
@@ -1318,13 +1378,7 @@ const SimplifiedStudentDashboard = ({ onLogout }) => {
                         <span className="font-medium">Teacher:</span> Dr. Smith
                       </div>
                       <div className="text-[10px] text-gray-600">
-                        <span className="font-medium">Period:</span> 3rd
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-center justify-between mb-3">
-                      <div className="text-[10px] text-gray-600">
-                        <span className="font-medium">Room:</span> 301
+                        <span className="font-medium">Students:</span> 30
                       </div>
                     </div>
                     
@@ -1370,13 +1424,7 @@ const SimplifiedStudentDashboard = ({ onLogout }) => {
                         <span className="font-medium">Teacher:</span> Ms. Williams
                       </div>
                       <div className="text-[10px] text-gray-600">
-                        <span className="font-medium">Period:</span> 1st
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-center justify-between mb-3">
-                      <div className="text-[10px] text-gray-600">
-                        <span className="font-medium">Room:</span> 105
+                        <span className="font-medium">Students:</span> 31
                       </div>
                     </div>
                     
@@ -1422,13 +1470,7 @@ const SimplifiedStudentDashboard = ({ onLogout }) => {
                         <span className="font-medium">Teacher:</span> Mr. Brown
                       </div>
                       <div className="text-[10px] text-gray-600">
-                        <span className="font-medium">Period:</span> 4th
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-center justify-between mb-3">
-                      <div className="text-[10px] text-gray-600">
-                        <span className="font-medium">Room:</span> 208
+                        <span className="font-medium">Students:</span> 29
                       </div>
                     </div>
                     
@@ -1474,13 +1516,7 @@ const SimplifiedStudentDashboard = ({ onLogout }) => {
                         <span className="font-medium">Teacher:</span> Mrs. Davis
                       </div>
                       <div className="text-[10px] text-gray-600">
-                        <span className="font-medium">Period:</span> 5th
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-center justify-between mb-3">
-                      <div className="text-[10px] text-gray-600">
-                        <span className="font-medium">Room:</span> 305
+                        <span className="font-medium">Students:</span> 30
                       </div>
                     </div>
                     
@@ -1526,13 +1562,7 @@ const SimplifiedStudentDashboard = ({ onLogout }) => {
                         <span className="font-medium">Teacher:</span> Ms. Taylor
                       </div>
                       <div className="text-[10px] text-gray-600">
-                        <span className="font-medium">Period:</span> 6th
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-center justify-between mb-3">
-                      <div className="text-[10px] text-gray-600">
-                        <span className="font-medium">Room:</span> Art Hall
+                        <span className="font-medium">Students:</span> 28
                       </div>
                     </div>
                     
@@ -1856,7 +1886,7 @@ const SimplifiedStudentDashboard = ({ onLogout }) => {
             <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
               <div className="bg-white rounded-2xl p-5 max-w-4xl w-full max-h-[90vh] overflow-auto">
                 <div className="flex items-center justify-between mb-5">
-                  <h3 className="text-[13px] font-bold text-gray-900">{selectedClass.name} - Class Details</h3>
+                  <h3 className="text-[15px] font-bold text-gray-900">{selectedClass.name} - Class Details</h3>
                   <button 
                     onClick={() => setSelectedClass(null)}
                     className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors"
@@ -1873,19 +1903,10 @@ const SimplifiedStudentDashboard = ({ onLogout }) => {
                   
                   <div className="relative z-10 flex items-center gap-4">
                     <div className="flex-1">
-                      <h2 className="text-[11px] font-bold text-white mb-2">{selectedClass.name}</h2>
+                      <h2 className="text-[14px] font-bold text-white mb-2">{selectedClass.name}</h2>
                       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                        <div className="text-[10px] text-blue-100">
+                        <div className="text-[13px] text-blue-100">
                           <span className="font-medium">Teacher:</span> {selectedClass.teacher}
-                        </div>
-                        <div className="text-base text-blue-100">
-                          <span className="font-medium">Period:</span> {selectedClass.period}
-                        </div>
-                        <div className="text-base text-blue-100">
-                          <span className="font-medium">Period:</span> {selectedClass.period}
-                        </div>
-                        <div className="text-[11px] text-blue-100">
-                          <span className="font-medium">Room:</span> {selectedClass.room}
                         </div>
                       </div>
                     </div>
@@ -1894,7 +1915,7 @@ const SimplifiedStudentDashboard = ({ onLogout }) => {
                 
                 {/* Study Resources Section */}
                 <div className="mb-8">
-                  <h3 className="text-[11px] font-bold text-gray-900 mb-4 flex items-center gap-2">
+                  <h3 className="text-[12px] font-bold text-gray-900 mb-4 flex items-center gap-2">
                     <BookOpen className="w-4 h-4 text-indigo-600" />
                     Study Resources
                   </h3>
@@ -1907,11 +1928,11 @@ const SimplifiedStudentDashboard = ({ onLogout }) => {
                         <div className="flex items-start gap-2 mb-3">
                           <FileText className="w-5 h-5 text-indigo-600 mt-0.5" />
                           <div>
-                            <h4 className="font-bold text-gray-900 text-[9px]">Chapter 5 Notes</h4>
-                            <p className="text-gray-600 text-[8px]">PDF Document</p>
+                            <h4 className="font-bold text-gray-900 text-[10px]">Chapter 5 Notes</h4>
+                            <p className="text-gray-600 text-[9px]">PDF Document</p>
                           </div>
                         </div>
-                        <button className="w-full py-1.5 bg-gradient-to-r from-blue-500 to-indigo-600 text-white text-[8px] font-medium rounded-md hover:from-blue-600 hover:to-indigo-700 transition-all">
+                        <button className="w-full py-1.5 bg-gradient-to-r from-blue-500 to-indigo-600 text-white text-[9px] font-medium rounded-md hover:from-blue-600 hover:to-indigo-700 transition-all">
                           View/Download
                         </button>
                       </div>
@@ -1923,11 +1944,11 @@ const SimplifiedStudentDashboard = ({ onLogout }) => {
                         <div className="flex items-start gap-2 mb-3">
                           <Globe className="w-5 h-5 text-green-600 mt-0.5" />
                           <div>
-                            <h4 className="font-bold text-gray-900 text-[9px]">Interactive Learning</h4>
-                            <p className="text-gray-600 text-[8px]">Online Resource</p>
+                            <h4 className="font-bold text-gray-900 text-[10px]">Interactive Learning</h4>
+                            <p className="text-gray-600 text-[9px]">Online Resource</p>
                           </div>
                         </div>
-                        <button className="w-full py-1.5 bg-gradient-to-r from-green-500 to-emerald-600 text-white text-[8px] font-medium rounded-md hover:from-green-600 hover:to-emerald-700 transition-all">
+                        <button className="w-full py-1.5 bg-gradient-to-r from-green-500 to-emerald-600 text-white text-[9px] font-medium rounded-md hover:from-green-600 hover:to-emerald-700 transition-all">
                           View/Download
                         </button>
                       </div>
@@ -1939,11 +1960,11 @@ const SimplifiedStudentDashboard = ({ onLogout }) => {
                         <div className="flex items-start gap-2 mb-3">
                           <Palette className="w-5 h-5 text-purple-600 mt-0.5" />
                           <div>
-                            <h4 className="font-bold text-gray-900 text-[9px]">Presentation Slides</h4>
-                            <p className="text-gray-600 text-[8px]">PPT Document</p>
+                            <h4 className="font-bold text-gray-900 text-[10px]">Presentation Slides</h4>
+                            <p className="text-gray-600 text-[9px]">PPT Document</p>
                           </div>
                         </div>
-                        <button className="w-full py-1.5 bg-gradient-to-r from-purple-500 to-violet-600 text-white text-[8px] font-medium rounded-md hover:from-purple-600 hover:to-violet-700 transition-all">
+                        <button className="w-full py-1.5 bg-gradient-to-r from-purple-500 to-violet-600 text-white text-[9px] font-medium rounded-md hover:from-purple-600 hover:to-violet-700 transition-all">
                           View/Download
                         </button>
                       </div>

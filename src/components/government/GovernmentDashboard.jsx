@@ -3,6 +3,7 @@ import { Users, School, Utensils, TrendingUp, AlertTriangle, FileText, Settings,
 import { BarChart as RechartsBarChart, Bar, LineChart as RechartsLineChart, Line, PieChart as RechartsPieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { motion, AnimatePresence } from 'framer-motion';
 import UltraModernHeader from '../UltraModernHeader';
+import ParticleBackground from '../ParticleBackground';
 
 const GovernmentDashboard = ({ onLogout }) => {
   const [activeTab, setActiveTab] = useState('home');
@@ -519,6 +520,7 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
 
   return (
     <div className="flex min-h-screen h-screen overflow-hidden bg-gradient-to-br from-blue-50 to-indigo-50">
+      <ParticleBackground />
       {/* Sidebar */}
       <motion.div 
         initial={{ x: -100, opacity: 0 }}
@@ -729,10 +731,10 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
                         <Line 
                           type="monotone" 
                           dataKey="attendance" 
-                          stroke="#1e40af" 
+                          stroke="#3B82F6" 
                           strokeWidth={2}
-                          dot={{ r: 6, fill: '#fff', strokeWidth: 2, stroke: '#1e40af' }}
-                          activeDot={{ r: 8, fill: '#fff', strokeWidth: 2, stroke: '#1e3a8a' }}
+                          dot={{ r: 6, fill: '#fff', strokeWidth: 2, stroke: '#3B82F6' }}
+                          activeDot={{ r: 8, fill: '#fff', strokeWidth: 2, stroke: '#6366F1' }}
                         />
                       </RechartsLineChart>
                     </ResponsiveContainer>
@@ -1148,7 +1150,7 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
                           animationDuration={800}
                         >
                           {attendanceTrendData.map((entry, index) => (
-                            <Cell key={`cell-${index}`} fill={getBarColor(entry.attendance)} />
+                            <Cell key={`cell-${index}`} fill="#3B82F6" />
                           ))}
                         </Bar>
                       </RechartsBarChart>
