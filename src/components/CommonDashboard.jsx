@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Users, UserCheck, BookOpen, Monitor, ArrowLeft, School, Building, User, LogOut } from 'lucide-react';
 import TeacherDashboard from './teacher/TeacherDashboard';
 import NewStudentDashboard from './teacher/NewStudentDashboard';
 import UltraModernHeader from './UltraModernHeader';
 
 const CommonDashboard = ({ onLogout, userType }) => {
+  const navigate = useNavigate();
   const [currentView, setCurrentView] = useState('home');
 
   // Avatar helper functions
@@ -33,12 +35,12 @@ const CommonDashboard = ({ onLogout, userType }) => {
   const renderDashboard = () => {
     switch (currentView) {
       case 'teacher':
-        return <TeacherDashboard />;
+        return <TeacherDashboard onLogout={onLogout} />;
       case 'student':
-        return <NewStudentDashboard />;
+        return <SimplifiedStudentDashboard onLogout={onLogout} />;
       case 'admin':
         return (
-          <div className="flex min-h-screen max-h-screen overflow-hidden bg-gradient-to-br from-slate-50 to-blue-50">
+          <div className="flex min-h-screen max-h-screen w-full overflow-hidden bg-gradient-to-br from-slate-50 to-blue-50">
             {/* Ultra Modern Header */}
             <div className="flex-shrink-0 w-full">
               <UltraModernHeader 
@@ -95,7 +97,7 @@ const CommonDashboard = ({ onLogout, userType }) => {
         );
       case 'government':
         return (
-          <div className="flex min-h-screen max-h-screen overflow-hidden bg-gradient-to-br from-slate-50 to-blue-50">
+          <div className="flex min-h-screen max-h-screen w-full overflow-hidden bg-gradient-to-br from-slate-50 to-blue-50">
             {/* Ultra Modern Header */}
             <div className="flex-shrink-0 w-full">
               <UltraModernHeader 
@@ -152,7 +154,7 @@ const CommonDashboard = ({ onLogout, userType }) => {
         );
       default:
         return (
-          <div className="flex min-h-screen max-h-screen overflow-hidden bg-gradient-to-br from-slate-50 to-blue-50">
+          <div className="flex min-h-screen max-h-screen w-full overflow-hidden bg-gradient-to-br from-slate-50 to-blue-50">
             {/* Ultra Modern Header */}
             <div className="flex-shrink-0 w-full">
               <UltraModernHeader 
@@ -183,7 +185,7 @@ const CommonDashboard = ({ onLogout, userType }) => {
                   {/* Teacher Dashboard Card */}
                   <div 
                     className="bg-white rounded-2xl p-4 shadow-md border border-slate-100 cursor-pointer hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1"
-                    onClick={() => setCurrentView('teacher')}
+                    onClick={() => navigate('/teacher')}
                   >
                     <div className="flex flex-col items-center text-center">
                       <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center mb-3">
@@ -203,7 +205,7 @@ const CommonDashboard = ({ onLogout, userType }) => {
                   {/* Student Dashboard Card */}
                   <div 
                     className="bg-white rounded-2xl p-4 shadow-md border border-slate-100 cursor-pointer hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1"
-                    onClick={() => setCurrentView('student')}
+                    onClick={() => navigate('/student')}
                   >
                     <div className="flex flex-col items-center text-center">
                       <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center mb-3">
@@ -223,7 +225,7 @@ const CommonDashboard = ({ onLogout, userType }) => {
                   {/* School Admin Dashboard Card */}
                   <div 
                     className="bg-white rounded-2xl p-4 shadow-md border border-slate-100 cursor-pointer hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1"
-                    onClick={() => setCurrentView('admin')}
+                    onClick={() => navigate('/admin')}
                   >
                     <div className="flex flex-col items-center text-center">
                       <div className="w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center mb-3">
@@ -243,7 +245,7 @@ const CommonDashboard = ({ onLogout, userType }) => {
                   {/* Government Official Dashboard Card */}
                   <div 
                     className="bg-white rounded-2xl p-4 shadow-md border border-slate-100 cursor-pointer hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1"
-                    onClick={() => setCurrentView('government')}
+                    onClick={() => navigate('/government')}
                   >
                     <div className="flex flex-col items-center text-center">
                       <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-xl flex items-center justify-center mb-3">
@@ -275,11 +277,11 @@ const CommonDashboard = ({ onLogout, userType }) => {
   };
 
   return (
-    <div className="min-h-screen max-h-screen overflow-hidden">
+    <div className="min-h-screen max-h-screen w-full overflow-hidden">
       {currentView !== 'home' && (
         <div className="fixed top-4 left-4 z-50">
           <button
-            onClick={() => setCurrentView('home')}
+            onClick={() => navigate('/')}
             className="flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-slate-500 to-slate-600 text-white rounded-lg hover:from-slate-600 hover:to-slate-700 transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 border border-slate-400/50 hover:border-slate-300/80 backdrop-blur-sm hover:backdrop-blur-md text-sm"
           >
             <ArrowLeft className="w-4 h-4" />
