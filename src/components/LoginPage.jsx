@@ -206,7 +206,7 @@ const LoginPage = ({ onLogin }) => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
-      <div className="w-full max-w-3xl bg-white rounded-lg shadow-lg overflow-hidden flex flex-col md:flex-row" style={{ minHeight: '300px' }}>
+      <div className="w-full max-w-3xl bg-white rounded-lg shadow-xl overflow-hidden flex flex-col md:flex-row" style={{ minHeight: '300px' }}>
         {/* Left Side - Illustration */}
         <div className="hidden md:flex md:w-1/2 bg-gradient-to-br from-blue-600 to-indigo-700 p-4 items-center justify-center relative overflow-hidden">
           <EducationIllustration />
@@ -231,7 +231,7 @@ const LoginPage = ({ onLogin }) => {
               transition={{ duration: 0.5, delay: 0.2 }}
             >
               <div 
-                className="bg-white/20 backdrop-blur-sm rounded-lg p-3 max-w-xs mx-auto border border-white/30 shadow-lg cursor-pointer"
+                className="bg-white/20 backdrop-blur-sm rounded-lg p-3 max-w-xs mx-auto border border-white/30 shadow-xl cursor-pointer"
                 onClick={nextTestimonial}
               >
                 <div className="flex items-center justify-center mb-2">
@@ -305,7 +305,7 @@ const LoginPage = ({ onLogin }) => {
                 <motion.div
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="bg-red-50 border border-red-200 text-red-700 p-2 rounded-lg text-xs flex items-center gap-1.5"
+                  className="bg-red-50 border border-red-200 text-red-700 p-2 rounded-lg text-xs flex items-center gap-1.5 shadow-sm"
                 >
                   <svg className="w-3.5 h-3.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
@@ -336,7 +336,7 @@ const LoginPage = ({ onLogin }) => {
                         key={type.id}
                         type="button"
                         onClick={() => setUserType(type.id)}
-                        className={`py-1 px-1 rounded-md text-[8px] border transition-all flex flex-col items-center justify-center ${
+                        className={`py-1 px-1 rounded-md text-[8px] border transition-all flex flex-col items-center justify-center shadow-sm ${
                           userType === type.id
                             ? 'bg-blue-500 text-white border-transparent'
                             : 'bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100'
@@ -363,7 +363,7 @@ const LoginPage = ({ onLogin }) => {
                     required
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
-                    className="block w-full pl-8 pr-3 py-2 bg-gray-50 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-[9px] transition-all duration-300 hover:bg-gray-100"
+                    className="block w-full pl-8 pr-3 py-2 bg-gray-50 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-[9px] transition-all duration-300 hover:bg-gray-100 shadow-sm"
                     placeholder="Enter your username"
                   />
                   <div className="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none">
@@ -386,7 +386,7 @@ const LoginPage = ({ onLogin }) => {
                       required={isSignUp}
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      className="block w-full pl-8 pr-3 py-2 bg-gray-50 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-[9px] transition-all duration-300 hover:bg-gray-100"
+                      className="block w-full pl-8 pr-3 py-2 bg-gray-50 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-[9px] transition-all duration-300 hover:bg-gray-100 shadow-sm"
                       placeholder="Enter your email address"
                     />
                     <div className="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none">
@@ -409,7 +409,7 @@ const LoginPage = ({ onLogin }) => {
                     required
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="block w-full pl-8 pr-8 py-2 bg-gray-50 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-[9px] transition-all duration-300 hover:bg-gray-100"
+                    className="block w-full pl-8 pr-8 py-2 bg-gray-50 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-[9px] transition-all duration-300 hover:bg-gray-100 shadow-sm"
                     placeholder="Enter your password"
                   />
                   <div className="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none">
@@ -456,7 +456,7 @@ const LoginPage = ({ onLogin }) => {
                 whileTap={{ scale: 0.98 }}
                 type="submit"
                 disabled={isLoading}
-                className="w-full flex justify-center items-center py-2 px-3 border border-transparent rounded-md shadow-sm text-[9px] font-medium text-white bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300"
+                className="w-full flex justify-center items-center py-2 px-3 border border-transparent rounded-md shadow-md text-[9px] font-medium text-white bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300"
               >
                 {isLoading ? (
                   <svg className="animate-spin -ml-1 mr-1 h-3 w-3 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
