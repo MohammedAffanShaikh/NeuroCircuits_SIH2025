@@ -1,11 +1,40 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Users, UserCheck, UserX, BookOpen, TrendingUp, FileText, Settings, LogOut, Home, Search, Filter, Download, Plus, Eye, Edit, Trash2, Printer, BarChart, PieChart, LineChart, Calendar, Clock, Shield, MapPin, AlertTriangle, CheckCircle, XCircle, RefreshCw, Bell, Menu, X, School, Activity, User, Book, Utensils, GraduationCap, Minus } from 'lucide-react';
 import { BarChart as RechartsBarChart, Bar, LineChart as RechartsLineChart, Line, PieChart as RechartsPieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate, useLocation } from 'react-router-dom';
 import UltraModernHeader from '../UltraModernHeader';
+import ParticleBackground from '../ParticleBackground';
 
 const AdminDashboard = ({ onLogout }) => {
-  const [activeTab, setActiveTab] = useState('home');
+  const navigate = useNavigate();
+  const location = useLocation();
+  
+  // Set active tab based on current route
+  const getActiveTabFromRoute = () => {
+    const path = location.pathname;
+    if (path.includes('/schools')) return 'schools';
+    if (path.includes('/teachers')) return 'teachers';
+    if (path.includes('/students')) return 'students';
+    if (path.includes('/classes')) return 'classes';
+    if (path.includes('/reports')) return 'reports';
+    if (path.includes('/notices')) return 'notices';
+    if (path.includes('/settings')) return 'settings';
+    return 'home';
+  };
+  
+  const [activeTab, setActiveTab] = useState(getActiveTabFromRoute());
+  
+  // Update active tab when route changes
+  useEffect(() => {
+    setActiveTab(getActiveTabFromRoute());
+  }, [location]);
+  
+  // Handle tab navigation
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
+    navigate(`/admin/${tab}`);
+  };
   const [activeSettingsTab, setActiveSettingsTab] = useState('profile');
   const [selectedClass, setSelectedClass] = useState('All Classes');
   const [showAddTeacherModal, setShowAddTeacherModal] = useState(false);
@@ -43,7 +72,6 @@ const AdminDashboard = ({ onLogout }) => {
   const [studentAvatarPreview, setStudentAvatarPreview] = useState(null);
   const [showAvatarOptions, setShowAvatarOptions] = useState(false);
   const [avatarType, setAvatarType] = useState(''); // 'teacher' or 'student'
-  const [mealPeriod, setMealPeriod] = useState('daily'); // daily, weekly, monthly
   const [mealFilter, setMealFilter] = useState('daily'); // daily, weekly, monthly
   
   // State for report generation
@@ -54,9 +82,27 @@ const AdminDashboard = ({ onLogout }) => {
   const [selectedSchool, setSelectedSchool] = useState('All Schools');
   const [selectedDuration, setSelectedDuration] = useState('weekly'); // weekly, monthly
   
+  // State for notices
+  const [notices, setNotices] = useState([
+    { id: 1, title: 'Summer Holidays Announcement', content: 'School will remain closed from June 15th to July 15th for summer holidays.', date: '2023-06-01', priority: 'High', audience: 'All' },
+    { id: 2, title: 'Parent-Teacher Meeting', content: 'PTM scheduled for June 10th, 2023. Please confirm your availability.', date: '2023-06-05', priority: 'Medium', audience: 'Grade 9, Grade 10' },
+    { id: 3, title: 'Annual Sports Day', content: 'Sports day event will be held on June 20th, 2023. All students are encouraged to participate.', date: '2023-06-08', priority: 'Low', audience: 'All' }
+  ]);
+  
   // State for applied filters
   const [appliedSchool, setAppliedSchool] = useState('All Schools');
   const [appliedDuration, setAppliedDuration] = useState('weekly');
+  
+  // State for new notice form
+  const [newNotice, setNewNotice] = useState({
+    title: '',
+    content: '',
+    audience: 'All',
+    priority: 'Medium'
+  });
+  
+  // State for showing add notice modal
+  const [showAddNoticeModal, setShowAddNoticeModal] = useState(false);
 
   // Filter states for Teachers tab
   const [teacherSubjectFilter, setTeacherSubjectFilter] = useState('All Subjects');
@@ -528,6 +574,39 @@ const AdminDashboard = ({ onLogout }) => {
   const closeReportFilterModal = () => {
     setShowReportFilterModal(false);
   };
+  
+  // Function to handle new notice form input changes
+  const handleNewNoticeChange = (e) => {
+    const { name, value } = e.target;
+    setNewNotice({ ...newNotice, [name]: value });
+  };
+  
+  // Function to add a new notice
+  const addNewNotice = () => {
+    if (newNotice.title && newNotice.content) {
+      const noticeObj = {
+        id: notices.length + 1,
+        title: newNotice.title,
+        content: newNotice.content,
+        audience: newNotice.audience,
+        priority: newNotice.priority,
+        date: new Date().toISOString().split('T')[0]
+      };
+      
+      // Add the new notice to the notices array
+      setNotices([noticeObj, ...notices]);
+      
+      // Reset the form and close the modal
+      setNewNotice({ title: '', content: '', audience: 'All', priority: 'Medium' });
+      setShowAddNoticeModal(false);
+    }
+  };
+  
+  // Function to close the add notice modal
+  const closeAddNoticeModal = () => {
+    setShowAddNoticeModal(false);
+    setNewNotice({ title: '', content: '', audience: 'All', priority: 'Medium' });
+  };
 
   // Filter classes based on filter criteria
   const getFilteredClasses = () => {
@@ -686,6 +765,7 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
 
   return (
     <div className="flex min-h-screen h-screen overflow-hidden bg-gradient-to-br from-blue-50 to-indigo-50">
+      <ParticleBackground />
       {/* Sidebar */}
       <motion.div 
         initial={{ x: -100, opacity: 0 }}
@@ -725,6 +805,7 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
             { id: 'teachers', icon: User, label: 'Teachers' },
             { id: 'students', icon: Users, label: 'Students' },
             { id: 'classes', icon: BookOpen, label: 'Classes' },
+            { id: 'notices', icon: Bell, label: 'Notices' },
             { id: 'reports', icon: FileText, label: 'Reports' },
             { id: 'alerts', icon: Bell, label: 'Alerts' },
             { id: 'middaymeal', icon: Utensils, label: 'Mid Day Meal' },
@@ -732,7 +813,7 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
           ].map((tab) => (
             <button
               key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
+              onClick={() => handleTabChange(tab.id)}
               className={`w-full flex items-center gap-2 px-2 py-1.5 rounded-md transition-all ${
                 activeTab === tab.id
                   ? 'bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-md shadow-blue-500/20'
@@ -771,6 +852,7 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
             userName="Admin User"
             userRole="School Administrator"
             onLogout={onLogout}
+            onAlertsClick={() => handleTabChange('alerts')}
           />
         </div>
 
@@ -818,13 +900,13 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
               </div>
 
               {/* Summary Cards */}
-              <div className="flex gap-4 mb-6">
+              <div className="grid grid-cols-1 sm:grid-cols-4 lg:grid-cols-4 gap-4 mb-6">
                 {summaryStats.map((stat, index) => {
                   const IconComponent = stat.icon;
                   return (
                     <div 
                       key={index}
-                      className={`flex-grow bg-gradient-to-br ${stat.color} rounded-md p-4 shadow-sm border border-white/20 backdrop-blur-sm relative overflow-hidden`}
+                      className={`bg-gradient-to-br ${stat.color} rounded-md p-4 shadow-sm border border-white/20 backdrop-blur-sm relative overflow-hidden`}
                     >
                       <div className="absolute -top-2 -right-2 w-10 h-10 bg-white/10 rounded-full"></div>
                       <div className="absolute -bottom-2 -left-2 w-8 h-8 bg-white/10 rounded-full"></div>
@@ -905,10 +987,10 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
                         <Line 
                           type="monotone" 
                           dataKey="attendance" 
-                          stroke="#1e40af" 
+                          stroke="#3B82F6" 
                           strokeWidth={3}
-                          dot={{ r: 7, fill: '#fff', strokeWidth: 2, stroke: '#1e40af' }}
-                          activeDot={{ r: 9, fill: '#fff', strokeWidth: 2, stroke: '#1e3a8a' }}
+                          dot={{ r: 7, fill: '#fff', strokeWidth: 2, stroke: '#3B82F6' }}
+                          activeDot={{ r: 9, fill: '#fff', strokeWidth: 2, stroke: '#6366F1' }}
                           animationDuration={800}
                         />
                       </RechartsLineChart>
@@ -1015,7 +1097,10 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
               </div>
 
               <div className="flex justify-between items-center mb-5">
-                <h2 className="text-sm font-bold text-gray-900">Teacher Management</h2>
+                <div>
+                  <h2 className="text-sm font-bold text-blue-700">Teacher Management</h2>
+                  <p className="text-[10px] text-gray-600 mt-1">Manage and organize all teaching staff members</p>
+                </div>
                 <button 
                   onClick={() => setShowAddTeacherModal(true)}
                   className="flex items-center gap-1 px-3 py-1.5 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-md hover:from-blue-600 hover:to-indigo-700 transition-all text-[10px] shadow-sm hover:shadow-md"
@@ -1127,6 +1212,7 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
             </div>
           )}
 
+
           {/* Students Tab */}
           {activeTab === 'students' && (
             <div>
@@ -1160,7 +1246,10 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
               </div>
 
               <div className="flex justify-between items-center mb-5">
-                <h2 className="text-sm font-bold text-gray-900">Student Management</h2>
+                <div>
+                  <h2 className="text-sm font-bold text-blue-700">Student Management</h2>
+                  <p className="text-[10px] text-gray-600 mt-1">Manage and track all student information and records</p>
+                </div>
                 <button 
                   onClick={() => setShowAddStudentModal(true)}
                   className="flex items-center gap-1 px-3 py-1.5 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-md hover:from-blue-600 hover:to-indigo-700 transition-all text-[10px] shadow-sm hover:shadow-md"
@@ -1314,7 +1403,10 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
               </div>
 
               <div className="flex justify-between items-center mb-5">
-                <h2 className="text-sm font-bold text-gray-900">Class Management</h2>
+                <div>
+                  <h2 className="text-sm font-bold text-blue-700">Class Management</h2>
+                  <p className="text-[10px] text-gray-600 mt-1">Organize and manage all school classes and divisions</p>
+                </div>
                 <button 
                   onClick={() => setShowAddClassModal(true)}
                   className="flex items-center gap-1 px-3 py-1.5 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-md hover:from-blue-600 hover:to-indigo-700 transition-all text-[10px] shadow-sm hover:shadow-md"
@@ -1392,20 +1484,34 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
                   <table className="w-full">
                     <thead className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white">
                       <tr>
+<<<<<<< HEAD
                         <th className="px-4 py-3 text-left text-[10px] font-bold uppercase tracking-wider">Class</th>
                         <th className="px-4 py-3 text-left text-[10px] font-bold uppercase tracking-wider">Subject</th>
                         <th className="px-4 py-3 text-left text-[10px] font-bold uppercase tracking-wider">Teacher</th>
                         <th className="px-4 py-3 text-left text-[10px] font-bold uppercase tracking-wider">Students</th>
                         <th className="px-4 py-3 text-left text-[10px] font-bold uppercase tracking-wider">Status</th>
                         <th className="px-4 py-3 text-left text-[10px] font-bold uppercase tracking-wider">Actions</th>
+=======
+                        <th className="px-2 py-2 text-left text-[9px] font-bold uppercase tracking-wider">Class</th>
+                        <th className="px-2 py-2 text-left text-[9px] font-bold uppercase tracking-wider">Subject</th>
+                        <th className="px-2 py-2 text-left text-[9px] font-bold uppercase tracking-wider">Teacher</th>
+                        <th className="px-2 py-2 text-left text-[9px] font-bold uppercase tracking-wider">Students</th>
+                        <th className="px-2 py-2 text-left text-[9px] font-bold uppercase tracking-wider">Status</th>
+>>>>>>> d26c593767ea5f9ce496c6477d8aa717e50beb4c
                       </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-100">
                       {getFilteredClasses().map((classItem) => (
                         <tr key={classItem.id} className="hover:bg-blue-50/50 transition-all duration-200 group">
+<<<<<<< HEAD
                           <td className="px-4 py-3 whitespace-nowrap">
                             <div className="flex items-center gap-3">
                               <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white text-[11px] font-bold shadow-sm">
+=======
+                          <td className="px-2 py-2 whitespace-nowrap">
+                            <div className="flex items-center gap-2">
+                              <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white text-[10px] font-bold shadow-sm">
+>>>>>>> d26c593767ea5f9ce496c6477d8aa717e50beb4c
                                 {classItem.name.charAt(0)}
                               </div>
                               <div>
@@ -1416,6 +1522,7 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
                               </div>
                             </div>
                           </td>
+<<<<<<< HEAD
                           <td className="px-4 py-3 whitespace-nowrap">
                             <div className="text-[11px] font-medium text-gray-900">{classItem.subject}</div>
                           </td>
@@ -1426,12 +1533,29 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
                             <div className="flex items-center gap-2">
                               <div className="flex items-center justify-center w-6 h-6 rounded-full bg-blue-100 text-blue-600">
                                 <Users className="w-3 h-3" />
+=======
+                          <td className="px-2 py-2 whitespace-nowrap">
+                            <div className="text-[10px] font-medium text-gray-900">{classItem.subject}</div>
+                          </td>
+                          <td className="px-2 py-2 whitespace-nowrap">
+                            <div className="text-[10px] text-gray-700">{classItem.teacher}</div>
+                          </td>
+                          <td className="px-2 py-2 whitespace-nowrap">
+                            <div className="flex items-center gap-1">
+                              <div className="flex items-center justify-center w-5 h-5 rounded-full bg-blue-100 text-blue-600">
+                                <Users className="w-2.5 h-2.5" />
+>>>>>>> d26c593767ea5f9ce496c6477d8aa717e50beb4c
                               </div>
                               <span className="text-[11px] font-semibold text-gray-900">{classItem.students}</span>
                             </div>
                           </td>
+<<<<<<< HEAD
                           <td className="px-4 py-3 whitespace-nowrap">
                             <span className="inline-flex px-2.5 py-1 text-[10px] font-semibold leading-tight rounded-full bg-green-100 text-green-800 shadow-sm">
+=======
+                          <td className="px-2 py-2 whitespace-nowrap">
+                            <span className="inline-flex px-2 py-0.5 text-[9px] font-semibold leading-tight rounded-full bg-green-100 text-green-800 shadow-sm">
+>>>>>>> d26c593767ea5f9ce496c6477d8aa717e50beb4c
                               Active
                             </span>
                           </td>
@@ -1469,6 +1593,100 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
             </div>
           )}
 
+<<<<<<< HEAD
+=======
+          {/* Notices Tab */}
+          {activeTab === 'notices' && (
+            <div>
+              {/* Welcome Banner */}
+              <div className="bg-gradient-to-r from-blue-600 via-indigo-500 to-indigo-600 rounded-md p-4 mb-5 shadow-sm backdrop-blur-sm border border-white/20 relative overflow-hidden">
+                <div className="absolute -top-5 -right-5 w-20 h-20 bg-white/10 rounded-full"></div>
+                <div className="absolute -bottom-5 -left-5 w-16 h-16 bg-white/10 rounded-full"></div>
+                <div className="absolute top-4 right-4 w-7 h-7 bg-white/10 rotate-45"></div>
+                
+                <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-3">
+                  <div>
+                    <h2 className="text-[16px] font-bold text-white mb-1.5">Notices & Announcements</h2>
+                    <p className="text-[10px] text-blue-100 mb-2">Create and manage important notices for students, teachers, and parents</p>
+                    <div className="flex flex-wrap gap-2 mt-2">
+                      <div className="flex items-center bg-white/10 rounded-full px-2.5 py-1">
+                        <div className="w-2 h-2 bg-green-400 rounded-full mr-1.5"></div>
+                        <span className="text-[8px] text-white font-medium">{schoolData.name}</span>
+                      </div>
+                      <div className="flex items-center bg-white/10 rounded-full px-2.5 py-1">
+                        <div className="w-2 h-2 bg-blue-400 rounded-full mr-1.5"></div>
+                        <span className="text-[8px] text-white font-medium">{notices.length} Notices</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="bg-white/20 rounded-md p-2">
+                      <Bell className="w-5 h-5 text-white" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex justify-between items-center mb-5">
+                <div>
+                  <h2 className="text-[13px] font-bold text-blue-700">Notice Management</h2>
+                  <p className="text-[10px] text-gray-600 mt-1">Create and manage important notices for students, teachers, and parents</p>
+                </div>
+                <button 
+                  onClick={() => setShowAddNoticeModal(true)}
+                  className="flex items-center gap-1 px-3 py-1.5 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-md hover:from-blue-600 hover:to-indigo-700 transition-all text-[10px] shadow-sm hover:shadow-md"
+                >
+                  <Plus className="w-3 h-3" />
+                  Add Notice
+                </button>
+              </div>
+
+              {/* Notices List */}
+              <div className="bg-white rounded-md shadow-sm border border-gray-100 overflow-hidden">
+                <div className="overflow-x-auto">
+                  <table className="w-full">
+                    <thead className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white">
+                      <tr>
+                        <th className="px-4 py-3 text-left text-[9px] font-bold uppercase tracking-wider">Notice</th>
+                        <th className="px-4 py-3 text-left text-[9px] font-bold uppercase tracking-wider">Audience</th>
+                        <th className="px-4 py-3 text-left text-[9px] font-bold uppercase tracking-wider">Priority</th>
+                        <th className="px-4 py-3 text-left text-[9px] font-bold uppercase tracking-wider">Date</th>
+                      </tr>
+                    </thead>
+                    <tbody className="bg-white divide-y divide-gray-100">
+                      {notices.map((notice) => (
+                        <tr key={notice.id} className="hover:bg-blue-50/50 transition-all duration-200 group">
+                          <td className="px-4 py-3 whitespace-nowrap">
+                            <div>
+                              <div className="text-[11px] font-bold text-gray-900">{notice.title}</div>
+                              <div className="text-[9px] text-gray-600 mt-1 max-w-md truncate">{notice.content}</div>
+                            </div>
+                          </td>
+                          <td className="px-4 py-3 whitespace-nowrap">
+                            <div className="text-[10px] text-gray-700">{notice.audience}</div>
+                          </td>
+                          <td className="px-4 py-3 whitespace-nowrap">
+                            <span className={`inline-flex px-2.5 py-1 text-[9px] font-semibold leading-tight rounded-full shadow-sm ${{
+                              'High': 'bg-red-100 text-red-800',
+                              'Medium': 'bg-yellow-100 text-yellow-800',
+                              'Low': 'bg-green-100 text-green-800'
+                            }[notice.priority]}`}>
+                              {notice.priority}
+                            </span>
+                          </td>
+                          <td className="px-4 py-3 whitespace-nowrap">
+                            <div className="text-[10px] text-gray-700">{notice.date}</div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          )}
+
+>>>>>>> d26c593767ea5f9ce496c6477d8aa717e50beb4c
           {/* Reports Tab */}
           {activeTab === 'reports' && (
             <div>
@@ -1502,7 +1720,10 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
               </div>
 
               <div className="flex justify-between items-center mb-5">
-                <h2 className="text-sm font-bold text-gray-900">Reports & Analytics</h2>
+                <div>
+                  <h2 className="text-sm font-bold text-blue-700">Reports & Analytics</h2>
+                  <p className="text-[10px] text-gray-600 mt-1">Comprehensive analytics and reporting for school performance</p>
+                </div>
                 <div className="flex gap-2">
                   <button 
                     onClick={() => setShowReportFilterModal(true)}
@@ -1562,7 +1783,7 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
                           animationDuration={800}
                         >
                           {classes.map((entry, index) => (
-                            <Cell key={`cell-${index}`} fill="#60a5fa" />
+                            <Cell key={`cell-${index}`} fill="#3B82F6" />
                           ))}
                         </Bar>
                       </RechartsBarChart>
@@ -1613,10 +1834,10 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
                           type="monotone" 
                           dataKey="averageScore" 
                           name="Average Score" 
-                          stroke="#93c5fd" 
+                          stroke="#3B82F6" 
                           strokeWidth={3}
-                          dot={{ r: 6, fill: '#bfdbfe', strokeWidth: 2, stroke: '#1d4ed8' }}
-                          activeDot={{ r: 8, fill: '#bfdbfe', strokeWidth: 2, stroke: '#1d4ed8' }}
+                          dot={{ r: 6, fill: '#3B82F6', strokeWidth: 2, stroke: '#3B82F6' }}
+                          activeDot={{ r: 8, fill: '#3B82F6', strokeWidth: 2, stroke: '#6366F1' }}
                           animationDuration={800}
                         />
                       </RechartsLineChart>
@@ -1660,7 +1881,10 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
               </div>
 
               <div className="flex justify-between items-center mb-5">
-                <h2 className="text-sm font-bold text-gray-900">Alert Management</h2>
+                <div>
+                  <h2 className="text-sm font-bold text-blue-700">Alert Management</h2>
+                  <p className="text-[10px] text-gray-600 mt-1">Monitor and manage all system alerts and notifications</p>
+                </div>
                 <div className="flex gap-2">
                   <select className="px-3 py-1.5 bg-white border border-gray-200 rounded-md text-[10px] focus:outline-none focus:ring-2 focus:ring-blue-500">
                     <option>All Statuses</option>
@@ -1795,7 +2019,7 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
 
               <div className="flex justify-between items-center mb-4">
                 <div>
-                  <h2 className="text-sm font-bold text-gray-900">System Settings</h2>
+                  <h2 className="text-sm font-bold text-blue-700">System Settings</h2>
                   <p className="text-gray-600 text-[10px] mt-1">Manage your account preferences and system settings</p>
                 </div>
               </div>
@@ -1835,7 +2059,7 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
                   {activeSettingsTab === 'profile' && (
                     <div className="bg-white rounded-md shadow-sm border border-gray-100 p-3">
                       <div className="mb-3">
-                        <h2 className="text-sm font-bold text-gray-900 mb-1">Profile Information</h2>
+                        <h2 className="text-sm font-bold text-blue-700 mb-1">Profile Information</h2>
                         <p className="text-gray-600 text-[10px]">Update your personal and professional details</p>
                       </div>
                       
@@ -1903,7 +2127,7 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
                   {activeSettingsTab === 'notifications' && (
                     <div className="bg-white rounded-md shadow-sm border border-gray-100 p-3">
                       <div className="mb-3">
-                        <h2 className="text-sm font-bold text-gray-900 mb-1">Notification Preferences</h2>
+                        <h2 className="text-sm font-bold text-blue-700 mb-1">Notification Preferences</h2>
                         <p className="text-gray-600 text-[10px]">Manage how and when you receive notifications</p>
                       </div>
                       
@@ -1965,7 +2189,7 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
                   {activeSettingsTab === 'security' && (
                     <div className="bg-white rounded-md shadow-sm border border-gray-100 p-3">
                       <div className="mb-3">
-                        <h2 className="text-sm font-bold text-gray-900 mb-1">Security Settings</h2>
+                        <h2 className="text-sm font-bold text-blue-700 mb-1">Security Settings</h2>
                         <p className="text-gray-600 text-[10px]">Manage your account security and authentication</p>
                       </div>
                       
@@ -2045,7 +2269,7 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
                   {activeSettingsTab === 'appearance' && (
                     <div className="bg-white rounded-md shadow-sm border border-gray-100 p-3">
                       <div className="mb-3">
-                        <h2 className="text-sm font-bold text-gray-900 mb-1">Appearance Settings</h2>
+                        <h2 className="text-sm font-bold text-blue-700 mb-1">Appearance Settings</h2>
                         <p className="text-gray-600 text-[10px]">Customize the look and feel of your dashboard</p>
                       </div>
                       
@@ -2152,19 +2376,36 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
                 </div>
               </div>
 
-              <div className="mb-4">
-                <h2 className="text-sm font-bold text-blue-700">Meal Program Overview</h2>
-                <p className="text-[10px] text-gray-600 mt-1">Total meals to be served today: {selectedSchoolData.reduce((total, school) => total + school.presentToday, 0).toLocaleString()}</p>
-              </div>
-              
               <div className="flex justify-between items-center mb-4">
                 <div>
-                  {/* Filter Controls */}
-                  <div className="flex gap-2 items-center bg-white rounded-lg border border-gray-200 p-1.5">
+                  <h2 className="text-sm font-bold text-blue-700">Meal Program Overview</h2>
+                  <p className="text-[10px] text-gray-600 mt-1">Total meals to be served today: {selectedSchoolData.reduce((total, school) => total + school.presentToday, 0).toLocaleString()}</p>
+                </div>
+                <div className="flex gap-2">
+                  <button 
+                    onClick={handleGenerateMealAnalysisReport}
+                    className="flex items-center gap-1 px-3 py-1.5 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-md hover:from-blue-600 hover:to-indigo-700 transition-all text-[10px] shadow-sm hover:shadow-md"
+                  >
+                    <FileText className="w-3 h-3" />
+                    Generate Analysis
+                  </button>
+                  <button 
+                    onClick={handleExportMealAnalysisReport}
+                    className="flex items-center gap-1 px-3 py-1.5 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-md hover:from-blue-600 hover:to-indigo-700 transition-all text-[10px] shadow-sm hover:shadow-md"
+                  >
+                    <Download className="w-3 h-3" />
+                    Export Analysis
+                  </button>
+                </div>
+              </div>
+              <div className="bg-white rounded-md p-4 shadow-sm border border-gray-100 mb-5">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                  <div>
+                    <label className="block text-[10px] font-medium text-gray-700 mb-1.5">School</label>
                     <select 
                       value={selectedSchool}
                       onChange={(e) => setSelectedSchool(e.target.value)}
-                      className="px-2 py-1 text-[10px] rounded-md bg-gray-50 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-1.5 bg-gray-50 border border-gray-200 rounded-md text-[10px] focus:outline-none focus:ring-2 focus:ring-blue-500"
                     >
                       <option value="All Schools">All Schools</option>
                       {mealAttendanceData.map((school) => (
@@ -2173,57 +2414,26 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
                         </option>
                       ))}
                     </select>
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-medium text-gray-700 mb-1.5">Duration</label>
                     <select 
                       value={selectedDuration}
                       onChange={(e) => setSelectedDuration(e.target.value)}
-                      className="px-2 py-1 text-[10px] rounded-md bg-gray-50 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-1.5 bg-gray-50 border border-gray-200 rounded-md text-[10px] focus:outline-none focus:ring-2 focus:ring-blue-500"
                     >
                       <option value="weekly">Weekly</option>
                       <option value="monthly">Monthly</option>
                     </select>
+                  </div>
+                  <div className="flex items-end">
                     <button 
                       onClick={applyFilters}
-                      className="px-2 py-1 text-[10px] rounded-md bg-blue-100 text-blue-700 hover:bg-blue-200 transition-colors font-medium"
+                      className="w-full px-3 py-1.5 bg-blue-100 text-blue-700 rounded-md hover:bg-blue-200 transition-all text-[10px] font-medium"
                     >
-                      Apply Filter
+                      Apply Filters
                     </button>
                   </div>
-                </div>
-                <div className="flex gap-3">
-                  <div className="flex gap-1">
-                    <button 
-                      onClick={() => setMealPeriod('daily')}
-                      className={`px-2 py-1 text-[10px] rounded-md ${mealPeriod === 'daily' ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
-                    >
-                      Daily
-                    </button>
-                    <button 
-                      onClick={() => setMealPeriod('weekly')}
-                      className={`px-2 py-1 text-[10px] rounded-md ${mealPeriod === 'weekly' ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
-                    >
-                      Weekly
-                    </button>
-                    <button 
-                      onClick={() => setMealPeriod('monthly')}
-                      className={`px-2 py-1 text-[10px] rounded-md ${mealPeriod === 'monthly' ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
-                    >
-                      Monthly
-                    </button>
-                  </div>
-                  <button 
-                    onClick={handleGenerateMealAnalysisReport}
-                    className="flex items-center gap-1 px-3 py-1.5 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-all text-[10px] font-medium"
-                  >
-                    <FileText className="w-3 h-3" />
-                    Generate Analysis
-                  </button>
-                  <button 
-                    onClick={handleExportMealAnalysisReport}
-                    className="flex items-center gap-1 px-3 py-1.5 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-all text-[10px] font-medium"
-                  >
-                    <Download className="w-3 h-3" />
-                    Export Analysis
-                  </button>
                 </div>
               </div>
 
@@ -2301,12 +2511,12 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
                   <div className="bg-white rounded-md p-4 shadow-sm border border-gray-100 relative overflow-hidden">
                     <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-amber-500 via-orange-500 to-red-500"></div>
                     <div className="absolute -top-2 -right-2 w-10 h-10 bg-orange-500/10 rounded-full"></div>
-                    <h3 className="text-sm font-bold text-gray-900 mb-4 bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent relative z-10">Meal Distribution Trends (Daily)</h3>
+                    <h3 className="text-sm font-bold text-gray-900 mb-4 bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent relative z-10">Meal Distribution Trends</h3>
                     <div className="h-48 bg-gradient-to-br from-amber-50 to-orange-50 rounded-md p-3 border border-amber-100 relative z-10">
                       <div className="flex items-center justify-center h-full text-gray-500 text-[10px]">
                         <div className="text-center">
                           <Utensils className="w-8 h-8 mx-auto mb-2 text-amber-400" />
-                          <p>Meal distribution chart for {mealPeriod} period</p>
+                          <p>Meal distribution chart</p>
                           <p className="mt-1 text-[9px]">Data visualization will be displayed here</p>
                           <div className="flex justify-center gap-2 mt-3">
                             <div className="w-16 h-16 bg-gradient-to-br from-amber-100 to-orange-100 rounded-md flex items-center justify-center border border-amber-200 overflow-hidden">
@@ -3013,6 +3223,97 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
                   className="flex-1 px-3 py-1.5 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-all text-[10px]"
                 >
                   Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Add Notice Modal */}
+      {showAddNoticeModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-md w-full max-w-md max-h-80 overflow-y-auto">
+            <div className="p-4 border-b border-gray-100">
+              <div className="flex items-center justify-between">
+                <h3 className="text-[10px] font-bold text-gray-900">Add New Notice</h3>
+                <button 
+                  onClick={closeAddNoticeModal}
+                  className="p-1.5 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-md transition-all"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+            
+            <div className="p-4">
+              <div className="space-y-3">
+                <div>
+                  <label className="block text-[8px] font-medium text-gray-700 mb-1.5">Title</label>
+                  <input 
+                    type="text" 
+                    name="title"
+                    value={newNotice.title}
+                    onChange={handleNewNoticeChange}
+                    className="w-full px-3 py-1.5 bg-gray-50 border border-gray-200 rounded-md text-[8px] focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="Enter notice title"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[8px] font-medium text-gray-700 mb-1.5">Content</label>
+                  <textarea 
+                    name="content"
+                    value={newNotice.content}
+                    onChange={handleNewNoticeChange}
+                    rows="3"
+                    className="w-full px-3 py-1.5 bg-gray-50 border border-gray-200 rounded-md text-[8px] focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="Enter notice content"
+                  ></textarea>
+                </div>
+                <div>
+                  <label className="block text-[8px] font-medium text-gray-700 mb-1.5">Audience</label>
+                  <select 
+                    name="audience"
+                    value={newNotice.audience}
+                    onChange={handleNewNoticeChange}
+                    className="w-full px-3 py-1.5 bg-gray-50 border border-gray-200 rounded-md text-[8px] focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    <option value="All">All</option>
+                    <option value="Students">Students</option>
+                    <option value="Teachers">Teachers</option>
+                    <option value="Parents">Parents</option>
+                    <option value="Grade 9, Grade 10">Grade 9, Grade 10</option>
+                    <option value="Grade 1-5">Grade 1-5</option>
+                    <option value="Grade 6-8">Grade 6-8</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-[8px] font-medium text-gray-700 mb-1.5">Priority</label>
+                  <select 
+                    name="priority"
+                    value={newNotice.priority}
+                    onChange={handleNewNoticeChange}
+                    className="w-full px-3 py-1.5 bg-gray-50 border border-gray-200 rounded-md text-[8px] focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    <option value="Low">Low</option>
+                    <option value="Medium">Medium</option>
+                    <option value="High">High</option>
+                  </select>
+                </div>
+              </div>
+              
+              <div className="flex gap-2 mt-4">
+                <button 
+                  onClick={closeAddNoticeModal}
+                  className="flex-1 px-3 py-1.5 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-all text-[8px]"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={addNewNotice}
+                  className="flex-1 px-3 py-1.5 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-md hover:from-blue-600 hover:to-indigo-700 transition-all text-[8px] shadow-sm hover:shadow-md"
+                >
+                  Add Notice
                 </button>
               </div>
             </div>

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
-import { Users, User, UserCheck, UserX, Bell, AlertTriangle, Download, Calendar, Clock, Activity, Shield, MapPin, TrendingUp, FileText, Settings, LogOut, Menu, X, Home, BookOpen, ClipboardList, MessageSquare, Search, ChevronDown, CheckCircle2, Eye, Edit, Printer, Filter, Plus, Save, XCircle, RefreshCw, PieChart, Palette } from 'lucide-react';
+import { Users, User, UserCheck, UserX, Bell, AlertTriangle, Download, Calendar, Clock, Activity, Shield, MapPin, TrendingUp, FileText, Settings, LogOut, Menu, X, Home, BookOpen, ClipboardList, MessageSquare, Search, Eye, Edit, Printer, Filter, Plus, Save, RefreshCw } from 'lucide-react';
 import { BarChart, Bar, LineChart, Line, PieChart as RechartsPieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { motion } from 'framer-motion';
+import { useNavigate, useLocation } from 'react-router-dom';
 import AttendSmartLogo from '../AttendSmartLogo';
 import UltraModernHeader from '../UltraModernHeader';
 import ClassroomCard from '../ClassroomCard';
@@ -247,8 +247,34 @@ const TeacherDashboard = ({ onLogout }) => {
       </g>
     </svg>
   );
-  const { t, i18n } = useTranslation();
-  const [activeTab, setActiveTab] = useState('home');
+  const navigate = useNavigate();
+  const location = useLocation();
+  
+  // Set active tab based on current route
+  const getActiveTabFromRoute = () => {
+    const path = location.pathname;
+    if (path.includes('/classes')) return 'classes';
+    if (path.includes('/attendance')) return 'attendance';
+    if (path.includes('/assignments')) return 'assignments';
+    if (path.includes('/notices')) return 'notices';
+    if (path.includes('/reports')) return 'reports';
+    if (path.includes('/alerts')) return 'alerts';
+    if (path.includes('/settings')) return 'settings';
+    return 'home';
+  };
+  
+  const [activeTab, setActiveTab] = useState(getActiveTabFromRoute());
+  
+  // Update active tab when route changes
+  useEffect(() => {
+    setActiveTab(getActiveTabFromRoute());
+  }, [location]);
+  
+  // Handle tab navigation
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
+    navigate(`/teacher/${tab}`);
+  };
   const [selectedClass, setSelectedClass] = useState('Class 10-A');
   
   // Teacher-specific data
@@ -1068,7 +1094,7 @@ const TeacherDashboard = ({ onLogout }) => {
   ];
 
   return (
-    <div className="flex min-h-screen h-screen overflow-hidden bg-gradient-to-br from-blue-50 to-indigo-50">
+    <div className="flex min-h-screen h-screen w-full overflow-hidden bg-gradient-to-br from-blue-50 to-indigo-50">
       <ParticleBackground />
       
       {/* Sidebar */}
@@ -1112,7 +1138,7 @@ const TeacherDashboard = ({ onLogout }) => {
           ].map((tab) => (
             <button
               key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
+              onClick={() => handleTabChange(tab.id)}
               className={`w-full flex items-center gap-2 px-2.5 py-2 rounded-md transition-all ${
                 activeTab === tab.id
                   ? 'bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-md shadow-blue-500/20'
@@ -1158,7 +1184,7 @@ const TeacherDashboard = ({ onLogout }) => {
             userName={teacherData.name}
             userRole={`${teacherData.subject} Teacher`}
             onLogout={onLogout}
-            onAlertsClick={() => setActiveTab('alerts')}
+            onAlertsClick={() => handleTabChange('alerts')}
           />
         </div>
 
@@ -1168,7 +1194,7 @@ const TeacherDashboard = ({ onLogout }) => {
           {activeTab === 'home' && (
             <div>
               {/* Welcome Banner - Matching student dashboard style */}
-              <div className="bg-gradient-to-r from-blue-600 via-indigo-500 to-indigo-600 rounded-md p-4 mb-1 shadow-sm backdrop-blur-sm border border-white/20 relative overflow-hidden drop-shadow-sm">
+              <div className="bg-gradient-to-r from-blue-600 via-indigo-500 to-indigo-600 rounded-md p-4 mb-4 shadow-sm backdrop-blur-sm border border-white/20 relative overflow-hidden drop-shadow-sm -mt-5">
                 {/* Educational background elements */}
                 <EnhancedEducationIllustration />
                 <div className="absolute -top-5 -right-5 w-20 h-20 bg-white/10 rounded-full"></div>
@@ -1355,7 +1381,7 @@ const TeacherDashboard = ({ onLogout }) => {
           {activeTab === 'classes' && (
             <div>
               {/* Welcome Banner */}
-              <div className="bg-gradient-to-r from-blue-600 via-indigo-500 to-indigo-600 rounded-md p-4 mb-4 shadow-sm backdrop-blur-sm border border-white/20 relative overflow-hidden">
+              <div className="bg-gradient-to-r from-blue-600 via-indigo-500 to-indigo-600 rounded-md p-4 mb-1 shadow-sm backdrop-blur-sm border border-white/20 relative overflow-hidden">
                 <EnhancedEducationIllustration />
                 <div className="absolute -top-5 -right-5 w-20 h-20 bg-white/10 rounded-full"></div>
                 <div className="absolute -bottom-5 -left-5 w-16 h-16 bg-white/10 rounded-full"></div>
@@ -1387,7 +1413,10 @@ const TeacherDashboard = ({ onLogout }) => {
               </div>
 
               <div className="flex justify-between items-center mb-6">
-                <h2 className="text-sm font-bold text-gray-900">Class Management</h2>
+                <div>
+                  <h2 className="text-sm font-bold text-blue-700">Class Management</h2>
+                  <p className="text-[10px] text-gray-600 mt-1">Organize and manage all your classes and subjects</p>
+                </div>
                 <div className="flex gap-2">
                   <button 
                     onClick={() => setShowAddClassForm(true)}
@@ -1440,7 +1469,7 @@ const TeacherDashboard = ({ onLogout }) => {
           {activeTab === 'attendance' && (
             <div>
               {/* Welcome Banner */}
-              <div className="bg-gradient-to-r from-blue-600 via-indigo-500 to-indigo-600 rounded-md p-4 mb-4 shadow-sm backdrop-blur-sm border border-white/20 relative overflow-hidden">
+              <div className="bg-gradient-to-r from-blue-600 via-indigo-500 to-indigo-600 rounded-md p-4 mb-4 shadow-sm backdrop-blur-sm border border-white/20 relative overflow-hidden -mt-5">
                 <EnhancedEducationIllustration />
                 <div className="absolute -top-5 -right-5 w-20 h-20 bg-white/10 rounded-full"></div>
                 <div className="absolute -bottom-5 -left-5 w-16 h-16 bg-white/10 rounded-full"></div>
@@ -1472,7 +1501,10 @@ const TeacherDashboard = ({ onLogout }) => {
               </div>
 
               <div className="flex justify-between items-center mb-6">
-                <h2 className="text-sm font-bold text-gray-900">Attendance Management</h2>
+                <div>
+                  <h2 className="text-sm font-bold text-blue-700">Attendance Management</h2>
+                  <p className="text-[10px] text-gray-600 mt-1">Track and manage student attendance records</p>
+                </div>
                 <div className="flex gap-3">
                   <button 
                     onClick={() => setShowAddStudentForm(true)}
@@ -1590,7 +1622,7 @@ const TeacherDashboard = ({ onLogout }) => {
           {activeTab === 'assignments' && (
             <div>
               {/* Welcome Banner */}
-              <div className="bg-gradient-to-r from-blue-600 via-indigo-500 to-indigo-600 rounded-md p-4 mb-4 shadow-sm backdrop-blur-sm border border-white/20 relative overflow-hidden">
+              <div className="bg-gradient-to-r from-blue-600 via-indigo-500 to-indigo-600 rounded-md p-4 mb-4 shadow-sm backdrop-blur-sm border border-white/20 relative overflow-hidden -mt-5">
                 <EducationIllustration />
                 <div className="absolute -top-5 -right-5 w-20 h-20 bg-white/10 rounded-full"></div>
                 <div className="absolute -bottom-5 -left-5 w-16 h-16 bg-white/10 rounded-full"></div>
@@ -1620,7 +1652,10 @@ const TeacherDashboard = ({ onLogout }) => {
               </div>
 
               <div className="flex justify-between items-center mb-6">
-                <h2 className="text-sm font-bold text-gray-900">Assignment Management</h2>
+                <div>
+                  <h2 className="text-sm font-bold text-blue-700">Assignment Management</h2>
+                  <p className="text-[10px] text-gray-600 mt-1">Create and manage student assignments and track submissions</p>
+                </div>
                 <div className="flex gap-3">
                   <button 
                     onClick={() => setShowAddAssignmentForm(true)}
@@ -1751,7 +1786,7 @@ const TeacherDashboard = ({ onLogout }) => {
           {activeTab === 'reports' && (
             <div className="pt-2">
               {/* Welcome Banner */}
-              <div className="bg-gradient-to-r from-blue-600 via-indigo-500 to-indigo-600 rounded-md p-4 mb-4 shadow-sm backdrop-blur-sm border border-white/20 relative overflow-hidden">
+              <div className="bg-gradient-to-r from-blue-600 via-indigo-500 to-indigo-600 rounded-md p-4 mb-4 shadow-sm backdrop-blur-sm border border-white/20 relative overflow-hidden -mt-5">
                 <EnhancedEducationIllustration />
                 <div className="absolute -top-5 -right-5 w-20 h-20 bg-white/10 rounded-full"></div>
                 <div className="absolute -bottom-5 -left-5 w-16 h-16 bg-white/10 rounded-full"></div>
@@ -1783,7 +1818,10 @@ const TeacherDashboard = ({ onLogout }) => {
               </div>
 
               <div className="flex justify-between items-center mb-4">
-                <h2 className="text-sm font-bold text-gray-900">Attendance Reports & Analytics</h2>
+                <div>
+                  <h2 className="text-sm font-bold text-blue-700">Attendance Reports & Analytics</h2>
+                  <p className="text-[10px] text-gray-600 mt-1">Comprehensive analytics and reporting for student performance</p>
+                </div>
                 <div className="flex gap-2">
                   <button 
                     onClick={() => setShowReportsFilter(true)}
@@ -1909,28 +1947,28 @@ const TeacherDashboard = ({ onLogout }) => {
                           type="monotone" 
                           dataKey="present" 
                           name="Present Students" 
-                          stroke="#8B5CF6" 
+                          stroke="#3B82F6" 
                           strokeWidth={2}
-                          dot={{ r: 3, fill: '#A78BFA' }}
-                          activeDot={{ r: 5, fill: '#A78BFA' }}
+                          dot={{ r: 3, fill: '#3B82F6' }}
+                          activeDot={{ r: 5, fill: '#3B82F6' }}
                         />
                         <Line 
                           type="monotone" 
                           dataKey="absent" 
                           name="Absent Students" 
-                          stroke="#3B82F6" 
+                          stroke="#6366F1" 
                           strokeWidth={2}
-                          dot={{ r: 3, fill: '#60A5FA' }}
-                          activeDot={{ r: 5, fill: '#60A5FA' }}
+                          dot={{ r: 3, fill: '#6366F1' }}
+                          activeDot={{ r: 5, fill: '#6366F1' }}
                         />
                         <Line 
                           type="monotone" 
                           dataKey="late" 
                           name="Late Arrivals" 
-                          stroke="#1D4ED8" 
+                          stroke="#8B5CF6" 
                           strokeWidth={2}
-                          dot={{ r: 3, fill: '#3B82F6' }}
-                          activeDot={{ r: 5, fill: '#3B82F6' }}
+                          dot={{ r: 3, fill: '#8B5CF6' }}
+                          activeDot={{ r: 5, fill: '#8B5CF6' }}
                         />
                       </LineChart>
                     </ResponsiveContainer>
@@ -1989,7 +2027,7 @@ const TeacherDashboard = ({ onLogout }) => {
           {activeTab === 'alerts' && (
             <div style={{padding: '16px'}}>
               {/* Welcome Banner */}
-              <div className="bg-gradient-to-r from-blue-600 via-indigo-500 to-indigo-600 rounded-md p-4 mb-2 shadow-sm backdrop-blur-sm border border-white/20 relative overflow-hidden">
+              <div className="bg-gradient-to-r from-blue-600 via-indigo-500 to-indigo-600 rounded-md p-4 mb-2 shadow-sm backdrop-blur-sm border border-white/20 relative overflow-hidden -mt-8">
                 <EnhancedEducationIllustration />
                 <div className="absolute -top-5 -right-5 w-20 h-20 bg-white/10 rounded-full"></div>
                 <div className="absolute -bottom-5 -left-5 w-16 h-16 bg-white/10 rounded-full"></div>
@@ -2020,43 +2058,43 @@ const TeacherDashboard = ({ onLogout }) => {
                 </div>
               </div>
 
-              <h2 style={{fontSize: '12px', fontWeight: 'bold', marginBottom: '4px'}}>Alert Management & Notifications</h2>
+              <h2 style={{fontSize: '16px', fontWeight: 'bold', marginTop: '21px', marginBottom: '21px', color: '#1d4ed8'}}>Alert Management & Notifications</h2>
               
               {/* Alert Summary Cards */}
               <div style={{display: 'flex', gap: '12px', marginBottom: '15px'}}>
-                <div style={{background: 'linear-gradient(to bottom right, #f87171, #ef4444)', padding: '12px', borderRadius: '5px', border: '1px solid rgba(248, 113, 113, 0.3)', textAlign: 'center', flex: '1', position: 'relative', overflow: 'hidden', color: 'white', boxShadow: '0 2px 4px rgba(0,0,0,0.1)'}}>
+                <div style={{background: 'linear-gradient(to bottom right, #f87171, #ef4444)', padding: '14px', borderRadius: '7px', border: '1px solid rgba(248, 113, 113, 0.3)', textAlign: 'center', flex: '1', position: 'relative', overflow: 'hidden', color: 'white', boxShadow: '0 4px 6px rgba(0,0,0,0.15)'}}>
                   <div style={{position: 'absolute', top: '-29px', right: '-29px', width: '95px', height: '95px', backgroundColor: 'rgba(254, 202, 202, 0.15)', borderRadius: '50%', zIndex: '0'}}></div>
                   <div style={{position: 'absolute', bottom: '-19px', left: '-19px', width: '75px', height: '75px', backgroundColor: 'rgba(252, 165, 165, 0.2)', borderRadius: '50%', zIndex: '0'}}></div>
                   <div style={{position: 'relative', zIndex: '1'}}>
-                    <h3 style={{fontSize: '19px', fontWeight: 'bold', marginBottom: '2px'}}>3</h3>
-                    <p style={{fontSize: '9px', opacity: '0.9'}}>Critical Alerts</p>
+                    <h3 style={{fontSize: '21px', fontWeight: 'bold', marginBottom: '4px'}}>3</h3>
+                    <p style={{fontSize: '11px', opacity: '0.9'}}>Critical Alerts</p>
                   </div>
                 </div>
                 
-                <div style={{background: 'linear-gradient(to bottom right, #fbbf24, #f59e0b)', padding: '12px', borderRadius: '5px', border: '1px solid rgba(251, 191, 36, 0.3)', textAlign: 'center', flex: '1', position: 'relative', overflow: 'hidden', color: 'white', boxShadow: '0 2px 4px rgba(0,0,0,0.1)'}}>
+                <div style={{background: 'linear-gradient(to bottom right, #fbbf24, #f59e0b)', padding: '14px', borderRadius: '7px', border: '1px solid rgba(251, 191, 36, 0.3)', textAlign: 'center', flex: '1', position: 'relative', overflow: 'hidden', color: 'white', boxShadow: '0 4px 6px rgba(0,0,0,0.15)'}}>
                   <div style={{position: 'absolute', top: '-29px', right: '-29px', width: '95px', height: '95px', backgroundColor: 'rgba(251, 191, 36, 0.15)', borderRadius: '50%', zIndex: '0'}}></div>
                   <div style={{position: 'absolute', bottom: '-19px', left: '-19px', width: '75px', height: '75px', backgroundColor: 'rgba(245, 158, 11, 0.2)', borderRadius: '50%', zIndex: '0'}}></div>
                   <div style={{position: 'relative', zIndex: '1'}}>
-                    <h3 style={{fontSize: '19px', fontWeight: 'bold', marginBottom: '2px'}}>7</h3>
-                    <p style={{fontSize: '9px', opacity: '0.9'}}>Warnings</p>
+                    <h3 style={{fontSize: '21px', fontWeight: 'bold', marginBottom: '4px'}}>7</h3>
+                    <p style={{fontSize: '11px', opacity: '0.9'}}>Warnings</p>
                   </div>
                 </div>
                 
-                <div style={{background: 'linear-gradient(to bottom right, #60a5fa, #3b82f6)', padding: '12px', borderRadius: '5px', border: '1px solid rgba(96, 165, 250, 0.3)', textAlign: 'center', flex: '1', position: 'relative', overflow: 'hidden', color: 'white', boxShadow: '0 2px 4px rgba(0,0,0,0.1)'}}>
+                <div style={{background: 'linear-gradient(to bottom right, #60a5fa, #3b82f6)', padding: '14px', borderRadius: '7px', border: '1px solid rgba(96, 165, 250, 0.3)', textAlign: 'center', flex: '1', position: 'relative', overflow: 'hidden', color: 'white', boxShadow: '0 4px 6px rgba(0,0,0,0.15)'}}>
                   <div style={{position: 'absolute', top: '-29px', right: '-29px', width: '95px', height: '95px', backgroundColor: 'rgba(191, 219, 254, 0.15)', borderRadius: '50%', zIndex: '0'}}></div>
                   <div style={{position: 'absolute', bottom: '-19px', left: '-19px', width: '75px', height: '75px', backgroundColor: 'rgba(96, 165, 250, 0.2)', borderRadius: '50%', zIndex: '0'}}></div>
                   <div style={{position: 'relative', zIndex: '1'}}>
-                    <h3 style={{fontSize: '19px', fontWeight: 'bold', marginBottom: '2px'}}>12</h3>
-                    <p style={{fontSize: '9px', opacity: '0.9'}}>Informational Notices</p>
+                    <h3 style={{fontSize: '21px', fontWeight: 'bold', marginBottom: '4px'}}>12</h3>
+                    <p style={{fontSize: '11px', opacity: '0.9'}}>Informational Notices</p>
                   </div>
                 </div>
                 
-                <div style={{background: 'linear-gradient(to bottom right, #a78bfa, #8b5cf6)', padding: '12px', borderRadius: '5px', border: '1px solid rgba(167, 139, 250, 0.3)', textAlign: 'center', flex: '1', position: 'relative', overflow: 'hidden', color: 'white', boxShadow: '0 2px 4px rgba(0,0,0,0.1)'}}>
+                <div style={{background: 'linear-gradient(to bottom right, #a78bfa, #8b5cf6)', padding: '14px', borderRadius: '7px', border: '1px solid rgba(167, 139, 250, 0.3)', textAlign: 'center', flex: '1', position: 'relative', overflow: 'hidden', color: 'white', boxShadow: '0 4px 6px rgba(0,0,0,0.15)'}}>
                   <div style={{position: 'absolute', top: '-29px', right: '-29px', width: '95px', height: '95px', backgroundColor: 'rgba(221, 214, 254, 0.15)', borderRadius: '50%', zIndex: '0'}}></div>
                   <div style={{position: 'absolute', bottom: '-19px', left: '-19px', width: '75px', height: '75px', backgroundColor: 'rgba(192, 132, 252, 0.2)', borderRadius: '50%', zIndex: '0'}}></div>
                   <div style={{position: 'relative', zIndex: '1'}}>
-                    <h3 style={{fontSize: '19px', fontWeight: 'bold', marginBottom: '2px'}}>5</h3>
-                    <p style={{fontSize: '9px', opacity: '0.9'}}>General Info</p>
+                    <h3 style={{fontSize: '21px', fontWeight: 'bold', marginBottom: '4px'}}>5</h3>
+                    <p style={{fontSize: '11px', opacity: '0.9'}}>General Info</p>
                   </div>
                 </div>
               </div>
@@ -2134,7 +2172,7 @@ const TeacherDashboard = ({ onLogout }) => {
           {activeTab === 'notices' && (
             <div>
               {/* Welcome Banner */}
-              <div className="bg-gradient-to-r from-blue-600 via-indigo-500 to-indigo-600 rounded-md p-4 mb-4 shadow-sm backdrop-blur-sm border border-white/20 relative overflow-hidden">
+              <div className="bg-gradient-to-r from-blue-600 via-indigo-500 to-indigo-600 rounded-md p-4 mb-4 shadow-sm backdrop-blur-sm border border-white/20 relative overflow-hidden -mt-5">
                 <EnhancedEducationIllustration />
                 <div className="absolute -top-5 -right-5 w-20 h-20 bg-white/10 rounded-full"></div>
                 <div className="absolute -bottom-5 -left-5 w-16 h-16 bg-white/10 rounded-full"></div>
@@ -2166,7 +2204,10 @@ const TeacherDashboard = ({ onLogout }) => {
               </div>
 
               <div className="flex justify-between items-center mb-6">
-                <h2 className="text-[12px] font-bold text-gray-900">Post New Notice</h2>
+                <div>
+                  <h2 className="text-[14px] font-bold text-blue-700">Post New Notice</h2>
+                  <p className="text-[10px] text-gray-600 mt-1">Create and manage important notices for students and staff</p>
+                </div>
                 <div className="flex gap-3">
                   <button 
                     className="flex items-center gap-1 px-3 py-1.5 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded hover:from-blue-600 hover:to-indigo-700 transition-all shadow-sm hover:shadow text-[10px] font-medium"
@@ -2310,7 +2351,7 @@ const TeacherDashboard = ({ onLogout }) => {
           {activeTab === 'settings' && (
             <div>
               {/* Welcome Banner */}
-              <div className="bg-gradient-to-r from-blue-600 via-indigo-500 to-indigo-600 rounded-md p-4 mb-4 shadow-sm backdrop-blur-sm border border-white/20 relative overflow-hidden">
+              <div className="bg-gradient-to-r from-blue-600 via-indigo-500 to-indigo-600 rounded-md p-4 mb-4 shadow-sm backdrop-blur-sm border border-white/20 relative overflow-hidden -mt-5">
                 <EnhancedEducationIllustration />
                 <div className="absolute -top-5 -right-5 w-20 h-20 bg-white/10 rounded-full"></div>
                 <div className="absolute -bottom-5 -left-5 w-16 h-16 bg-white/10 rounded-full"></div>
@@ -2343,8 +2384,8 @@ const TeacherDashboard = ({ onLogout }) => {
 
               <div className="flex justify-between items-center mb-5">
                 <div>
-                  <h2 className="text-xs font-bold text-gray-900">Account Settings</h2>
-                  <p className="text-gray-600 text-[10px]">Manage your profile and account preferences</p>
+                  <h2 className="text-xs font-bold text-blue-700">Account Settings</h2>
+                  <p className="text-gray-600 text-[10px]">Configure and customize your account preferences</p>
                 </div>
               </div>
               

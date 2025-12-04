@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Globe, Save } from 'lucide-react';
 
@@ -28,9 +28,9 @@ const LanguageSelector = () => {
 
   const languages = [
     { code: 'en', name: t('languages.english'), nativeName: 'English' },
-    { code: 'hi', name: t('languages.hindi'), nativeName: 'हिन्दी' },
-    { code: 'ur', name: t('languages.urdu'), nativeName: 'اردو' },
-    { code: 'pa', name: t('languages.punjabi'), nativeName: 'ਪੰਜਾਬੀ' }
+    { code: 'hi', name: t('languages.hindi'), nativeName: 'αñ╣αñ┐αñ¿αÑìαñªαÑÇ' },
+    { code: 'ur', name: t('languages.urdu'), nativeName: '╪º╪▒╪»┘ê' },
+    { code: 'pa', name: t('languages.punjabi'), nativeName: 'α¿¬α⌐░α¿£α¿╛α¿¼α⌐Ç' }
   ];
 
   const changeLanguage = (lng) => {
@@ -44,9 +44,9 @@ const LanguageSelector = () => {
     // Show success message
     const successMessage = {
       en: 'Language preference saved successfully!',
-      hi: 'भाषा प्राथमिकता सफलतापूर्वक सहेजी गई!',
-      ur: 'زبان کی ترجیح کامیابی کے ساتھ محفوظ ہو گئی!',
-      pa: 'ਭਾਸ਼ਾ ਪਸੰਦੀ ਸਫਲਤਾਪੂਰਵਕ ਸੁਰੱਖਿਅਤ ਕੀਤੀ ਗਈ!'
+      hi: 'αñ¡αñ╛αñ╖αñ╛ αñ¬αÑìαñ░αñ╛αñÑαñ«αñ┐αñòαññαñ╛ αñ╕αñ½αñ▓αññαñ╛αñ¬αÑéαñ░αÑìαñ╡αñò αñ╕αñ╣αÑçαñ£αÑÇ αñùαñê!',
+      ur: '╪▓╪¿╪º┘å ┌⌐█î ╪¬╪▒╪¼█î╪¡ ┌⌐╪º┘à█î╪º╪¿█î ┌⌐█Æ ╪│╪º╪¬┌╛ ┘à╪¡┘ü┘ê╪╕ █ü┘ê ┌»╪ª█î!',
+      pa: 'α¿¡α¿╛α¿╕α¿╝α¿╛ α¿¬α¿╕α⌐░α¿ªα⌐Ç α¿╕α¿½α¿▓α¿ñα¿╛α¿¬α⌐éα¿░α¿╡α¿ò α¿╕α⌐üα¿░α⌐▒α¿ûα¿┐α¿àα¿ñ α¿òα⌐Çα¿ñα⌐Ç α¿ùα¿ê!'
     };
     
     alert(successMessage[selectedLanguage] || successMessage.en);

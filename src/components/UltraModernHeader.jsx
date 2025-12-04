@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useReducer } from 'react';
+﻿﻿﻿﻿﻿﻿﻿﻿import React, { useState, useEffect, useRef, useReducer } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Calendar, User, Bell, ChevronDown, Menu, X, HelpCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -158,16 +158,16 @@ const UltraModernHeader = ({
           />
         ))}
         <div className="px-5 py-3.5">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-3.5">
+          <div className="flex flex-row items-center justify-between gap-3.5">
             {/* Left side - Dashboard title and search */}
             <div className="flex items-center gap-3.5 flex-1">
               {/* Menu button for mobile */}
               {showMenuButton && (
                 <button 
                   onClick={onMenuToggle}
-                  className="md:hidden p-1.5 rounded-lg bg-white/50 backdrop-blur-sm border border-white/30 text-gray-700 hover:bg-white/70 transition-all duration-300 shadow-sm hover:shadow-md"
+                  className="lg:hidden p-1.5 rounded-lg bg-white/50 backdrop-blur-sm border border-white/30 text-gray-700 hover:bg-white/70 transition-all duration-300 shadow-sm hover:shadow-md"
                 >
-                  {isMenuOpen ? <X className="w-4.5 h-4.5" /> : <Menu className="w-4.5 h-4.5" />}
+                  {isMenuOpen ? <X className="w-6.5 h-6.5" /> : <Menu className="w-6.5 h-6.5" />}
                 </button>
               )}
               
@@ -176,7 +176,7 @@ const UltraModernHeader = ({
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.2 }}
-                className="text-[13px] font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent hidden md:block relative"
+                className="text-[15px] font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent relative"
               >
                 {dashboardTitle}
               </motion.h1>
@@ -195,7 +195,7 @@ const UltraModernHeader = ({
               <motion.div 
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.98 }}
-                className="hidden md:flex items-center gap-1 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-md px-1.5 py-1 border border-white/40 shadow-sm hover:shadow transition-all duration-300 cursor-pointer group"
+                className="hidden lg:flex items-center gap-1 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-md px-1.5 py-1 border border-white/40 shadow-sm hover:shadow transition-all duration-300 cursor-pointer group"
               >
                 <motion.div
                   animate={{ 
@@ -208,9 +208,9 @@ const UltraModernHeader = ({
                     repeatType: "reverse"
                   }}
                 >
-                  <Calendar className="w-2.5 h-2.5 text-white" />
+                  <Calendar className="w-4.5 h-4.5 text-white" />
                 </motion.div>
-                <span className="text-[10px] font-medium text-white">{currentDate}</span>
+                <span className="text-[12px] font-medium text-white">{currentDate}</span>
               </motion.div>
               
               {/* Class input */}
@@ -224,7 +224,7 @@ const UltraModernHeader = ({
                   value={selectedClass}
                   onChange={(e) => setSelectedClass(e.target.value)}
                   whileFocus={{ scale: 1.02 }}
-                  className="bg-gradient-to-r from-blue-500 to-indigo-500 border border-white/40 rounded-md px-1.5 py-1 text-[10px] font-medium text-white placeholder-white/80 focus:outline-none focus:ring-2 focus:ring-indigo-300 shadow-sm hover:shadow transition-all duration-300 appearance-none"
+                  className="bg-gradient-to-r from-blue-500 to-indigo-500 border border-white/40 rounded-md px-1.5 py-1 text-[12px] font-medium text-white placeholder-white/80 focus:outline-none focus:ring-2 focus:ring-indigo-300 shadow-sm hover:shadow transition-all duration-300 appearance-none"
                   placeholder="Enter class name"
                 />
               </motion.div>
@@ -238,15 +238,7 @@ const UltraModernHeader = ({
                 className="relative p-1 rounded-lg bg-gradient-to-r from-amber-500 to-orange-500 border border-white/40 shadow-sm hover:shadow transition-all duration-300 cursor-pointer"
                 onClick={onAlertsClick}
               >
-                <Bell className="w-3 h-3 text-white" />
-                <motion.span 
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  transition={{ delay: 0.5, type: "spring", stiffness: 300 }}
-                  className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-gradient-to-r from-red-500 to-orange-500 text-white text-[9px] rounded-full flex items-center justify-center font-bold"
-                >
-                  3
-                </motion.span>
+                <Bell className="w-5 h-5 text-white" />
                 <motion.div
                   className="absolute inset-0 rounded-xl bg-amber-400/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                 />

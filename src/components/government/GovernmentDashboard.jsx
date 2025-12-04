@@ -1,14 +1,46 @@
+<<<<<<< HEAD
 import React, { useState } from 'react';
+=======
+import React, { useState, useEffect } from 'react';
+>>>>>>> d26c593767ea5f9ce496c6477d8aa717e50beb4c
 import { Users, School, Utensils, TrendingUp, AlertTriangle, FileText, Settings, LogOut, Home, Search, Filter, Download, Plus, Eye, Edit, Trash2, Printer, BarChart, PieChart, LineChart, Calendar, Clock, Shield, MapPin, CheckCircle, XCircle, RefreshCw, Bell, Menu, X, Building, Activity, User, Book, Target, Award, Camera, Mail, Save, GraduationCap, Minus, Monitor } from 'lucide-react';
 import { BarChart as RechartsBarChart, Bar, LineChart as RechartsLineChart, Line, PieChart as RechartsPieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate, useLocation } from 'react-router-dom';
 import UltraModernHeader from '../UltraModernHeader';
+import ParticleBackground from '../ParticleBackground';
 
 const GovernmentDashboard = ({ onLogout }) => {
-  const [activeTab, setActiveTab] = useState('home');
+  const navigate = useNavigate();
+  const location = useLocation();
+  
+  // Set active tab based on current route
+  const getActiveTabFromRoute = () => {
+    const path = location.pathname;
+    if (path.includes('/schools')) return 'schools';
+    if (path.includes('/districts')) return 'districts';
+    if (path.includes('/reports')) return 'reports';
+    if (path.includes('/notices')) return 'notices';
+    if (path.includes('/settings')) return 'settings';
+    return 'home';
+  };
+  
+  const [activeTab, setActiveTab] = useState(getActiveTabFromRoute());
+  
+  // Update active tab when route changes
+  useEffect(() => {
+    setActiveTab(getActiveTabFromRoute());
+  }, [location]);
+  
+  // Handle tab navigation
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
+    navigate(`/government/${tab}`);
+  };
   const [activeSettingsTab, setActiveSettingsTab] = useState('profile');
   const [selectedDistrict, setSelectedDistrict] = useState('All Districts');
   const [reportPeriod, setReportPeriod] = useState('monthly'); // weekly, monthly, yearly
+
 
   // State for Add School form
   const [showAddSchoolForm, setShowAddSchoolForm] = useState(false);
@@ -25,6 +57,50 @@ const GovernmentDashboard = ({ onLogout }) => {
     { id: 3, type: 'resource', message: 'Budget allocation for Kendriya Vidyalaya', time: '1 hour ago', severity: 'medium', status: 'acknowledged' },
   ];
 
+<<<<<<< HEAD
+=======
+  // State for notices
+  const [notices, setNotices] = useState([
+    { 
+      id: 1, 
+      title: "Budget Allocation Announcement", 
+      content: "The annual budget for the education sector has been finalized and allocated to all districts. Please review the allocation for your district and submit utilization plan within 15 days.",
+      audience: "All Districts",
+      priority: "Important",
+      sender: "Government Official",
+      date: "2024-05-15",
+      time: "09:30 AM"
+    },
+    { 
+      id: 2, 
+      title: "Policy Update on Student Assessment", 
+      content: "New guidelines for student assessment and evaluation have been released. All schools are required to implement these changes starting from the next academic year.",
+      audience: "All Schools",
+      priority: "Important",
+      sender: "Government Official",
+      date: "2024-05-10",
+      time: "14:20 PM"
+    },
+    { 
+      id: 3, 
+      title: "Mid-Day Meal Program Enhancement", 
+      content: "The mid-day meal program will be enhanced with additional nutritional supplements starting June 1st. All schools participating in the program must update their inventory.",
+      audience: "All Schools",
+      priority: "Normal",
+      sender: "Government Official",
+      date: "2024-05-05",
+      time: "11:45 AM"
+    }
+  ]);
+
+  const [newNotice, setNewNotice] = useState({
+    title: "",
+    content: "",
+    audience: "All Districts",
+    priority: "Normal"
+  });
+
+>>>>>>> d26c593767ea5f9ce496c6477d8aa717e50beb4c
   // Sample schools data - moved to the top to avoid reference error
   const [schools, setSchools] = useState([
     { id: 1, name: 'Delhi Public School', students: 1250, attendance: 94.2, performance: 'A', alerts: alerts.filter(a => a.message.includes('Delhi Public')).length },
@@ -50,7 +126,6 @@ const GovernmentDashboard = ({ onLogout }) => {
   // State for report generation
   const [generatingReport, setGeneratingReport] = useState(null);
   const [generatedReports, setGeneratedReports] = useState([]);
-  const [mealPeriod, setMealPeriod] = useState('daily'); // daily, weekly, monthly
   
   // State for meal filtering
   const [selectedSchool, setSelectedSchool] = useState('All Schools');
@@ -282,6 +357,58 @@ const GovernmentDashboard = ({ onLogout }) => {
     }
   };
 
+  // Function to handle new notice form input changes
+  const handleNewNoticeChange = (e) => {
+    const { name, value } = e.target;
+    setNewNotice({ ...newNotice, [name]: value });
+  };
+  
+  // Function to add a new notice
+  const addNewNotice = () => {
+    if (newNotice.title && newNotice.content) {
+      const noticeObj = {
+        id: notices.length + 1,
+        title: newNotice.title,
+        content: newNotice.content,
+        audience: newNotice.audience,
+        priority: newNotice.priority,
+        sender: "Government Official",
+        date: new Date().toISOString().split('T')[0],
+        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      };
+      
+      setNotices([noticeObj, ...notices]);
+      setNewNotice({
+        title: "",
+        content: "",
+        audience: "All Districts",
+        priority: "Normal"
+      });
+    }
+  };
+  
+  // Function to clear the new notice form
+  const clearNoticeForm = () => {
+    setNewNotice({
+      title: "",
+      content: "",
+      audience: "All Districts",
+      priority: "Normal"
+    });
+  };
+  
+  // Function to get priority badge class
+  const getPriorityBadgeClass = (priority) => {
+    switch (priority) {
+      case 'Urgent':
+        return 'bg-red-100 text-red-800';
+      case 'Important':
+        return 'bg-blue-100 text-blue-800';
+      default:
+        return 'bg-green-100 text-green-800';
+    }
+  };
+
   const getBarColor = (value) => {
     return '#2563EB'; // slightly darker medium blue for all bars
   };
@@ -425,20 +552,21 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
 
   return (
     <div className="flex min-h-screen h-screen overflow-hidden bg-gradient-to-br from-blue-50 to-indigo-50">
+      <ParticleBackground />
       {/* Sidebar */}
       <motion.div 
         initial={{ x: -100, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
         transition={{ duration: 0.5 }}
-        className="w-52 bg-white shadow-lg flex flex-col h-full"
+        className="w-56 bg-white shadow-lg flex flex-col h-full"
       >
-        <div className="p-2.5 border-b border-gray-100">
+        <div className="p-3 border-b border-gray-100">
           <div className="flex items-center gap-1.5">
             <div className="relative">
-              <div className="w-7 h-7 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-md flex items-center justify-center text-white font-bold text-[11px] shadow-md">
+              <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-md flex items-center justify-center text-white font-bold text-[11px] shadow-md">
                 GD
               </div>
-              <div className="absolute -bottom-0.5 -right-0.5 w-2 h-2 bg-green-500 rounded-full border border-white"></div>
+              <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-green-500 rounded-full border border-white"></div>
             </div>
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-1">
@@ -446,22 +574,16 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
                   Smart Attendance
                 </span>
               </div>
-              <p className="text-[10px] text-gray-500 truncate">Government</p>
-            </div>
-            <div className="relative">
-              <img 
-                src="https://api.dicebear.com/7.x/avataaars/svg?seed=Official&backgroundColor=00897b,00acc1,039be5,1e88e5,3949ab,43a047,5e35b1,7cb342,8e24aa,c0ca33,f4511e,fb8c00,fdd835,ffb300"
-                alt="Government Official Avatar"
-                className="w-8 h-8 rounded-full border-2 border-white shadow-md"
-              />
+              <p className="text-[11px] text-gray-500 truncate">Government</p>
             </div>
           </div>
         </div>
 
-        <nav className="flex-1 p-2 pt-0 space-y-0.5 overflow-y-auto">
+        <nav className="flex-1 p-2.5 pt-0 space-y-0.5 overflow-y-auto">
           {[
             { id: 'home', icon: Home, label: 'Dashboard Home' },
             { id: 'schools', icon: School, label: 'Schools' },
+            { id: 'notices', icon: Bell, label: 'Notices' },
             { id: 'reports', icon: FileText, label: 'Reports' },
             { id: 'alerts', icon: Bell, label: 'Alerts' },
             { id: 'middaymeal', icon: Utensils, label: 'Mid Day Meal' },
@@ -469,17 +591,17 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
           ].map((tab) => (
             <button
               key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={`w-full flex items-center gap-2 px-2 py-1.5 rounded-md transition-all ${
+              onClick={() => handleTabChange(tab.id)}
+              className={`w-full flex items-center gap-2 px-2.5 py-2 rounded-md transition-all ${
                 activeTab === tab.id
                   ? 'bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-md shadow-blue-500/20'
                   : 'text-gray-600 hover:bg-blue-50 hover:text-blue-600'
               }`}
             >
-              <tab.icon className="w-3 h-3" />
+              <tab.icon className="w-3.5 h-3.5" />
               <span className="font-medium text-[11px]">{tab.label}</span>
               {tab.id === 'alerts' && (
-                <span className="ml-auto bg-red-500 text-white text-[8px] font-bold rounded-full w-3 h-3 flex items-center justify-center">
+                <span className="ml-auto bg-red-500 text-white text-[11px] font-bold rounded-full w-3.5 h-3.5 flex items-center justify-center">
                   {alerts.filter(a => a.status === 'new').length}
                 </span>
               )}
@@ -487,19 +609,21 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
           ))}
         </nav>
 
-        <div className="p-2 border-t border-gray-100 space-y-1">
+        <div className="p-2.5 border-t border-gray-100 space-y-1">
           <button 
             onClick={onLogout}
-            className="w-full flex items-center gap-2 px-2 py-1.5 rounded-md text-gray-600 hover:bg-red-50 hover:text-red-600 transition-all"
+            className="w-full flex items-center gap-2 px-2.5 py-2 rounded-md text-gray-600 hover:bg-red-50 hover:text-red-600 transition-all"
           >
-            <LogOut className="w-3 h-3" />
+            <LogOut className="w-3.5 h-3.5" />
             <span className="font-medium text-[11px]">Logout</span>
           </button>
         </div>
       </motion.div>
 
+
+
       {/* Main Content */}
-      <div className="flex-1 overflow-y-auto overscroll-contain flex flex-col h-full">
+      <div className="flex-1 overflow-y-auto overscroll-contain flex flex-col h-full lg:ml-0">
         {/* Ultra Modern Header */}
         <div className="flex-shrink-0">
           <UltraModernHeader 
@@ -508,12 +632,12 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
             userName="Government Official"
             userRole="Education Oversight"
             onLogout={onLogout}
-            onAlertsClick={() => setActiveTab('alerts')}
+            onAlertsClick={() => handleTabChange('alerts')}
           />
         </div>
 
         {/* Dashboard Content */}
-        <div className="p-4 flex-grow overflow-y-auto overscroll-contain">
+        <div className="p-3 flex-grow overflow-y-auto overscroll-contain">
           {/* Home Tab */}
           {activeTab === 'home' && (
             <div>
@@ -639,10 +763,10 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
                         <Line 
                           type="monotone" 
                           dataKey="attendance" 
-                          stroke="#1e40af" 
+                          stroke="#3B82F6" 
                           strokeWidth={2}
-                          dot={{ r: 6, fill: '#fff', strokeWidth: 2, stroke: '#1e40af' }}
-                          activeDot={{ r: 8, fill: '#fff', strokeWidth: 2, stroke: '#1e3a8a' }}
+                          dot={{ r: 6, fill: '#fff', strokeWidth: 2, stroke: '#3B82F6' }}
+                          activeDot={{ r: 8, fill: '#fff', strokeWidth: 2, stroke: '#6366F1' }}
                         />
                       </RechartsLineChart>
                     </ResponsiveContainer>
@@ -650,7 +774,7 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
                 </div>
 
                 {/* Recent Alerts */}
-                <div className="bg-gradient-to-br from-white to-gray-50 rounded-md p-4 shadow-sm border border-gray-200/30 backdrop-blur-sm relative overflow-hidden">
+                <div className="bg-gradient-to-br from-white to-gray-50 rounded-md p-4 shadow-sm border border-gray-200/30 backdrop-blur-sm relative overflow-hidden mb-5">
                   <div className="absolute -top-2 -right-2 w-8 h-8 bg-blue-500/10 rounded-full"></div>
                   <div className="absolute -bottom-2 -left-2 w-6 h-6 bg-blue-500/10 rounded-full"></div>
                   
@@ -679,6 +803,51 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
                         </div>
                       </motion.div>
                     ))}
+                  </div>
+                </div>
+
+                {/* Quick Notices Section */}
+                <div className="bg-white rounded-md p-3 shadow-sm border border-gray-100 mb-5">
+                  <div className="flex items-center justify-between mb-3">
+                    <h2 className="text-xs font-bold text-blue-700">Recent Notices</h2>
+                    <button 
+                      onClick={() => setActiveTab('notices')}
+                      className="text-[8px] text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1"
+                    >
+                      View All <span className="text-[9px]">→</span>
+                    </button>
+                  </div>
+                  <div className="space-y-2">
+                    {notices.slice(0, 3).map((notice) => (
+                      <div key={notice.id} className="border-l-2 border-blue-500 pl-2 py-1">
+                        <div className="flex justify-between items-start">
+                          <h3 className="font-medium text-gray-900 text-[10px]">{notice.title}</h3>
+                          <span className={`text-[7px] ${getPriorityBadgeClass(notice.priority)} px-1 py-0.5 rounded-full ml-1`}>
+                            {notice.priority}
+                          </span>
+                        </div>
+                        <p className="text-gray-600 text-[9px] mt-1 line-clamp-2">{notice.content.substring(0, 80)}{notice.content.length > 80 ? '...' : ''}</p>
+                        <div className="flex justify-between items-center mt-1">
+                          <span className="text-[8px] text-gray-500">{notice.date}</span>
+                          <span className="text-[8px] text-gray-500">To: {notice.audience}</span>
+                        </div>
+                        <div className="text-[7px] text-gray-400 mt-1">
+                          From: {notice.sender}
+                        </div>
+                      </div>
+                    ))}
+                    {notices.length === 0 && (
+                      <div className="text-center py-3">
+                        <Bell className="w-5 h-5 text-gray-300 mx-auto mb-1" />
+                        <p className="text-[9px] text-gray-500">No notices posted yet</p>
+                        <button 
+                          onClick={() => setActiveTab('notices')}
+                          className="text-[8px] text-blue-600 hover:text-blue-700 font-medium mt-1"
+                        >
+                          Create your first notice
+                        </button>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
@@ -718,7 +887,10 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
               </div>
 
               <div className="flex justify-between items-center mb-4">
-                <div></div>
+                <div>
+                  <h2 className="text-sm font-bold text-blue-700">School Management</h2>
+                  <p className="text-[10px] text-gray-600 mt-1">View and manage all schools in your district</p>
+                </div>
                 <button 
                   onClick={() => setShowAddSchoolForm(true)}
                   className="flex items-center gap-1 px-3 py-1.5 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-lg hover:from-blue-600 hover:to-indigo-700 transition-all shadow-sm hover:shadow-md text-[10px] font-medium"
@@ -800,7 +972,7 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
                     <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500"></div>
                     <div className="absolute -top-2 -right-2 w-10 h-10 bg-indigo-500/10 rounded-full"></div>
                     <div className="absolute -bottom-2 -left-2 w-8 h-8 bg-purple-500/10 rounded-full"></div>
-                    <h3 className="text-sm font-bold text-gray-900 mb-4 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent relative z-10">District Statistics</h3>
+                    <h3 className="text-sm font-bold text-blue-700 mb-4 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent relative z-10">District Statistics</h3>
                     <div className="space-y-3 relative z-10">
                       <div className="flex justify-between items-center p-3 bg-gradient-to-r from-blue-50/50 via-indigo-50/50 to-purple-50/50 rounded-md border border-blue-100/50">
                         <div className="flex items-center gap-2">
@@ -841,7 +1013,7 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
                   <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500"></div>
                   <div className="absolute -top-2 -right-2 w-10 h-10 bg-indigo-500/10 rounded-full"></div>
                   <div className="absolute -bottom-2 -left-2 w-8 h-8 bg-purple-500/10 rounded-full"></div>
-                  <h3 className="text-sm font-bold text-gray-900 mb-4 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent relative z-10">All Schools</h3>
+                  <h3 className="text-sm font-bold text-blue-700 mb-4 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent relative z-10">All Schools</h3>
                   <div className="overflow-x-auto relative z-10">
                     <table className="w-full">
                       <thead>
@@ -945,7 +1117,10 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
               </div>
 
               <div className="flex justify-between items-center mb-4">
-                <h2 className="text-sm font-bold text-blue-700">Reports & Analytics</h2>
+                <div>
+                  <h2 className="text-sm font-bold text-blue-700">Reports & Analytics</h2>
+                  <p className="text-[10px] text-gray-600 mt-1">Generate and export comprehensive educational reports</p>
+                </div>
                 <div className="flex gap-3">
                   <button 
                     onClick={handleFilterReports}
@@ -1013,7 +1188,7 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
                           animationDuration={800}
                         >
                           {attendanceTrendData.map((entry, index) => (
-                            <Cell key={`cell-${index}`} fill={getBarColor(entry.attendance)} />
+                            <Cell key={`cell-${index}`} fill="#3B82F6" />
                           ))}
                         </Bar>
                       </RechartsBarChart>
@@ -1024,7 +1199,7 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
 
               {/* Detailed Reports */}
               <div className="mt-6 bg-white rounded-md p-4 shadow-sm border border-gray-100">
-                <h3 className="text-sm font-bold text-gray-900 mb-4">Detailed Reports</h3>
+                <h3 className="text-sm font-bold text-blue-700 mb-4">Detailed Reports</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
                   {[
                     { title: 'Monthly Attendance Report', description: 'Comprehensive attendance analysis', icon: FileText },
@@ -1090,7 +1265,10 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
               </div>
 
               <div className="flex justify-between items-center mb-4">
-                <h2 className="text-base font-bold text-blue-700">Alert Management</h2>
+                <div>
+                  <h2 className="text-base font-bold text-blue-700">Alert Management</h2>
+                  <p className="text-[10px] text-gray-600 mt-1">Monitor and respond to system alerts and notifications</p>
+                </div>
                 <div className="flex gap-3">
                   <button className="flex items-center gap-1 px-3 py-1.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-all text-[10px] font-medium">
                     <RefreshCw className="w-3 h-3" />
@@ -1185,6 +1363,163 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
             </div>
           )}
 
+          {/* Notices Tab */}
+          {activeTab === 'notices' && (
+            <div>
+              {/* Welcome Banner */}
+              <div className="bg-gradient-to-r from-blue-600 via-indigo-500 to-indigo-600 rounded-md p-4 mb-4 shadow-sm backdrop-blur-sm border border-white/20 relative overflow-hidden">
+                <div className="absolute -top-5 -right-5 w-20 h-20 bg-white/10 rounded-full"></div>
+                <div className="absolute -bottom-5 -left-5 w-16 h-16 bg-white/10 rounded-full"></div>
+                <div className="absolute top-4 right-4 w-7 h-7 bg-white/10 rotate-45"></div>
+                <div className="absolute top-1/3 left-1/4 w-7 h-7 bg-white/5 rounded-full"></div>
+                <div className="absolute bottom-1/3 right-1/3 w-6 h-6 bg-white/10 rotate-12"></div>
+                
+                <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-3">
+                  <div>
+                    <h2 className="text-[13px] font-bold text-white mb-1.5">Notice Management Dashboard</h2>
+                    <p className="text-[10px] text-blue-100 mb-2">Create and manage important notices for schools and districts</p>
+                    <div className="flex flex-wrap gap-2 mt-2">
+                      <div className="flex items-center bg-white/10 rounded-full px-2.5 py-1">
+                        <div className="w-2 h-2 bg-green-400 rounded-full mr-1.5"></div>
+                        <span className="text-[10px] text-white font-medium">{districtData.name}</span>
+                      </div>
+                      <div className="flex items-center bg-white/10 rounded-full px-2.5 py-1">
+                        <div className="w-2 h-2 bg-blue-400 rounded-full mr-1.5"></div>
+                        <span className="text-[10px] text-white font-medium">Notice Board</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="bg-white/20 rounded-md p-2">
+                      <Bell className="w-5 h-5 text-white" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex justify-between items-center mb-4">
+                <div>
+                  <h2 className="text-[13px] font-bold text-blue-700">Post New Notice</h2>
+                  <p className="text-[10px] text-gray-600 mt-1">Create and manage important notices for schools and districts</p>
+                </div>
+                <div className="flex gap-3">
+                  <button 
+                    className="flex items-center gap-1 px-3 py-1.5 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded hover:from-blue-600 hover:to-indigo-700 transition-all shadow-sm hover:shadow text-[10px] font-medium"
+                  >
+                    <Plus className="w-3 h-3" />
+                    Create Notice
+                  </button>
+                </div>
+              </div>
+              
+              {/* Notice Creation Form */}
+              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-3 mb-3">
+                <h3 className="text-[11px] font-bold text-blue-700 mb-2">Compose Notice</h3>
+                <div className="space-y-2">
+                  <div>
+                    <label className="block text-[10px] font-medium text-gray-700 mb-1">Notice Title</label>
+                    <input 
+                      type="text" 
+                      name="title"
+                      value={newNotice.title}
+                      onChange={handleNewNoticeChange}
+                      className="w-full px-2 py-1 border border-gray-300 rounded text-[10px]"
+                      placeholder="Enter notice title"
+                    />
+                  </div>
+                  
+                  <div>
+                    <label className="block text-[10px] font-medium text-gray-700 mb-1">Notice Content</label>
+                    <textarea 
+                      name="content"
+                      value={newNotice.content}
+                      onChange={handleNewNoticeChange}
+                      className="w-full px-2 py-1 border border-gray-300 rounded text-[10px]"
+                      placeholder="Enter notice content"
+                      rows="2"
+                    />
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-2">
+                    <div>
+                      <label className="block text-[10px] font-medium text-gray-700 mb-1">Target Audience</label>
+                      <select 
+                        name="audience"
+                        value={newNotice.audience}
+                        onChange={handleNewNoticeChange}
+                        className="w-full px-2 py-1 border border-gray-300 rounded text-[10px]"
+                      >
+                        <option value="All Districts">All Districts</option>
+                        <option value="All Schools">All Schools</option>
+                        <option value="Specific Districts">Specific Districts</option>
+                        <option value="Specific Schools">Specific Schools</option>
+                        <option value="Administrators">Administrators</option>
+                      </select>
+                    </div>
+                    
+                    <div>
+                      <label className="block text-[10px] font-medium text-gray-700 mb-1">Priority</label>
+                      <select 
+                        name="priority"
+                        value={newNotice.priority}
+                        onChange={handleNewNoticeChange}
+                        className="w-full px-2 py-1 border border-gray-300 rounded text-[10px]"
+                      >
+                        <option value="Normal">Normal</option>
+                        <option value="Important">Important</option>
+                        <option value="Urgent">Urgent</option>
+                      </select>
+                    </div>
+                  </div>
+                  
+                  <div className="flex gap-2 pt-1">
+                    <button 
+                      onClick={clearNoticeForm}
+                      className="px-2 py-1 border border-gray-300 text-gray-700 rounded text-[10px]"
+                    >
+                      Clear
+                    </button>
+                    <button 
+                      onClick={addNewNotice}
+                      className="px-2 py-1 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded text-[10px]"
+                    >
+                      Post Notice
+                    </button>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Recent Notices */}
+              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-3 mt-[-4px]">
+                <div className="flex justify-between items-center mb-3">
+                  <h3 className="text-[11px] font-bold text-blue-700">Recent Notices</h3>
+                  <button className="text-blue-600 hover:text-blue-800 text-[10px] font-medium">View All</button>
+                </div>
+                
+                <div className="space-y-3">
+                  {notices.map((notice) => (
+                    <div key={notice.id} className="border border-gray-200 rounded p-2 hover:bg-blue-50 transition-colors">
+                      <div className="flex justify-between items-start mb-1">
+                        <h4 className="font-medium text-gray-900 text-[12px]">{notice.title}</h4>
+                        <span className={`text-[7px] ${getPriorityBadgeClass(notice.priority)} px-1 py-0.5 rounded-full`}>
+                          {notice.priority}
+                        </span>
+                      </div>
+                      <p className="text-gray-600 text-[10px] mb-1">{notice.content.substring(0, 100)}{notice.content.length > 100 ? '...' : ''}</p>
+                      <div className="flex justify-between items-center text-[10px] text-gray-500">
+                        <span>{notice.date} at {notice.time}</span>
+                        <span>To: {notice.audience}</span>
+                      </div>
+                      <div className="text-[9px] text-gray-400 mt-1">
+                        From: {notice.sender}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Mid Day Meal Tab */}
           {activeTab === 'middaymeal' && (
             <div>
@@ -1217,19 +1552,37 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
                 </div>
               </div>
 
-              <div className="mb-4">
-                <h2 className="text-sm font-bold text-blue-700">Meal Program Overview</h2>
-                <p className="text-[10px] text-gray-600 mt-1">Total meals to be served today: {selectedSchoolData.reduce((total, school) => total + school.presentToday, 0).toLocaleString()}</p>
-              </div>
-              
               <div className="flex justify-between items-center mb-4">
                 <div>
-                  {/* Filter Controls */}
-                  <div className="flex gap-2 items-center bg-white rounded-lg border border-gray-200 p-1.5">
+                  <h2 className="text-sm font-bold text-blue-700">Meal Program Overview</h2>
+                  <p className="text-[10px] text-gray-600 mt-1">Monitor and manage the mid day meal program across schools</p>
+                  <p className="text-[10px] text-gray-600 mt-1">Total meals to be served today: {selectedSchoolData.reduce((total, school) => total + school.presentToday, 0).toLocaleString()}</p>
+                </div>
+                <div className="flex gap-2">
+                  <button 
+                    onClick={handleGenerateMealAnalysisReport}
+                    className="flex items-center gap-1 px-3 py-1.5 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-md hover:from-blue-600 hover:to-indigo-700 transition-all text-[10px] shadow-sm hover:shadow-md"
+                  >
+                    <FileText className="w-3 h-3" />
+                    Generate Analysis
+                  </button>
+                  <button 
+                    onClick={handleExportMealAnalysisReport}
+                    className="flex items-center gap-1 px-3 py-1.5 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-md hover:from-blue-600 hover:to-indigo-700 transition-all text-[10px] shadow-sm hover:shadow-md"
+                  >
+                    <Download className="w-3 h-3" />
+                    Export Analysis
+                  </button>
+                </div>
+              </div>
+              <div className="bg-white rounded-md p-4 shadow-sm border border-gray-100 mb-5">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                  <div>
+                    <label className="block text-[10px] font-medium text-gray-700 mb-1.5">School</label>
                     <select 
                       value={selectedSchool}
                       onChange={(e) => setSelectedSchool(e.target.value)}
-                      className="px-2 py-1 text-[10px] rounded-md bg-gray-50 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-1.5 bg-gray-50 border border-gray-200 rounded-md text-[10px] focus:outline-none focus:ring-2 focus:ring-blue-500"
                     >
                       <option value="All Schools">All Schools</option>
                       {mealAttendanceData.map((school) => (
@@ -1238,57 +1591,26 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
                         </option>
                       ))}
                     </select>
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-medium text-gray-700 mb-1.5">Duration</label>
                     <select 
                       value={selectedDuration}
                       onChange={(e) => setSelectedDuration(e.target.value)}
-                      className="px-2 py-1 text-[10px] rounded-md bg-gray-50 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-1.5 bg-gray-50 border border-gray-200 rounded-md text-[10px] focus:outline-none focus:ring-2 focus:ring-blue-500"
                     >
                       <option value="weekly">Weekly</option>
                       <option value="monthly">Monthly</option>
                     </select>
+                  </div>
+                  <div className="flex items-end">
                     <button 
                       onClick={applyFilters}
-                      className="px-2 py-1 text-[10px] rounded-md bg-blue-500 text-white hover:bg-blue-600 transition-colors"
+                      className="w-full px-3 py-1.5 bg-blue-100 text-blue-700 rounded-md hover:bg-blue-200 transition-all text-[10px] font-medium"
                     >
-                      Apply Filter
+                      Apply Filters
                     </button>
                   </div>
-                </div>
-                <div className="flex gap-3">
-                  <div className="flex gap-1">
-                    <button 
-                      onClick={() => setMealPeriod('daily')}
-                      className={`px-2 py-1 text-[10px] rounded-md ${mealPeriod === 'daily' ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
-                    >
-                      Daily
-                    </button>
-                    <button 
-                      onClick={() => setMealPeriod('weekly')}
-                      className={`px-2 py-1 text-[10px] rounded-md ${mealPeriod === 'weekly' ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
-                    >
-                      Weekly
-                    </button>
-                    <button 
-                      onClick={() => setMealPeriod('monthly')}
-                      className={`px-2 py-1 text-[10px] rounded-md ${mealPeriod === 'monthly' ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
-                    >
-                      Monthly
-                    </button>
-                  </div>
-                  <button 
-                    onClick={handleGenerateMealAnalysisReport}
-                    className="flex items-center gap-1 px-3 py-1.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-all text-[10px] font-medium"
-                  >
-                    <FileText className="w-3 h-3" />
-                    Generate Analysis
-                  </button>
-                  <button 
-                    onClick={handleExportMealAnalysisReport}
-                    className="flex items-center gap-1 px-3 py-1.5 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-lg hover:from-blue-600 hover:to-indigo-700 transition-all shadow-sm hover:shadow-md text-[10px] font-medium"
-                  >
-                    <Download className="w-3 h-3" />
-                    Export Analysis
-                  </button>
                 </div>
               </div>
 
@@ -1366,12 +1688,12 @@ Attendance Rate: ${analysisData.attendanceRate}%`);
                   <div className="bg-white rounded-md p-4 shadow-sm border border-gray-100 relative overflow-hidden">
                     <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-amber-500 via-orange-500 to-red-500"></div>
                     <div className="absolute -top-2 -right-2 w-10 h-10 bg-orange-500/10 rounded-full"></div>
-                    <h3 className="text-sm font-bold text-gray-900 mb-4 bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent relative z-10">Meal Distribution Trends (Daily)</h3>
+                    <h3 className="text-sm font-bold text-gray-900 mb-4 bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent relative z-10">Meal Distribution Trends</h3>
                     <div className="h-48 bg-gradient-to-br from-amber-50 to-orange-50 rounded-md p-3 border border-amber-100 relative z-10">
                       <div className="flex items-center justify-center h-full text-gray-500 text-[10px]">
                         <div className="text-center">
                           <Utensils className="w-8 h-8 mx-auto mb-2 text-amber-400" />
-                          <p>Meal distribution chart for {mealPeriod} period</p>
+                          <p>Meal distribution chart</p>
                           <p className="mt-1 text-[9px]">Data visualization will be displayed here</p>
                           <div className="flex justify-center gap-2 mt-3">
                             <div className="w-16 h-16 bg-gradient-to-br from-amber-100 to-orange-100 rounded-md flex items-center justify-center border border-amber-200 overflow-hidden">
